@@ -33,7 +33,7 @@
         </div>
       </div>
 
-      <!-- LOBBY -->
+      <!-- LOBBY (main game screen) -->
       <div id="screen-lobby" class="screen hidden">
         <div class="card">
           <h2>
@@ -57,15 +57,12 @@
           <p class="hint-text" id="host-note"></p>
           <button id="btn-start-round">Start Round</button>
         </div>
-      </div>
 
-      <!-- ROLE SCREEN -->
-      <div id="screen-role" class="screen hidden">
         <div class="card">
-          <h2>Round <span id="role-round-label"></span></h2>
+          <h3>Your word / hint</h3>
+          <p class="hint-text">Only you should see this. Don’t show your screen.</p>
+          <p id="role-round-label" class="round-label"></p>
           <p id="role-text" class="role-text"></p>
-          <p class="note">Don’t show this screen to anyone else.</p>
-          <button id="btn-back-lobby">Back to Lobby</button>
         </div>
       </div>
     </div>

@@ -6,7 +6,6 @@ let isHost = false;
 
 const screenHome = document.getElementById("screen-home");
 const screenLobby = document.getElementById("screen-lobby");
-const screenRole = document.getElementById("screen-role");
 
 const homeError = document.getElementById("home-error");
 const createRoomInfo = document.getElementById("create-room-info");
@@ -22,13 +21,11 @@ const roleText = document.getElementById("role-text");
 const btnStartRound = document.getElementById("btn-start-round");
 
 function showScreen(id) {
-  [screenHome, screenLobby, screenRole].forEach((el) =>
-    el.classList.add("hidden")
-  );
+  [screenHome, screenLobby].forEach((el) => el.classList.add("hidden"));
   document.getElementById(id).classList.remove("hidden");
 }
 
-// Create room (host only)
+// Create room (host)
 document.getElementById("btn-create-room").onclick = () => {
   socket.emit("createRoom", ({ roomCode }) => {
     document.getElementById("join-room-code").value = roomCode;
@@ -60,6 +57,10 @@ document.getElementById("btn-join-room").onclick = () => {
     playerNameLabel.textContent = currentName;
     hostNameLabel.textContent = res.hostName || "(not set yet)";
 
+    // Clear last role text on join
+    roleRoundLabel.textContent = "";
+    roleText.textContent = "";
+
     updateHostUI(res.round || 0, res.hostName);
     showScreen("screen-lobby");
   });
@@ -71,15 +72,8 @@ btnStartRound.onclick = () => {
   socket.emit("startRound", { roomCode: currentRoom });
 };
 
-document.getElementById("btn-back-lobby").onclick = () => {
-  showScreen("screen-lobby");
-};
-
 function updateHostUI(round, hostName) {
-  // Host name
   hostNameLabel.textContent = hostName || "(unknown)";
-
-  // Show/hide start button and note
   if (isHost) {
     btnStartRound.style.display = "block";
     hostNote.textContent = round
@@ -89,44 +83,12 @@ function updateHostUI(round, hostName) {
     btnStartRound.style.display = "none";
     hostNote.textContent = "Waiting for the host to start the round.";
   }
-
   if (round && round > 0) {
     roundLabel.textContent = `(Round ${round})`;
   } else {
     roundLabel.textContent = "";
   }
 }
-
-// Server events
-
-socket.on("roomUpdate", ({ players, round, hostName, order }) => {
-  // Players list
-  playerList.innerHTML = "";
-  players.forEach((p) => {
-    const li = document.createElement("li");
-    li.textContent = p.name;
-    playerList.appendChild(li);
-  });
-
-  // Host / round labels
-  updateHostUI(round || 0, hostName);
-
-  // Speaking order (if we already have one)
-  renderOrder(order || []);
-});
-
-socket.on("roundStarted", ({ round, hostName, order }) => {
-  updateHostUI(round || 0, hostName);
-  renderOrder(order || []);
-});
-
-socket.on("role", ({ isImposter, word, round }) => {
-  roleRoundLabel.textContent = round || "";
-  roleText.textContent = isImposter
-    ? `You are the IMPOSTER.\nYour hint: ${word}`
-    : `Your secret word: ${word}`;
-  showScreen("screen-role");
-});
 
 function renderOrder(order) {
   orderList.innerHTML = "";
@@ -142,3 +104,34 @@ function renderOrder(order) {
     orderList.appendChild(li);
   });
 }
+
+// Server events
+
+socket.on("roomUpdate", ({ players, round, hostName, order }) => {
+  playerList.innerHTML = "";
+  players.forEach((p) => {
+    const li = document.createElement("li");
+    li.textContent = p.name;
+    playerList.appendChild(li);
+  });
+
+  updateHostUI(round || 0, hostName);
+  renderOrder(order || []);
+});
+
+socket.on("roundStarted", ({ round, hostName, order }) => {
+  updateHostUI(round || 0, hostName);
+  renderOrder(order || []);
+
+  // Clear old role until new one arrives
+  roleRoundLabel.textContent = `Round ${round}`;
+  roleText.textContent = "Waiting for your word...";
+});
+
+// Each player receives their private role here
+socket.on("role", ({ isImposter, word, round }) => {
+  roleRoundLabel.textContent = `Round ${round}`;
+  roleText.textContent = isImposter
+    ? `You are the IMPOSTER.\nYour hint: ${word}`
+    : `Your secret word: ${word}`;
+});
