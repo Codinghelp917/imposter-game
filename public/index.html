@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Imposter Word Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-bg">
+    <div class="container">
+      <h1 class="app-title">Imposter Word Game</h1>
+      <p class="app-subtitle">Join a room on your phone and try to spot the fake.</p>
+
+      <!-- HOME SCREEN -->
+      <div id="screen-home" class="screen">
+        <h2>Join or Create Room</h2>
+
+        <div class="card">
+          <h3>Create a new room</h3>
+          <button id="btn-create-room">Create Room</button>
+          <p class="hint-text" id="create-room-info"></p>
+        </div>
+
+        <div class="card">
+          <h3>Join existing room</h3>
+          <label>Room code</label>
+          <input id="join-room-code" placeholder="e.g. 1234">
+          <label>Your name</label>
+          <input id="join-name" placeholder="e.g. Thila">
+          <button id="btn-join-room">Join</button>
+          <p id="home-error" class="error"></p>
+        </div>
+      </div>
+
+      <!-- LOBBY -->
+      <div id="screen-lobby" class="screen hidden">
+        <div class="card">
+          <h2>
+            Room <span id="room-code-label"></span>
+            <span id="round-label" class="round-label"></span>
+          </h2>
+          <p class="meta">
+            You are: <strong><span id="player-name-label"></span></strong><br>
+            Host: <strong><span id="host-name-label"></span></strong>
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Players in this room</h3>
+          <ul id="player-list" class="player-list"></ul>
+        </div>
+
+        <div class="card">
+          <h3>Speaking order (this round)</h3>
+          <ol id="order-list" class="order-list"></ol>
+          <p class="hint-text" id="host-note"></p>
+          <button id="btn-start-round">Start Round</button>
+        </div>
+      </div>
+
+      <!-- ROLE SCREEN -->
+      <div id="screen-role" class="screen hidden">
+        <div class="card">
+          <h2>Round <span id="role-round-label"></span></h2>
+          <p id="role-text" class="role-text"></p>
+          <p class="note">Don’t show this screen to anyone else.</p>
+          <button id="btn-back-lobby">Back to Lobby</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="client.js"></script>
+</body>
+</html>

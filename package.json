@@ -1,0 +1,13 @@
+{
+  "name": "imposter-game",
+  "version": "1.0.0",
+  "description": "Simple online imposter word game with rooms",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.0",
+    "socket.io": "^4.7.5"
+  }
+}
