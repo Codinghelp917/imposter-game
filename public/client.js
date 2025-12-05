@@ -123,10 +123,11 @@ socket.on("roundStarted", ({ round, hostName, order }) => {
   updateHostUI(round || 0, hostName);
   renderOrder(order || []);
 
-  // Clear old role until new one arrives
+  // Just update round label – let the 'role' event set the text
   roleRoundLabel.textContent = `Round ${round}`;
-  roleText.textContent = "Waiting for your word...";
+  // Do NOT change roleText here
 });
+
 
 // Each player receives their private role here
 socket.on("role", ({ isImposter, word, round }) => {
