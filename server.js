@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // ========================
 const WORDS = require("./words.json");
 
-// rooms[code] = { players, hostId, round, order, ... }
+// rooms[code] = { players, hostId, round, order }
 const rooms = {};
 
 function randomCode(length = 4) {
@@ -30,14 +30,18 @@ function shuffle(arr) {
 io.on("connection", (socket) => {
   console.log("New connection:", socket.id);
 
+  // ========================
   // Create room & mark this socket as host
+  // ========================
   socket.on("createRoom", (cb) => {
     let code;
-    do { code = randomCode(4); } while (rooms[code]);
+    do {
+      code = randomCode(4);
+    } while (rooms[code]);
 
     rooms[code] = {
       players: [],
-      hostId: socket.id,
+      hostId: socket.id, // host will still join as a player
       round: 0,
       order: []
     };
@@ -46,29 +50,53 @@ io.on("connection", (socket) => {
     cb({ roomCode: code });
   });
 
+  // ========================
   // Join room as a player
-  socket.on("joinRoom", ({ roomCode, name }, cb) => {
+  // ========================
+  socket.on("joinRoom", ({ roomCode, name, icon }, cb) => {
     const room = rooms[roomCode];
     if (!room) return cb({ ok: false, error: "Room not found" });
 
-    if (room.players.some((p) => p.name === name)) {
+    if (!roomCode || !name) {
+      return cb({ ok: false, error: "Room code and name are required" });
+    }
+
+    const trimmedName = name.trim();
+    if (trimmedName.length < 2 || trimmedName.length > 16) {
+      return cb({ ok: false, error: "Name must be 2–16 characters" });
+    }
+
+    if (
+      room.players.some(
+        (p) => p.name.toLowerCase() === trimmedName.toLowerCase()
+      )
+    ) {
       return cb({ ok: false, error: "Name already taken" });
     }
 
     const player = {
       id: socket.id,
-      name,
+      name: trimmedName,
       isImposter: false,
-      roleWord: null
+      roleWord: null,
+      icon: icon || null
     };
     room.players.push(player);
     socket.join(roomCode);
+
+    // Ensure hostId always points at a real player
+    if (!room.hostId || !room.players.some((p) => p.id === room.hostId)) {
+      room.hostId = room.players[0].id;
+    }
 
     const hostPlayer = room.players.find((p) => p.id === room.hostId);
     const hostName = hostPlayer ? hostPlayer.name : null;
 
     io.to(roomCode).emit("roomUpdate", {
-      players: room.players.map((p) => ({ name: p.name })),
+      players: room.players.map((p) => ({
+        name: p.name,
+        icon: p.icon || null
+      })),
       round: room.round,
       hostName,
       order: room.order || []
@@ -82,27 +110,44 @@ io.on("connection", (socket) => {
     });
   });
 
+  // ========================
   // Host-only: start a round
+  // ========================
   socket.on("startRound", ({ roomCode }) => {
     const room = rooms[roomCode];
     if (!room) return;
+
+    // If hostId somehow got out of sync, fix it
+    if (!room.players.some((p) => p.id === room.hostId)) {
+      if (room.players.length > 0) {
+        room.hostId = room.players[0].id;
+      }
+    }
+
     if (room.hostId !== socket.id) {
       console.log("Non-host tried to start round in", roomCode);
       return;
     }
     if (room.players.length < 3) return;
 
+    if (!Array.isArray(WORDS) || WORDS.length === 0) {
+      console.error("No words available – cannot start round");
+      return;
+    }
+
     room.round += 1;
 
     const { word, hint } = pickRandom(WORDS);
-    const imposterIndex = Math.floor(Math.random() * room.players.length);
 
-    // random speaking order (by name)
-    const order = shuffle(room.players).map((p) => p.name);
-    room.order = order;
+    // random speaking order
+    const shuffledPlayers = shuffle(room.players);
+    const imposterIndex = Math.floor(Math.random() * shuffledPlayers.length);
+    const imposterId = shuffledPlayers[imposterIndex].id;
 
-    room.players.forEach((p, idx) => {
-      p.isImposter = idx === imposterIndex;
+    room.order = shuffledPlayers.map((p) => p.name);
+
+    room.players.forEach((p) => {
+      p.isImposter = p.id === imposterId;
       p.roleWord = p.isImposter ? hint : word;
 
       io.to(p.id).emit("role", {
@@ -118,35 +163,57 @@ io.on("connection", (socket) => {
     io.to(roomCode).emit("roundStarted", {
       round: room.round,
       hostName,
-      order
+      order: room.order
     });
   });
 
+  // ========================
+  // Disconnect handling
+  // ========================
   socket.on("disconnect", () => {
     for (const [code, room] of Object.entries(rooms)) {
       const idx = room.players.findIndex((p) => p.id === socket.id);
-      if (idx !== -1) {
-        room.players.splice(idx, 1);
+      if (idx === -1) continue;
 
-        // If host left, we *could* promote someone else – for now we just leave hostId as-is
-        const hostPlayer = room.players.find((p) => p.id === room.hostId);
-        const hostName = hostPlayer ? hostPlayer.name : null;
+      const leavingPlayer = room.players[idx];
+      room.players.splice(idx, 1);
 
-        io.to(code).emit("roomUpdate", {
-          players: room.players.map((p) => ({ name: p.name })),
-          round: room.round,
-          hostName,
-          order: room.order || []
-        });
+      console.log(`Player ${leavingPlayer.name} left room ${code}`);
 
-        if (room.players.length === 0) {
-          delete rooms[code];
-        }
+      if (room.players.length === 0) {
+        console.log(`Room ${code} is now empty, deleting.`);
+        delete rooms[code];
         break;
       }
+
+      const hostStillHere = room.players.some((p) => p.id === room.hostId);
+      if (!hostStillHere) {
+        room.hostId = room.players[0].id;
+        console.log(
+          `Host left in room ${code}, promoting ${room.players[0].name} as new host`
+        );
+      }
+
+      const hostPlayer = room.players.find((p) => p.id === room.hostId);
+      const hostName = hostPlayer ? hostPlayer.name : null;
+
+      io.to(code).emit("roomUpdate", {
+        players: room.players.map((p) => ({
+          name: p.name,
+          icon: p.icon || null
+        })),
+        round: room.round,
+        hostName,
+        order: room.order || []
+      });
+
+      break;
     }
   });
 });
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+// 0.0.0.0 so other devices on same Wi-Fi can join
+server.listen(PORT, "0.0.0.0", () =>
+  console.log(`✅ Server running on port ${PORT}`)
+);

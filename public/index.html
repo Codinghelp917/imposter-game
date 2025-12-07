@@ -9,10 +9,13 @@
 <body>
   <div class="app-bg">
     <div class="container">
-      <h1 class="app-title">Imposter Word Game</h1>
-      <p class="app-subtitle">Join a room on your phone and try to spot the fake.</p>
+      <h1 class="app-title">Mafia Word Game</h1>
+      <p class="app-subtitle">Join a room and figure out who's the mole.</p>
 
-      <!-- HOME SCREEN -->
+      <!-- HERO IMAGE -->
+      <img src="images/imposter.png" alt="Mafia Game Banner" class="hero-image">
+
+      <!-- ================= HOME SCREEN ================= -->
       <div id="screen-home" class="screen">
         <h2>Join or Create Room</h2>
 
@@ -27,13 +30,51 @@
           <label>Room code</label>
           <input id="join-room-code" placeholder="e.g. 1234">
           <label>Your name</label>
-          <input id="join-name" placeholder="e.g. Thila">
+          <input id="join-name" placeholder="e.g. Thilaksan">
+
+          <!-- MAFIA ICON PICKER -->
+          <div class="icon-picker">
+            <p class="hint-text">Pick your mafia icon:</p>
+            <div class="icon-grid">
+              <button type="button" class="icon-option selected" data-icon="bandit.png">
+                <img src="images/icons/bandit.png" alt="Icon 8">
+              </button>
+              <button type="button" class="icon-option" data-icon="cute.png">
+                <img src="images/icons/cute.png" alt="Icon 2">
+              </button>
+              <button type="button" class="icon-option" data-icon="fedora.png">
+                <img src="images/icons/fedora.png" alt="Icon 3">
+              </button>
+              <button type="button" class="icon-option" data-icon="hat.png">
+                <img src="images/icons/hat.png" alt="Icon 4">
+              </button>
+              <button type="button" class="icon-option selected" data-icon="katana.png">
+                <img src="images/icons/katana.png" alt="Icon 5">
+              </button>
+              <button type="button" class="icon-option" data-icon="knife.png">
+                <img src="images/icons/knife blood.png" alt="Icon 6">
+              </button>
+              <button type="button" class="icon-option" data-icon="knife1.png">
+                <img src="images/icons/ninja.png" alt="Icon 7">
+              </button>
+              <button type="button" class="icon-option" data-icon="kutty.png">
+                <img src="images/icons/kutty.png" alt="Icon 1">
+              </button>
+              <button type="button" class="icon-option" data-icon="kutty.png">
+                <img src="images/icons/kutty hat.png" alt="Icon 9">
+              </button>
+              <button type="button" class="icon-option" data-icon="kutty.png">
+                <img src="images/icons/samurai.png" alt="Icon 10">
+              </button>
+            </div>
+          </div>
+
           <button id="btn-join-room">Join</button>
           <p id="home-error" class="error"></p>
         </div>
       </div>
 
-      <!-- LOBBY (main game screen) -->
+      <!-- ================= LOBBY / GAME SCREEN ================= -->
       <div id="screen-lobby" class="screen hidden">
         <div class="card">
           <h2>
@@ -62,7 +103,9 @@
           <h3>Your word / hint</h3>
           <p class="hint-text">Only you should see this. Don’t show your screen.</p>
           <p id="role-round-label" class="round-label"></p>
-          <p id="role-text" class="role-text"></p>
+          <div id="role-text" class="role-text"></div>
+
+          <img src="images/imposter.png" alt="Imposter" id="imposter-image" class="imposter-image hidden">
         </div>
       </div>
     </div>
