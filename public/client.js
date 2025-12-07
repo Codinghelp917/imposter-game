@@ -1,5 +1,7 @@
 const socket = io();
 
+const SESSION_KEY = "mafiaWordGameSession"; // for auto-rejoin
+
 let currentRoom = null;
 let currentName = null;
 let isHost = false;
@@ -25,7 +27,7 @@ const roleRoundLabel = document.getElementById("role-round-label");
 const roleText = document.getElementById("role-text");
 const btnStartRound = document.getElementById("btn-start-round");
 
-// Icon picker buttons (may not exist if you haven't added them yet)
+// Icon picker buttons
 const iconOptions = document.querySelectorAll(".icon-option");
 
 function showScreen(id) {
@@ -93,6 +95,20 @@ document.getElementById("btn-join-room").onclick = () => {
       currentName = name;
       isHost = !!res.isHost;
       currentHostName = res.hostName || null;
+
+      // 🔐 Save session for auto-rejoin
+      try {
+        localStorage.setItem(
+          SESSION_KEY,
+          JSON.stringify({
+            roomCode: currentRoom,
+            name: currentName,
+            icon: selectedIcon
+          })
+        );
+      } catch (e) {
+        // ignore storage errors
+      }
 
       roomCodeLabel.textContent = currentRoom;
       playerNameLabel.textContent = currentName;
@@ -246,10 +262,69 @@ socket.on("role", ({ isImposter, word, round }) => {
   }
 });
 
-// Basic error handling
+// -----------------------------
+// Connection handling (auto-rejoin)
+// -----------------------------
+
+// When disconnected (e.g. app backgrounded)
 socket.on("disconnect", () => {
-  homeError.textContent = "Disconnected from server. Refresh the page to reconnect.";
-  showScreen("screen-home");
+  // Keep them on the lobby if they were there; just show a message.
+  if (hostNote) {
+    hostNote.textContent = "Connection lost. Trying to reconnect...";
+  }
+});
+
+// When connection comes back
+socket.on("connect", () => {
+  // If we're already in a room in this session, do nothing
+  if (currentRoom) return;
+
+  // Try to restore from localStorage
+  let saved;
+  try {
+    saved = localStorage.getItem(SESSION_KEY);
+  } catch (e) {
+    return;
+  }
+  if (!saved) return;
+
+  let session;
+  try {
+    session = JSON.parse(saved);
+  } catch (e) {
+    localStorage.removeItem(SESSION_KEY);
+    return;
+  }
+
+  const { roomCode, name, icon } = session || {};
+  if (!roomCode || !name) {
+    localStorage.removeItem(SESSION_KEY);
+    return;
+  }
+
+  // Attempt to rejoin the previous room automatically
+  socket.emit("joinRoom", { roomCode, name, icon }, (res) => {
+    if (!res || !res.ok) {
+      // Room may have been deleted or name taken
+      localStorage.removeItem(SESSION_KEY);
+      return;
+    }
+
+    currentRoom = roomCode;
+    currentName = name;
+    isHost = !!res.isHost;
+    currentHostName = res.hostName || null;
+
+    roomCodeLabel.textContent = currentRoom;
+    playerNameLabel.textContent = currentName;
+    hostNameLabel.textContent = currentHostName || "Deciding host...";
+
+    roleRoundLabel.textContent = "";
+    roleText.textContent = "";
+
+    updateHostUI(res.round || 0);
+    showScreen("screen-lobby");
+  });
 });
 
 socket.on("connect_error", () => {
