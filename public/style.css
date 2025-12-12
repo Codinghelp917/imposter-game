@@ -128,6 +128,30 @@ button:disabled {
   transform: none;
 }
 
+/* Secondary button (Leave room) */
+.secondary-button {
+  width: auto;
+  padding: 6px 12px;
+  margin-top: 6px;
+  border-radius: 9999px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: transparent;
+  color: #e5e7eb;
+  box-shadow: none;
+  font-size: 0.85rem;
+}
+
+.secondary-button:hover {
+  background: rgba(15, 23, 42, 0.9);
+  opacity: 1;
+  transform: none;
+}
+
+.secondary-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
 .error {
   color: #fca5a5;
   font-size: 0.8rem;
@@ -196,6 +220,18 @@ button:disabled {
 .player-host {
   font-weight: 600;
   color: #bfdbfe;
+}
+
+/* Show "(Host)" label after host name */
+.player-list li.player-host::after {
+  content: " (Host)";
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+/* Highlight yourself in the list */
+.player-list li.player-self {
+  font-weight: 700;
 }
 
 /* Make the room code look like a "code" */

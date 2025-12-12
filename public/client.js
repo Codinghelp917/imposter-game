@@ -1,5 +1,4 @@
 const socket = io();
-
 const SESSION_KEY = "mafiaWordGameSession"; // for auto-rejoin
 
 let currentRoom = null;
@@ -13,7 +12,7 @@ let selectedIcon = "mafia1.png"; // default icon
 const screenHome = document.getElementById("screen-home");
 const screenLobby = document.getElementById("screen-lobby");
 
-// Home / lobby elements
+// Elements
 const homeError = document.getElementById("home-error");
 const createRoomInfo = document.getElementById("create-room-info");
 const roomCodeLabel = document.getElementById("room-code-label");
@@ -26,8 +25,6 @@ const hostNote = document.getElementById("host-note");
 const roleRoundLabel = document.getElementById("role-round-label");
 const roleText = document.getElementById("role-text");
 const btnStartRound = document.getElementById("btn-start-round");
-
-// Icon picker buttons
 const iconOptions = document.querySelectorAll(".icon-option");
 
 function showScreen(id) {
@@ -38,18 +35,53 @@ function showScreen(id) {
 // -----------------------------
 // Icon picker logic
 // -----------------------------
-if (iconOptions.length > 0) {
-  // Default to the first icon
-  selectedIcon = iconOptions[0].dataset.icon || "mafia1.png";
-  iconOptions[0].classList.add("selected");
-
+function setSelectedIcon(iconName) {
+  selectedIcon = iconName;
   iconOptions.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      iconOptions.forEach((b) => b.classList.remove("selected"));
+    if (btn.dataset.icon === iconName) {
       btn.classList.add("selected");
-      selectedIcon = btn.dataset.icon || "mafia1.png";
-    });
+    } else {
+      btn.classList.remove("selected");
+    }
   });
+}
+
+if (iconOptions.length > 0) {
+  setSelectedIcon(iconOptions[0].dataset.icon || "mafia1.png");
+  iconOptions.forEach((btn) => {
+    btn.addEventListener("click", () => setSelectedIcon(btn.dataset.icon));
+  });
+}
+
+// -----------------------------
+// Shared helper for successful join
+// -----------------------------
+function handleJoinSuccess(res, roomCode, name, iconFromSession = false) {
+  homeError.textContent = "";
+  currentRoom = roomCode;
+  currentName = name;
+  isHost = !!res.isHost;
+  currentHostName = res.hostName || null;
+
+  // Save session (skip if iconFromSession === false)
+  const iconToSave = iconFromSession || selectedIcon;
+  if (iconFromSession !== false) {
+    try {
+      localStorage.setItem(
+        SESSION_KEY,
+        JSON.stringify({ roomCode, name, icon: iconToSave })
+      );
+    } catch (e) {}
+  }
+
+  roomCodeLabel.textContent = roomCode;
+  playerNameLabel.textContent = name;
+  hostNameLabel.textContent = currentHostName || "Deciding host...";
+  roleRoundLabel.textContent = "";
+  roleText.textContent = "";
+
+  updateHostUI(res.round || 0);
+  showScreen("screen-lobby");
 }
 
 // -----------------------------
@@ -67,61 +99,30 @@ document.getElementById("btn-create-room").onclick = () => {
 // -----------------------------
 // Join room
 // -----------------------------
+let joining = false;
 document.getElementById("btn-join-room").onclick = () => {
+  if (joining) return;
+  joining = true;
+
   const roomInput = document.getElementById("join-room-code");
   const nameInput = document.getElementById("join-name");
-
   const roomCode = roomInput.value.trim().toUpperCase();
   const name = nameInput.value.trim();
 
-  roomInput.value = roomCode;
-
   if (!roomCode || !name) {
     homeError.textContent = "Enter both room code and name.";
+    joining = false;
     return;
   }
 
-  socket.emit(
-    "joinRoom",
-    { roomCode, name, icon: selectedIcon },
-    (res) => {
-      if (!res || !res.ok) {
-        homeError.textContent = (res && res.error) || "Could not join room.";
-        return;
-      }
-
-      homeError.textContent = "";
-      currentRoom = roomCode;
-      currentName = name;
-      isHost = !!res.isHost;
-      currentHostName = res.hostName || null;
-
-      // 🔐 Save session for auto-rejoin
-      try {
-        localStorage.setItem(
-          SESSION_KEY,
-          JSON.stringify({
-            roomCode: currentRoom,
-            name: currentName,
-            icon: selectedIcon
-          })
-        );
-      } catch (e) {
-        // ignore storage errors
-      }
-
-      roomCodeLabel.textContent = currentRoom;
-      playerNameLabel.textContent = currentName;
-      hostNameLabel.textContent = currentHostName || "Deciding host...";
-
-      // Clear last role text on join
-      roleRoundLabel.textContent = "";
-      roleText.textContent = "";
-
-      updateHostUI(res.round || 0);
-      showScreen("screen-lobby");
+  socket.emit("joinRoom", { roomCode, name, icon: selectedIcon }, (res) => {
+    joining = false;
+    if (!res || !res.ok) {
+      homeError.textContent = (res && res.error) || "Could not join room.";
+      return;
     }
-  );
+    handleJoinSuccess(res, roomCode, name, selectedIcon);
+  });
 };
 
 // -----------------------------
@@ -136,18 +137,11 @@ btnStartRound.onclick = () => {
 // UI helpers
 // -----------------------------
 function updateHostUI(round) {
-  // Host name label (never "unknown")
-  if (currentHostName) {
-    hostNameLabel.textContent = currentHostName;
-  } else {
-    hostNameLabel.textContent = "Deciding host...";
-  }
-
+  hostNameLabel.textContent = currentHostName || "Deciding host...";
   const playerCount = currentPlayers.length || 0;
 
   if (isHost) {
     btnStartRound.style.display = "block";
-
     if (playerCount < 3) {
       btnStartRound.disabled = true;
       hostNote.textContent = `You are the host. Waiting for at least 3 players to start (currently ${playerCount}).`;
@@ -162,22 +156,15 @@ function updateHostUI(round) {
     hostNote.textContent = "Waiting for the host to start the round.";
   }
 
-  if (round && round > 0) {
-    roundLabel.textContent = `(Round ${round})`;
-  } else {
-    roundLabel.textContent = "";
-  }
+  roundLabel.textContent = round && round > 0 ? `(Round ${round})` : "";
 }
 
 function renderOrder(order) {
   orderList.innerHTML = "";
   if (!order || !order.length) {
-    const li = document.createElement("li");
-    li.textContent = "No round started yet.";
-    orderList.appendChild(li);
+    orderList.innerHTML = "<li>No round started yet.</li>";
     return;
   }
-
   order.forEach((name, index) => {
     const li = document.createElement("li");
     li.textContent = `${index + 1}. ${name}`;
@@ -190,38 +177,19 @@ function renderOrder(order) {
 // -----------------------------
 socket.on("roomUpdate", ({ players, round, hostName, order }) => {
   currentPlayers = players || [];
+  if (typeof hostName === "string" && hostName.trim()) currentHostName = hostName;
 
-  // Update host name if provided
-  if (typeof hostName === "string" && hostName.trim() !== "") {
-    currentHostName = hostName;
-  } else if (!currentHostName && currentPlayers.length > 0) {
-    // fallback: show first player's name if no host yet
-    currentHostName = currentPlayers[0].name;
-  }
-
-  // Recalculate if THIS client is host
-  isHost =
-    !!currentHostName &&
-    !!currentName &&
-    currentHostName === currentName;
-
-  // Update player list with icons
+  isHost = currentHostName === currentName;
   playerList.innerHTML = "";
+
   currentPlayers.forEach((p) => {
     const li = document.createElement("li");
+    li.innerHTML = p.icon
+      ? `<img src="images/icons/${p.icon}" alt="" class="player-icon-img"> ${p.name}`
+      : p.name;
 
-    if (p.icon) {
-      li.innerHTML = `
-        <img src="images/icons/${p.icon}" alt="" class="player-icon-img">
-        ${p.name}
-      `;
-    } else {
-      li.textContent = p.name;
-    }
-
-    if (p.name === currentHostName) {
-      li.classList.add("player-host");
-    }
+    if (p.name === currentHostName) li.classList.add("player-host");
+    if (p.name === currentName) li.classList.add("player-self");
 
     playerList.appendChild(li);
   });
@@ -231,61 +199,35 @@ socket.on("roomUpdate", ({ players, round, hostName, order }) => {
 });
 
 socket.on("roundStarted", ({ round, hostName, order }) => {
-  if (typeof hostName === "string" && hostName.trim() !== "") {
-    currentHostName = hostName;
-    isHost =
-      !!currentHostName &&
-      !!currentName &&
-      currentHostName === currentName;
-  }
+  if (typeof hostName === "string" && hostName.trim()) currentHostName = hostName;
+  isHost = currentHostName === currentName;
 
   updateHostUI(round || 0);
   renderOrder(order || []);
-
   roleRoundLabel.textContent = `Round ${round}`;
-  // Don't change roleText here – it's set by the 'role' event
 });
 
-// Each player receives their private role here
 socket.on("role", ({ isImposter, word, round }) => {
   roleRoundLabel.textContent = `Round ${round}`;
-
-  if (isImposter) {
-    roleText.innerHTML = `
-      <strong>You are the IMPOSTER.</strong><br>
-      Your hint: <span class="role-word">${word}</span>
-    `;
-  } else {
-    roleText.innerHTML = `
-      Your secret word: <span class="role-word">${word}</span>
-    `;
-  }
+  roleText.innerHTML = isImposter
+    ? `<strong>You are the IMPOSTER.</strong><br>Your hint: <span class="role-word">${word}</span>`
+    : `Your secret word: <span class="role-word">${word}</span>`;
 });
 
 // -----------------------------
 // Connection handling (auto-rejoin)
 // -----------------------------
-
-// When disconnected (e.g. app backgrounded)
 socket.on("disconnect", () => {
-  // Keep them on the lobby if they were there; just show a message.
-  if (hostNote) {
-    hostNote.textContent = "Connection lost. Trying to reconnect...";
-  }
+  if (hostNote) hostNote.textContent = "Connection lost. Trying to reconnect...";
+  btnStartRound.disabled = true;
 });
 
-// When connection comes back
 socket.on("connect", () => {
-  // If we're already in a room in this session, do nothing
-  if (currentRoom) return;
-
-  // Try to restore from localStorage
+  if (currentRoom) return; // already connected
   let saved;
   try {
     saved = localStorage.getItem(SESSION_KEY);
-  } catch (e) {
-    return;
-  }
+  } catch (e) { return; }
   if (!saved) return;
 
   let session;
@@ -302,31 +244,33 @@ socket.on("connect", () => {
     return;
   }
 
-  // Attempt to rejoin the previous room automatically
+  setSelectedIcon(icon || "mafia1.png");
+  homeError.textContent = `Rejoining room ${roomCode} as ${name}...`;
+
   socket.emit("joinRoom", { roomCode, name, icon }, (res) => {
     if (!res || !res.ok) {
-      // Room may have been deleted or name taken
       localStorage.removeItem(SESSION_KEY);
+      homeError.textContent = "Your room has ended or your name is taken. Join again.";
       return;
     }
-
-    currentRoom = roomCode;
-    currentName = name;
-    isHost = !!res.isHost;
-    currentHostName = res.hostName || null;
-
-    roomCodeLabel.textContent = currentRoom;
-    playerNameLabel.textContent = currentName;
-    hostNameLabel.textContent = currentHostName || "Deciding host...";
-
-    roleRoundLabel.textContent = "";
-    roleText.textContent = "";
-
-    updateHostUI(res.round || 0);
-    showScreen("screen-lobby");
+    handleJoinSuccess(res, roomCode, name, icon);
   });
 });
 
 socket.on("connect_error", () => {
   homeError.textContent = "Unable to connect to server. Please try again.";
+});
+
+// -----------------------------
+// Optional: leave room button (if exists)
+// -----------------------------
+document.getElementById("btn-leave-room")?.addEventListener("click", () => {
+  if (currentRoom) socket.emit("leaveRoom", { roomCode: currentRoom });
+  localStorage.removeItem(SESSION_KEY);
+  currentRoom = null;
+  currentName = null;
+  isHost = false;
+  currentHostName = null;
+  currentPlayers = [];
+  showScreen("screen-home");
 });
