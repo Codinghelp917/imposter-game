@@ -1,7 +1,7 @@
 {
   "name": "imposter-game",
-  "version": "1.0.0",
-  "description": "Simple online imposter word game with rooms",
+  "version": "2.0.0",
+  "description": "Among Us-style online imposter word game with rooms, categories, live chat, optional voting and ejection reveals",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

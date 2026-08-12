@@ -1,122 +1,730 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Imposter Word Game</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1" />
+<meta name="theme-color" content="#140A24" />
+<title>Imposter · spot the faker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --stage:#140A24; --stage-2:#1C0F35; --velvet:#271456; --velvet-2:#301A63;
+    --line:rgba(255,255,255,.10);
+    --spot:#FFC94D; --spot-soft:#FFE39B; --hot:#FF4D8D; --hot-2:#FF7AA8;
+    --danger:#FF3B5C; --ok:#3DE0AC; --cyan:#5AD1FF;
+    --ink:#F7EEFF; --muted:#AE98DA; --muted-2:#7C67AD;
+    --radius:22px; --shadow:0 24px 60px -20px rgba(0,0,0,.7); --tap:54px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%}
+  body{
+    font-family:"Space Grotesk",system-ui,sans-serif;color:var(--ink);
+    background:
+      radial-gradient(120% 80% at 50% -10%, #3a1c5e 0%, rgba(58,28,94,0) 55%),
+      radial-gradient(90% 60% at 50% 0%, rgba(255,201,77,.16) 0%, rgba(255,201,77,0) 45%),
+      linear-gradient(180deg,#170C2B 0%, #0E0619 100%);
+    background-attachment:fixed;min-height:100dvh;display:flex;flex-direction:column;align-items:center;
+    padding:max(12px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom));overflow-x:hidden;
+  }
+  header{width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:4px}
+  .brandrow{display:flex;align-items:center;justify-content:space-between;width:100%}
+  .wordmark{font-family:"Unbounded";font-weight:800;letter-spacing:.5px;font-size:clamp(23px,6.5vw,30px);line-height:1;
+    background:linear-gradient(180deg,var(--spot-soft),var(--spot) 60%,#E9A227);-webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 0 26px rgba(255,201,77,.25);display:flex;align-items:center;gap:.32em}
+  .wordmark .dot{width:.22em;height:.22em;border-radius:50%;background:var(--hot);box-shadow:0 0 10px var(--hot);animation:flick 2.4s infinite}
+  .wordmark .dot:nth-child(3){animation-delay:.8s}
+  @keyframes flick{0%,88%,100%{opacity:1}90%{opacity:.35}94%{opacity:.9}}
+  .tagline{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .iconbtn{width:40px;height:40px;flex:0 0 auto;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);
+    color:var(--muted);font-size:17px;cursor:pointer;display:grid;place-items:center;transition:.18s}
+  .iconbtn:hover{color:var(--ink);border-color:rgba(255,255,255,.22)}.iconbtn:active{transform:scale(.94)}
+  .marquee{display:flex;gap:8px;margin-top:1px}
+  .marquee i{width:6px;height:6px;border-radius:50%;background:var(--spot);box-shadow:0 0 8px var(--spot);opacity:.85;animation:bulb 1.6s infinite}
+  .marquee i:nth-child(2n){animation-delay:.2s;background:var(--hot);box-shadow:0 0 8px var(--hot)}
+  .marquee i:nth-child(3n){animation-delay:.45s}
+  @keyframes bulb{0%,100%{opacity:.9}50%{opacity:.35}}
+  main{width:100%;max-width:480px;flex:1;display:flex;flex-direction:column;justify-content:center;padding:16px 0}
+  .screen{display:none;animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
+  .screen.active{display:block}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .card{background:linear-gradient(180deg,var(--velvet),var(--stage-2));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+  .card + .card{margin-top:12px}
+  h2.eyebrow{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--spot);font-weight:700;margin:0 0 4px}
+  h1.title{font-family:"Unbounded";font-weight:700;font-size:clamp(21px,5.6vw,27px);margin:0 0 6px;line-height:1.08}
+  p.lead{color:var(--muted);margin:0 0 16px;font-size:15px;line-height:1.5}
+  label.field{display:block;margin-bottom:13px}
+  label.field .lab,.lab{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:7px;display:block}
+  input.txt{width:100%;height:var(--tap);border-radius:14px;border:1px solid var(--line);background:rgba(9,4,20,.5);color:var(--ink);padding:0 15px;font:inherit;font-size:16px;transition:.18s;outline:none}
+  input.txt::placeholder{color:var(--muted-2)}
+  input.txt:focus{border-color:var(--spot);box-shadow:0 0 0 4px rgba(255,201,77,.16)}
+  input.code{font-family:"Space Mono";letter-spacing:.4em;text-align:center;font-size:25px;font-weight:700;padding-left:.4em}
+  .avatars{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:15px}
+  .av{aspect-ratio:1;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.03);font-size:21px;display:grid;place-items:center;cursor:pointer;transition:.15s}
+  .av:hover{transform:translateY(-2px)}
+  .av.sel{border-color:var(--spot);background:rgba(255,201,77,.14);box-shadow:0 0 0 3px rgba(255,201,77,.18)}
+  .btn{width:100%;height:var(--tap);border:none;border-radius:15px;font:inherit;font-weight:700;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:.16s}
+  .btn:active{transform:translateY(1px) scale(.995)}
+  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+  .btn.primary{background:linear-gradient(180deg,var(--hot-2),var(--hot));color:#2a0616;box-shadow:0 12px 26px -10px rgba(255,77,141,.7)}
+  .btn.gold{background:linear-gradient(180deg,var(--spot-soft),var(--spot));color:#3b2600;box-shadow:0 12px 26px -12px rgba(255,201,77,.7)}
+  .btn.ghost{background:rgba(255,255,255,.05);color:var(--ink);border:1px solid var(--line)}
+  .btn.ghost:hover{border-color:rgba(255,255,255,.24)}
+  .btn.danger{background:transparent;color:var(--danger);border:1px solid rgba(255,59,92,.4)}
+  .btn.sm{height:44px;font-size:14px;border-radius:12px}
+  .btn.link{background:none;color:var(--muted);height:auto;font-weight:600;text-decoration:underline;text-underline-offset:3px}
+  .row{display:flex;gap:10px}.row>*{flex:1}
+  .or{display:flex;align-items:center;gap:12px;color:var(--muted-2);font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin:16px 0}
+  .or::before,.or::after{content:"";height:1px;flex:1;background:var(--line)}
+  .err{color:#FFB3C2;background:rgba(255,59,92,.12);border:1px solid rgba(255,59,92,.3);border-radius:12px;padding:10px 13px;font-size:14px;margin-bottom:14px;display:none}
+  .err.show{display:block;animation:rise .3s both}
+  details.how{margin-top:14px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.02)}
+  details.how summary{list-style:none;cursor:pointer;padding:14px 18px;font-weight:600;color:var(--spot);display:flex;align-items:center;justify-content:space-between}
+  details.how summary::-webkit-details-marker{display:none}
+  details.how summary::after{content:"+";font-size:20px;color:var(--muted)}
+  details.how[open] summary::after{content:"\2013"}
+  details.how .body{padding:0 18px 18px;color:var(--muted);font-size:14px;line-height:1.6}
+  details.how .body b{color:var(--ink)}
+  details.how ol{margin:6px 0 0;padding-left:18px}details.how li{margin:6px 0}
+  .codewrap{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:6px}
+  .codebig{font-family:"Space Mono";font-weight:700;font-size:clamp(38px,12vw,54px);letter-spacing:.16em;background:linear-gradient(180deg,#fff,var(--spot));-webkit-background-clip:text;background-clip:text;color:transparent;padding-left:.16em;border:none;cursor:pointer}
+  .codelabel{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+  .players{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+  .prow{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:14px;padding:8px 12px;animation:rise .35s both}
+  .prow.dead{opacity:.5}
+  .avatar{width:38px;height:38px;flex:0 0 auto;border-radius:11px;display:grid;place-items:center;font-size:19px;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.16),rgba(255,255,255,.02));border:1px solid var(--line)}
+  .pname{font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:.04em}
+  .badge.host{background:rgba(255,201,77,.16);color:var(--spot);border:1px solid rgba(255,201,77,.3)}
+  .badge.you{background:rgba(255,77,141,.14);color:var(--hot-2);border:1px solid rgba(255,77,141,.3)}
+  .badge.score{background:rgba(61,224,172,.12);color:var(--ok);border:1px solid rgba(61,224,172,.3);font-family:"Space Mono"}
+  .badge.tick{background:rgba(61,224,172,.16);color:var(--ok);border:1px solid rgba(61,224,172,.35)}
+  .badge.out{background:rgba(255,59,92,.14);color:var(--danger);border:1px solid rgba(255,59,92,.3)}
+  .badge.off{background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--line)}
+  .hint-line{color:var(--muted);font-size:13.5px;text-align:center;margin-top:12px;line-height:1.5}
+  .setblock{margin-top:6px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+  .chip{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.03);cursor:pointer;font-weight:600;font-size:14px;transition:.15s;user-select:none}
+  .chip .ct{font-family:"Space Mono";font-size:11px;color:var(--muted-2)}
+  .chip:hover{border-color:rgba(255,255,255,.24)}
+  .chip.on{border-color:var(--spot);background:rgba(255,201,77,.14);color:var(--ink);box-shadow:0 0 0 2px rgba(255,201,77,.14) inset}
+  .chip.ro{cursor:default;opacity:.9}
+  .chip.ro:not(.on){display:none}
+  .seg{display:flex;gap:8px;margin-top:2px}
+  .seg button{flex:1;height:46px;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted);font:inherit;font-weight:700;cursor:pointer;transition:.15s}
+  .seg button.on{border-color:var(--hot);background:rgba(255,77,141,.14);color:var(--ink)}
+  .seg button:disabled{opacity:.4;cursor:not-allowed}
+  .stageword{text-align:center;margin-bottom:12px}
+  .flip{perspective:1400px;margin:2px auto 16px;max-width:300px}
+  .flip-inner{position:relative;width:100%;aspect-ratio:5/6.3;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.8,.2,1);cursor:pointer}
+  .flip.flipped .flip-inner{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px;text-align:center;border:1px solid var(--line);box-shadow:var(--shadow)}
+  .face.front{background:repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0 12px,transparent 12px 24px),linear-gradient(180deg,var(--velvet-2),var(--stage-2))}
+  .face.front .q{font-family:"Unbounded";font-weight:800;font-size:74px;background:linear-gradient(180deg,var(--spot-soft),var(--spot));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 30px rgba(255,201,77,.3)}
+  .face.front .tap{margin-top:12px;color:var(--muted);font-size:13px;letter-spacing:.2em;text-transform:uppercase;font-weight:600}
+  .face.front .pulse{position:absolute;inset:0;border-radius:24px;border:2px solid rgba(255,201,77,.5);animation:ring 2.2s infinite}
+  @keyframes ring{0%{opacity:.7;transform:scale(1)}70%{opacity:0;transform:scale(1.04)}100%{opacity:0}}
+  .face.back{transform:rotateY(180deg)}
+  .face.back.crew{background:linear-gradient(180deg,#2b2050,#1a1338);border-color:rgba(255,201,77,.4);box-shadow:0 0 0 1px rgba(255,201,77,.25),var(--shadow)}
+  .face.back.imp{background:linear-gradient(180deg,#3a1030,#25091c);border-color:rgba(255,59,92,.5);box-shadow:0 0 0 1px rgba(255,59,92,.35),0 24px 60px -20px rgba(255,59,92,.4)}
+  .role-kicker{font-size:12px;letter-spacing:.26em;text-transform:uppercase;font-weight:700;margin-bottom:10px}
+  .crew .role-kicker{color:var(--spot)}.imp .role-kicker{color:var(--danger)}
+  .role-word{font-family:"Unbounded";font-weight:700;font-size:clamp(24px,7vw,32px);line-height:1.05;margin-bottom:12px}
+  .role-note{font-size:13.5px;color:var(--muted);line-height:1.5;max-width:220px}
+  .cluechip{display:inline-block;margin:2px 0 12px;font-family:"Space Mono";font-weight:700;font-size:18px;color:var(--danger);background:rgba(255,59,92,.1);border:1px solid rgba(255,59,92,.32);border-radius:12px;padding:8px 15px}
+  .rolebar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;margin-bottom:12px;font-size:14px;border:1px solid var(--line)}
+  .rolebar.crew{background:rgba(255,201,77,.09);border-color:rgba(255,201,77,.3)}
+  .rolebar.imp{background:rgba(255,59,92,.09);border-color:rgba(255,59,92,.3)}
+  .rolebar.dead{background:rgba(255,255,255,.04)}
+  .rolebar b{font-family:"Unbounded";font-weight:700}
+  .rolebar .who{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .roundpill{margin-left:auto;font-family:"Space Mono";font-size:12px;color:var(--muted);white-space:nowrap}
+  .chatwrap{display:flex;flex-direction:column;height:min(56vh,440px)}
+  .chatlog{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:9px;padding:4px 2px 8px}
+  .msg{max-width:82%;padding:8px 12px;border-radius:14px;font-size:14.5px;line-height:1.4;word-wrap:break-word}
+  .msg .nm{font-size:11px;font-weight:700;color:var(--spot-soft);margin-bottom:2px;display:flex;align-items:center;gap:5px}
+  .msg.them{align-self:flex-start;background:rgba(255,255,255,.06);border:1px solid var(--line);border-bottom-left-radius:5px}
+  .msg.me{align-self:flex-end;background:linear-gradient(180deg,rgba(255,77,141,.22),rgba(255,77,141,.12));border:1px solid rgba(255,77,141,.3);border-bottom-right-radius:5px}
+  .msg.me .nm{color:var(--hot-2);justify-content:flex-end}
+  .msg.sys{align-self:center;background:none;border:none;color:var(--muted);font-size:12.5px;text-align:center;max-width:92%;font-weight:500;padding:2px}
+  .msg.sys::before{content:"\25C6 ";color:var(--muted-2)}
+  .chatbar{display:flex;gap:8px;margin-top:8px}
+  .chatbar input{flex:1;height:48px}
+  .chatbar .send{width:48px;height:48px;flex:0 0 auto;border-radius:13px;border:none;background:linear-gradient(180deg,var(--hot-2),var(--hot));color:#2a0616;font-size:18px;cursor:pointer;display:grid;place-items:center}
+  .chatbar .send:disabled{opacity:.4}
+  .deadnote{text-align:center;color:var(--danger);font-size:13px;font-weight:600;padding:10px;background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.25);border-radius:12px;margin-top:8px}
+  .votelist{list-style:none;margin:0 0 8px;padding:0;display:flex;flex-direction:column;gap:9px}
+  .vopt{display:flex;align-items:center;gap:12px;padding:10px 13px;border-radius:15px;background:rgba(255,255,255,.04);border:1px solid var(--line);cursor:pointer;transition:.15s;width:100%;color:inherit;font:inherit;text-align:left}
+  .vopt:hover{border-color:rgba(255,255,255,.24);transform:translateX(2px)}
+  .vopt.picked{border-color:var(--hot);background:rgba(255,77,141,.14);box-shadow:0 0 0 3px rgba(255,77,141,.15)}
+  .vopt:disabled{cursor:not-allowed;opacity:.55}
+  .vopt.skip{justify-content:center;font-weight:700;color:var(--muted);border-style:dashed}
+  .vopt.skip.picked{color:var(--ink)}
+  .vopt .pname{font-weight:600}
+  .vopt .mark{width:24px;height:24px;flex:0 0 auto;border-radius:50%;border:2px solid var(--muted-2);display:grid;place-items:center;color:#2a0616;font-size:14px;font-weight:800;transition:.15s}
+  .vopt.picked .mark{background:var(--hot);border-color:var(--hot)}
+  .vmeta{display:flex;align-items:center;gap:6px;flex:0 0 auto;margin-left:auto}
+  #eject{position:fixed;inset:0;z-index:70;display:none;place-items:center;overflow:hidden;background:radial-gradient(circle at 50% 40%, #1a1140 0%, #070312 70%)}
+  #eject.show{display:grid}
+  #eject .stars{position:absolute;inset:0}
+  #eject .floater{position:absolute;top:44%;left:0;font-size:64px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.6));will-change:transform}
+  #eject .ejtext{position:relative;text-align:center;padding:0 24px;z-index:2}
+  #eject .ejname{font-family:"Unbounded";font-weight:800;font-size:clamp(22px,6vw,30px);margin-bottom:10px;opacity:0}
+  #eject .ejrole{font-family:"Unbounded";font-weight:700;font-size:clamp(18px,5vw,24px);opacity:0}
+  #eject .ejrole.imp{color:var(--danger)}
+  #eject .ejrole.crew{color:var(--cyan)}
+  #eject .ejrole.none{color:var(--muted)}
+  @keyframes floatAcross{0%{transform:translateX(-90px) rotate(0deg)}100%{transform:translateX(calc(100vw + 90px)) rotate(380deg)}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .verdict{text-align:center;padding:4px 0 2px}
+  .verdict .emoji{font-size:50px;line-height:1;margin-bottom:6px;display:block;animation:pop .6s cubic-bezier(.2,1.5,.4,1) both}
+  @keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+  .verdict h1{font-family:"Unbounded";font-weight:800;font-size:clamp(24px,7vw,32px);margin:0 0 6px}
+  .verdict.win h1{color:var(--ok)}.verdict.lose h1{color:var(--danger)}
+  .verdict p{color:var(--muted);margin:0;font-size:15px;line-height:1.5}
+  .reveal-card{display:flex;align-items:center;gap:14px;justify-content:center;margin:16px 0;padding:14px;border-radius:16px;background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.3)}
+  .reveal-card .avatar{width:46px;height:46px;font-size:22px}
+  .reveal-card .lab{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--danger);font-weight:700}
+  .reveal-card .nm{font-family:"Unbounded";font-weight:700;font-size:19px}
+  .theword{text-align:center;margin:14px 0}
+  .theword .lab{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .theword .w{font-family:"Unbounded";font-weight:700;font-size:clamp(22px,6vw,29px);background:linear-gradient(180deg,#fff,var(--spot));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .theword .cat{font-size:12px;color:var(--muted);margin-top:4px}
+  .board{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
+  .brow{display:flex;align-items:center;gap:11px;padding:8px 12px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid var(--line)}
+  .brow .rank{font-family:"Space Mono";font-weight:700;color:var(--muted);width:20px;flex:0 0 auto}
+  .brow.lead{border-color:rgba(255,201,77,.4);background:rgba(255,201,77,.08)}.brow.lead .rank{color:var(--spot)}
+  .brow .sc{font-family:"Space Mono";font-weight:700;color:var(--ok);margin-left:auto}
+  .waiting{display:flex;align-items:center;justify-content:center;gap:10px;color:var(--muted);font-size:14px;padding:13px;font-weight:500}
+  .waiting .spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.2);border-top-color:var(--spot);animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  footer{color:var(--muted-2);font-size:11px;letter-spacing:.1em;text-align:center;padding-top:8px}
+  #toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:#2a1550;border:1px solid var(--line);color:var(--ink);padding:12px 18px;border-radius:14px;font-size:14px;font-weight:500;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.3s;z-index:80;max-width:90vw}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  #toast.error{border-color:rgba(255,59,92,.5);background:#3a1030}
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:75}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001s!important;transition-duration:.08s!important}.flip-inner{transition:none}}
+</style>
 </head>
 <body>
-  <div class="app-bg">
-    <div class="container">
-      <h1 class="app-title">Mafia Word Game</h1>
-      <p class="app-subtitle">Join a room and figure out who's the mole.</p>
-
-      <!-- HERO IMAGE -->
-      <img src="images/imposter.png" alt="Mafia Game Banner" class="hero-image">
-
-      <!-- ================= HOME SCREEN ================= -->
-      <div id="screen-home" class="screen">
-        <h2>Join or Create Room</h2>
-
-        <div class="card">
-          <h3>Create a new room</h3>
-          <button id="btn-create-room">Create Room</button>
-          <p class="hint-text" id="create-room-info"></p>
-        </div>
-
-        <div class="card">
-          <h3>Join existing room</h3>
-          <label>Room code</label>
-          <input id="join-room-code" placeholder="e.g. 1234">
-          <label>Your name</label>
-          <input id="join-name" placeholder="e.g. Thilaksan">
-
-          <!-- MAFIA ICON PICKER -->
-          <div class="icon-picker">
-            <p class="hint-text">Pick your mafia icon:</p>
-            <div class="icon-grid">
-              <button type="button" class="icon-option selected" data-icon="bandit.png">
-                <img src="images/icons/bandit.png" alt="Icon 1">
-              </button>
-              <button type="button" class="icon-option" data-icon="cute.png">
-                <img src="images/icons/cute.png" alt="Icon 2">
-              </button>
-              <button type="button" class="icon-option" data-icon="fedora.png">
-                <img src="images/icons/fedora.png" alt="Icon 3">
-              </button>
-              <button type="button" class="icon-option" data-icon="hat.png">
-                <img src="images/icons/hat.png" alt="Icon 4">
-              </button>
-              <button type="button" class="icon-option" data-icon="katana.png">
-                <img src="images/icons/katana.png" alt="Icon 5">
-              </button>
-              <button type="button" class="icon-option" data-icon="knife blood.png">
-                <img src="images/icons/knife blood.png" alt="Icon 6">
-              </button>
-              <button type="button" class="icon-option" data-icon="ninja.png">
-                <img src="images/icons/ninja.png" alt="Icon 7">
-              </button>
-              <button type="button" class="icon-option" data-icon="kutty.png">
-                <img src="images/icons/kutty.png" alt="Icon 8">
-              </button>
-              <button type="button" class="icon-option" data-icon="kuttyhat.png">
-                <img src="images/icons/kuttyhat.png" alt="Icon 9">
-              </button>
-              <button type="button" class="icon-option" data-icon="samurai.png">
-                <img src="images/icons/samurai.png" alt="Icon 10">
-              </button>
-            </div>
-          </div>
-
-          <button id="btn-join-room">Join</button>
-          <p id="home-error" class="error"></p>
-        </div>
-      </div>
-
-      <!-- ================= LOBBY / GAME SCREEN ================= -->
-      <div id="screen-lobby" class="screen hidden">
-        <div class="card">
-          <h2>
-            Room <span id="room-code-label"></span>
-            <span id="round-label" class="round-label"></span>
-          </h2>
-          <p class="meta">
-            You are: <strong><span id="player-name-label"></span></strong><br>
-            Host: <strong><span id="host-name-label"></span></strong>
-          </p>
-
-          <!-- 🔹 NEW: Leave room button -->
-          <button id="btn-leave-room" class="secondary-button">
-            Leave room
-          </button>
-        </div>
-
-        <div class="card">
-          <h3>Players in this room</h3>
-          <ul id="player-list" class="player-list"></ul>
-        </div>
-
-        <div class="card">
-          <h3>Speaking order (this round)</h3>
-          <ol id="order-list" class="order-list"></ol>
-          <p class="hint-text" id="host-note"></p>
-          <button id="btn-start-round">Start Round</button>
-        </div>
-
-        <div class="card">
-          <h3>Your word / hint</h3>
-          <p class="hint-text">Only you should see this. Don’t show your screen.</p>
-          <p id="role-round-label" class="round-label"></p>
-          <div id="role-text" class="role-text"></div>
-
-          <img src="images/imposter.png" alt="Imposter" id="imposter-image" class="imposter-image hidden">
-        </div>
-      </div>
+  <header>
+    <div class="brandrow">
+      <div style="width:40px"></div>
+      <div class="wordmark">IM<span class="dot"></span>POST<span class="dot"></span>ER</div>
+      <button class="iconbtn" id="soundBtn" title="Sound" aria-label="Toggle sound">🔊</button>
     </div>
+    <div class="tagline">spot the faker</div>
+    <div class="marquee" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section class="screen active" id="screen-home">
+      <div class="card">
+        <h2 class="eyebrow">Party word game · 3+ players</h2>
+        <h1 class="title">One of you is the imposter.</h1>
+        <p class="lead">Everyone gets the same secret word — except the imposter, who only knows the category. Chat your clues, then vote out the faker.</p>
+        <div class="err" id="homeErr"></div>
+        <label class="field"><span class="lab">Your name</span>
+          <input class="txt" id="nameInput" maxlength="16" autocomplete="off" placeholder="e.g. Alex" /></label>
+        <span class="lab">Pick your look</span>
+        <div class="avatars" id="avatars"></div>
+        <button class="btn primary" id="createBtn">✦ Create a room</button>
+        <div class="or">or join one</div>
+        <label class="field"><span class="lab">Room code</span>
+          <input class="txt code" id="codeInput" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="0000" /></label>
+        <button class="btn gold" id="joinBtn">Join room</button>
+        <details class="how"><summary>How to play</summary><div class="body">
+          <ol>
+            <li>Everyone sees the same <b>secret word</b>. The <b>imposter</b> only sees the <b>category</b> — they're faking it.</li>
+            <li>Take turns in the <b>chat</b> dropping one clue about the word: subtle enough to hide it, clear enough to prove you're not the imposter.</li>
+            <li>After each round you can <b>vote someone out — or skip</b> to keep discussing. You get <b>3 rounds per imposter</b>.</li>
+            <li>Eject a <b>crewmate</b> → they're out, the game rolls on. Eject the <b>imposter</b> → crew win!</li>
+          </ol>
+        </div></details>
+      </div>
+    </section>
+
+    <!-- LOBBY -->
+    <section class="screen" id="screen-lobby">
+      <div class="card">
+        <div class="codewrap">
+          <span class="codelabel">Room code · tap to copy</span>
+          <button class="codebig" id="copyCode" title="Copy invite"></button>
+        </div>
+        <div class="row"><button class="btn ghost sm" id="shareBtn">Share invite</button></div>
+        <ul class="players" id="lobbyPlayers"></ul>
+        <div class="setblock" id="settingsHost" style="display:none">
+          <div style="margin-top:18px"><span class="lab">Categories to play</span>
+            <div class="chips" id="catChips"></div></div>
+          <div style="margin-top:16px"><span class="lab">Imposters · sets round limit</span>
+            <div class="seg" id="impSeg">
+              <button data-n="1" class="on">1 imposter · 3 rounds</button>
+              <button data-n="2">2 imposters · 6 rounds</button>
+            </div></div>
+        </div>
+        <div class="setblock" id="settingsGuest" style="display:none">
+          <div style="margin-top:18px"><span class="lab">Categories in play</span>
+            <div class="chips" id="catChipsRO"></div></div>
+        </div>
+        <div id="hostControls" style="display:none;margin-top:18px">
+          <button class="btn primary" id="startBtn">Start game</button>
+          <p class="hint-line" id="startHint"></p>
+        </div>
+        <div id="guestWaiting" class="waiting" style="display:none;margin-top:14px">
+          <span class="spin"></span> Waiting for <b id="hostNameWait" style="color:var(--ink);margin:0 4px">the host</b> to start…
+        </div>
+        <button class="btn link" id="leaveLobby" style="margin:12px auto 0;display:block">Leave room</button>
+      </div>
+    </section>
+
+    <!-- REVEAL -->
+    <section class="screen" id="screen-reveal">
+      <div class="card">
+        <div class="stageword"><h2 class="eyebrow" id="revealRound">Round 1</h2><h1 class="title">Your secret role</h1></div>
+        <div class="flip" id="flipCard"><div class="flip-inner">
+          <div class="face front"><div class="pulse"></div><div class="q">?</div><div class="tap">Tap to reveal</div></div>
+          <div class="face back" id="cardBack"></div>
+        </div></div>
+        <div id="revealHostControls" style="display:none">
+          <button class="btn primary" id="startDiscBtn">Everyone ready → start discussion</button>
+          <p class="hint-line">Make sure each player has peeked at their card.</p>
+        </div>
+        <div id="revealGuestWait" class="waiting" style="display:none"><span class="spin"></span> Peek at your card, then wait for the host…</div>
+      </div>
+    </section>
+
+    <!-- DISCUSSION -->
+    <section class="screen" id="screen-discussion">
+      <div class="card">
+        <div class="rolebar" id="discRoleBar"></div>
+        <div class="chatwrap">
+          <div class="chatlog" id="chatLog"></div>
+          <div class="chatbar" id="chatBar">
+            <input class="txt" id="chatInput" maxlength="240" autocomplete="off" placeholder="Drop a clue…" />
+            <button class="send" id="chatSend" aria-label="Send">➤</button>
+          </div>
+          <div class="deadnote" id="deadNote" style="display:none">💀 You're out — spectating. You can watch but not chat.</div>
+        </div>
+        <div id="discHostControls" style="margin-top:12px;display:none">
+          <button class="btn gold" id="callVoteBtn">Call a vote</button>
+          <p class="hint-line">Or keep chatting. Calling a vote uses up this round.</p>
+        </div>
+        <div id="discGuestWait" class="waiting" style="display:none;margin-top:8px"><span class="spin"></span> Discuss — the host will call a vote when ready.</div>
+      </div>
+    </section>
+
+    <!-- VOTING -->
+    <section class="screen" id="screen-voting">
+      <div class="card">
+        <div class="rolebar" id="voteRoleBar"></div>
+        <h1 class="title">Who's the imposter?</h1>
+        <p class="lead" id="voteSub">Vote someone out, or skip to keep discussing next round.</p>
+        <ul class="votelist" id="voteList"></ul>
+        <div id="voteHostControls" style="display:none;margin-top:8px">
+          <button class="btn gold sm" id="revealNowBtn">End vote now</button>
+          <p class="hint-line" id="voteProgress"></p>
+        </div>
+        <div id="voteGuestWait" class="waiting" style="display:none;margin-top:8px"><span class="spin"></span> <span id="voteWaitText">Waiting on the rest…</span></div>
+      </div>
+    </section>
+
+    <!-- GAME OVER -->
+    <section class="screen" id="screen-over">
+      <div class="card">
+        <div class="verdict" id="verdict">
+          <span class="emoji" id="verdictEmoji">🎭</span>
+          <h1 id="verdictTitle">Game over</h1>
+          <p id="verdictSub"></p>
+        </div>
+        <div class="reveal-card" id="impReveal">
+          <div class="avatar" id="impAvatar">🎭</div>
+          <div><div class="lab" id="impLbl">The imposter was</div><div class="nm" id="impName">—</div></div>
+        </div>
+        <div class="theword">
+          <div class="lab">The secret word was</div>
+          <div class="w" id="overWord">—</div>
+          <div class="cat" id="overCat"></div>
+        </div>
+        <h2 class="eyebrow" style="margin:16px 0 2px">Scoreboard</h2>
+        <ul class="board" id="board"></ul>
+        <div id="overHostControls" style="display:none;margin-top:18px">
+          <button class="btn primary" id="newGameBtn">New game</button>
+          <p class="hint-line">Same crew, fresh word and imposter.</p>
+        </div>
+        <div id="overGuestWait" class="waiting" style="display:none;margin-top:16px"><span class="spin"></span> Waiting for the host to start a new game…</div>
+        <button class="btn link" id="leaveOver" style="margin:12px auto 0;display:block">Leave room</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>Best played with everyone in the same room · no need to pass phones</footer>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <canvas id="confetti"></canvas>
+  <div id="eject"><div class="stars" id="ejStars"></div>
+    <div class="floater" id="ejFloater">🧑‍🚀</div>
+    <div class="ejtext"><div class="ejname" id="ejName"></div><div class="ejrole" id="ejRole"></div></div>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
-  <script src="client.js"></script>
+  <script>
+  (function(){
+    "use strict";
+    const $=(s)=>document.querySelector(s), $$=(s)=>Array.from(document.querySelectorAll(s));
+    const esc=(s)=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    const AVATARS=["🦊","🐼","🐸","🐙","🦄","🐝","🐳","🦁","🐯","🦉","🐧","🐨","🦖","🌟","🍕","👽","🤖","👑"];
+
+    const state={
+      me:{pid:null,name:"",icon:AVATARS[0],isHost:false},
+      roomCode:null, room:null, role:null, myVote:null, results:null,
+      categories:[], selCats:["Famous People"], selImp:1
+    };
+    try{const s=JSON.parse(localStorage.getItem("imposter.me")||"{}");if(s.name)state.me.name=s.name;if(s.icon)state.me.icon=s.icon;}catch(e){}
+    const persistMe=()=>{try{localStorage.setItem("imposter.me",JSON.stringify({name:state.me.name,icon:state.me.icon}));}catch(e){}};
+    const saveSeat=()=>{try{localStorage.setItem("imposter.seat",JSON.stringify({roomCode:state.roomCode,pid:state.me.pid,name:state.me.name,icon:state.me.icon}));}catch(e){}};
+    const clearSeat=()=>{try{localStorage.removeItem("imposter.seat");}catch(e){}};
+
+    /* sound */
+    let soundOn=(localStorage.getItem("imposter.sound")||"on")==="on"; let actx=null;
+    const ac=()=>{if(!actx){try{actx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}return actx;};
+    function beep(f,d,t,v,w){if(!soundOn)return;const c=ac();if(!c)return;const s=c.currentTime+(w||0);const o=c.createOscillator(),g=c.createGain();o.type=t||"sine";o.frequency.value=f;g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(v||.14,s+.01);g.gain.exponentialRampToValueAtTime(.0001,s+d);o.connect(g);g.connect(c.destination);o.start(s);o.stop(s+d+.02);}
+    const sfx={tap:()=>beep(660,.09,"triangle",.12),flip:()=>{beep(300,.12,"sawtooth",.08);beep(520,.14,"triangle",.08,.05);},vote:()=>beep(740,.08,"square",.08),msg:()=>beep(880,.05,"sine",.05),whoosh:()=>{beep(200,.5,"sawtooth",.09);beep(340,.5,"triangle",.06,.05);},win:()=>[0,.1,.2,.34].forEach((d,i)=>beep([523,659,784,1047][i],.22,"triangle",.13,d)),lose:()=>{beep(200,.3,"sawtooth",.14);beep(150,.4,"sawtooth",.12,.08);}};
+    const updSound=()=>{$("#soundBtn").textContent=soundOn?"🔊":"🔈";};
+    $("#soundBtn").addEventListener("click",()=>{soundOn=!soundOn;localStorage.setItem("imposter.sound",soundOn?"on":"off");updSound();if(soundOn)sfx.tap();});
+    updSound();
+
+    /* toast + screens */
+    let toastT=null;
+    function toast(m,e){const el=$("#toast");el.textContent=m;el.className="show"+(e?" error":"");clearTimeout(toastT);toastT=setTimeout(()=>el.className="",3200);}
+    function show(id){$$(".screen").forEach(s=>s.classList.remove("active"));$("#screen-"+id).classList.add("active");window.scrollTo({top:0,behavior:"instant"});}
+
+    /* avatar picker */
+    const avWrap=$("#avatars");
+    AVATARS.forEach(a=>{const b=document.createElement("button");b.type="button";b.className="av"+(a===state.me.icon?" sel":"");b.textContent=a;
+      b.addEventListener("click",()=>{state.me.icon=a;persistMe();$$(".av").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");sfx.tap();});avWrap.appendChild(b);});
+    $("#nameInput").value=state.me.name;
+
+    /* ============ SOCKET ============ */
+    const socket=io({transports:["websocket","polling"]});
+    socket.on("categories",(list)=>{state.categories=list;renderCatChips();});
+    socket.on("connect",()=>{
+      let seat=null;try{seat=JSON.parse(localStorage.getItem("imposter.seat")||"null");}catch(e){}
+      if(seat&&seat.roomCode&&seat.pid&&!$("#screen-home").classList.contains("active")){
+        socket.emit("rejoinRoom",seat,(res)=>{
+          if(res&&res.ok){state.roomCode=seat.roomCode;state.me.pid=res.pid;state.me.isHost=res.isHost;
+            if(res.categories)state.categories=res.categories;
+            if(res.state){state.selCats=res.state.settings.categories;state.selImp=res.state.settings.imposters;}
+            if(res.chat){res.chat.forEach(m=>appendChat(m,true));}
+            state.results=res.gameResult?{result:res.gameResult}:null; applyState(res.state); routeByPhase();
+          } else { clearSeat(); }
+        });
+      }
+    });
+    socket.on("roomUpdate",(s)=>applyState(s));
+    socket.on("role",(r)=>{state.role=r;renderReveal(true);renderRoleBars();});
+    socket.on("gameStarted",(d)=>{state.myVote=null;state.results=null;clearChat();applyState(d.state);renderReveal(true);show("reveal");});
+    socket.on("discussionStarted",(d)=>{applyState(d.state);if(d.chat){clearChat();d.chat.forEach(m=>appendChat(m,true));}renderDiscussion();show("discussion");});
+    socket.on("votingStarted",(d)=>{state.myVote=null;applyState(d.state);renderVoting();show("voting");});
+    socket.on("chat",(m)=>{appendChat(m);if(!m.system&&m.pid!==state.me.pid)sfx.msg();});
+    socket.on("voteResolved",(d)=>{state.results=d.resolution.result?{result:d.resolution.result,word:d.resolution.word,category:d.resolution.category,imposterNames:d.resolution.imposterNames}:null;
+      applyState(d.state);playEjection(d.resolution);});
+    socket.on("returnedToLobby",(d)=>{state.role=null;state.results=null;state.myVote=null;clearChat();applyState(d.state);renderLobby();show("lobby");});
+    socket.on("toast",(d)=>toast(d.message,d.type==="error"));
+
+    /* ============ STATE ============ */
+    const meInRoom=()=>state.room?state.room.players.find(p=>p.pid===state.me.pid):null;
+    function applyState(s){
+      if(!s)return; state.room=s;
+      const mine=meInRoom(); if(mine)state.me.isHost=mine.isHost;
+      if(s.settings){state.selCats=s.settings.categories;state.selImp=s.settings.imposters;}
+      const active=$(".screen.active"); if(!active)return;
+      const id=active.id;
+      if(id==="screen-lobby")renderLobby();
+      else if(id==="screen-voting")renderVoting();
+      else if(id==="screen-discussion")renderDiscussion();
+      else if(id==="screen-over")renderScoreboard();
+      else if(id==="screen-reveal")renderReveal(false);
+    }
+    function routeByPhase(){
+      const r=state.room; if(!r)return show("home");
+      if(r.phase==="lobby"){renderLobby();show("lobby");}
+      else if(r.phase==="reveal"){renderReveal(true);show("reveal");}
+      else if(r.phase==="discussion"){renderDiscussion();show("discussion");}
+      else if(r.phase==="voting"){renderVoting();show("voting");}
+      else if(r.phase==="gameover"){renderScoreboard();show("over");}
+    }
+
+    /* category chips */
+    function renderCatChips(){
+      const host=$("#catChips"); if(host){host.innerHTML="";
+        state.categories.forEach(c=>{const on=state.selCats.includes(c.name);
+          const el=document.createElement("div");el.className="chip"+(on?" on":"");
+          el.innerHTML=`${c.emoji} ${esc(c.name)} <span class="ct">${c.count}</span>`;
+          el.addEventListener("click",()=>toggleCat(c.name));host.appendChild(el);});
+      }
+    }
+    function renderCatChipsRO(){
+      const ro=$("#catChipsRO"); if(!ro)return; ro.innerHTML="";
+      state.categories.forEach(c=>{const on=state.selCats.includes(c.name);const el=document.createElement("div");
+        el.className="chip ro"+(on?" on":"");el.innerHTML=`${c.emoji} ${esc(c.name)}`;ro.appendChild(el);});
+    }
+    function toggleCat(name){
+      const i=state.selCats.indexOf(name);
+      if(i>=0){if(state.selCats.length===1){toast("Keep at least one category.",true);return;}state.selCats.splice(i,1);}
+      else state.selCats.push(name);
+      sfx.tap();renderCatChips();
+      socket.emit("updateSettings",{roomCode:state.roomCode,categories:state.selCats,imposters:state.selImp});
+    }
+    $$("#impSeg button").forEach(b=>b.addEventListener("click",()=>{
+      const n=parseInt(b.dataset.n,10);state.selImp=n;
+      $$("#impSeg button").forEach(x=>x.classList.toggle("on",x===b));sfx.tap();
+      socket.emit("updateSettings",{roomCode:state.roomCode,categories:state.selCats,imposters:n});
+    }));
+
+    /* lobby */
+    function renderLobby(){
+      const r=state.room; if(!r)return;
+      $("#copyCode").textContent=state.roomCode;
+      const ul=$("#lobbyPlayers");ul.innerHTML="";
+      r.players.forEach(p=>{const li=document.createElement("li");li.className="prow";
+        li.innerHTML=`<div class="avatar">${esc(p.icon||"🎭")}</div><div class="pname">${esc(p.name)}</div>`+
+          (p.score?`<span class="badge score">${p.score}</span>`:``)+
+          (p.pid===state.me.pid?`<span class="badge you">you</span>`:``)+
+          (p.isHost?`<span class="badge host">host</span>`:``)+
+          (!p.connected?`<span class="badge off">away</span>`:``);
+        ul.appendChild(li);});
+      const isHost=state.me.isHost;
+      $("#settingsHost").style.display=isHost?"block":"none";
+      $("#settingsGuest").style.display=isHost?"none":"block";
+      $("#hostControls").style.display=isHost?"block":"none";
+      $("#guestWaiting").style.display=isHost?"none":"flex";
+      $("#hostNameWait").textContent=r.hostName||"the host";
+      const n=r.players.filter(p=>p.connected).length;
+      $$("#impSeg button").forEach(b=>{const bn=parseInt(b.dataset.n,10);b.classList.toggle("on",bn===state.selImp);b.disabled=(bn===2&&n<5);});
+      if(isHost){renderCatChips();const can=n>=3;$("#startBtn").disabled=!can;
+        $("#startHint").textContent=can?`${n} players in. Deal a word when you're ready.`:`Need ${3-n} more player${3-n===1?"":"s"} (min 3).`;}
+      else{renderCatChipsRO();}
+    }
+
+    /* reveal */
+    function renderReveal(reset){
+      const r=state.room; if(!r)return;
+      $("#revealRound").textContent="Round "+(r.round||1);
+      if(reset)$("#flipCard").classList.remove("flipped");
+      const back=$("#cardBack");
+      if(state.role){
+        if(state.role.isImposter){back.className="face back imp";
+          back.innerHTML=`<div class="role-kicker">You're the imposter</div><div class="role-note" style="margin-bottom:4px">Everyone else knows a word in:</div>`+
+            `<div class="cluechip">${esc(state.role.category)}</div><div class="role-note">Bluff a clue that fits the category. Blend in — and don't get caught.</div>`;
+        }else{back.className="face back crew";
+          back.innerHTML=`<div class="role-kicker">You're a crewmate</div><div class="role-word">${esc(state.role.word)}</div>`+
+            `<div class="role-note">Give a subtle one-word clue. Prove you know it — without handing it to the imposter.</div>`;}
+      } else { back.className="face back crew"; back.innerHTML=`<div class="role-note">Dealing…</div>`; }
+      $("#revealHostControls").style.display=state.me.isHost?"block":"none";
+      $("#revealGuestWait").style.display=state.me.isHost?"none":"flex";
+    }
+    $("#flipCard").addEventListener("click",()=>{const c=$("#flipCard");if(!state.role){toast("Dealing your card…");return;}c.classList.toggle("flipped");if(c.classList.contains("flipped"))sfx.flip();});
+
+    /* role bars */
+    function roleBarHTML(){
+      const r=state.room; const mine=meInRoom();
+      const round=`Round ${r.round}/${r.maxRounds}`;
+      if(mine&&!mine.alive) return {cls:"dead",html:`<span class="who">Ejected</span><b>Spectating</b><span class="roundpill">${round}</span>`};
+      if(state.role&&state.role.isImposter) return {cls:"imp",html:`<span class="who">You're the</span><b style="color:var(--danger)">Imposter</b><span style="color:var(--muted)">· ${esc(state.role.category)}</span><span class="roundpill">${round}</span>`};
+      if(state.role) return {cls:"crew",html:`<span class="who">Your word</span><b style="color:var(--spot)">${esc(state.role.word)}</b><span class="roundpill">${round}</span>`};
+      return {cls:"crew",html:`<span class="roundpill">${round}</span>`};
+    }
+    function renderRoleBars(){
+      const b=roleBarHTML();
+      ["#discRoleBar","#voteRoleBar"].forEach(sel=>{const el=$(sel);if(el){el.className="rolebar "+b.cls;el.innerHTML=b.html;}});
+    }
+    /* chat */
+    function clearChat(){$("#chatLog").innerHTML="";}
+    function appendChat(m,noSound){
+      const log=$("#chatLog");const near=log.scrollTop+log.clientHeight>=log.scrollHeight-60;
+      const div=document.createElement("div");
+      if(m.system){div.className="msg sys";div.textContent=m.text;}
+      else{const mine=m.pid===state.me.pid;div.className="msg "+(mine?"me":"them");
+        div.innerHTML=`<div class="nm">${esc(m.icon||"🎭")} ${esc(m.name)}</div>${esc(m.text)}`;}
+      log.appendChild(div);
+      if(near||m.pid===state.me.pid)log.scrollTop=log.scrollHeight;
+    }
+    function renderDiscussion(){
+      const r=state.room;if(!r)return;renderRoleBars();
+      const mine=meInRoom();const dead=mine&&!mine.alive;
+      $("#chatBar").style.display=dead?"none":"flex";
+      $("#deadNote").style.display=dead?"block":"none";
+      $("#discHostControls").style.display=state.me.isHost?"block":"none";
+      $("#discGuestWait").style.display=state.me.isHost?"none":"flex";
+      $("#chatLog").scrollTop=$("#chatLog").scrollHeight;
+    }
+    function sendChat(){
+      const inp=$("#chatInput");const t=inp.value.trim();if(!t)return;
+      socket.emit("chat",{roomCode:state.roomCode,text:t});inp.value="";inp.focus();
+    }
+    $("#chatSend").addEventListener("click",sendChat);
+    $("#chatInput").addEventListener("keydown",(e)=>{if(e.key==="Enter"){e.preventDefault();sendChat();}});
+
+    /* voting */
+    function renderVoting(){
+      const r=state.room;if(!r)return;renderRoleBars();
+      const mine=meInRoom();const dead=mine&&!mine.alive;
+      const list=$("#voteList");list.innerHTML="";
+      $("#voteSub").textContent=dead?"You're out — watching this vote play out.":"Vote someone out, or skip to keep discussing next round.";
+      r.players.filter(p=>p.alive).forEach(p=>{
+        if(p.pid===state.me.pid)return;
+        const b=document.createElement("button");b.type="button";b.className="vopt"+(state.myVote===p.pid?" picked":"");b.disabled=dead;
+        b.innerHTML=`<div class="avatar">${esc(p.icon||"🎭")}</div><span class="pname">${esc(p.name)}</span>`+
+          `<div class="vmeta">${p.hasVoted?`<span class="badge tick">voted</span>`:``}<span class="mark">${state.myVote===p.pid?"✓":""}</span></div>`;
+        b.addEventListener("click",()=>castVote(p.pid));list.appendChild(b);
+      });
+      const skip=document.createElement("button");skip.type="button";skip.className="vopt skip"+(state.myVote==="skip"?" picked":"");skip.disabled=dead;
+      skip.innerHTML=`⏭️ Skip — no ejection <span class="mark" style="margin-left:8px">${state.myVote==="skip"?"✓":""}</span>`;
+      skip.addEventListener("click",()=>castVote("skip"));list.appendChild(skip);
+      const voters=r.players.filter(p=>p.alive&&p.connected);
+      const voted=voters.filter(p=>p.hasVoted).length;
+      $("#voteHostControls").style.display=state.me.isHost?"block":"none";
+      $("#voteProgress").textContent=`${voted} of ${voters.length} votes in.`;
+      const iVoted=!!state.myVote||dead;
+      $("#voteGuestWait").style.display=(!state.me.isHost&&iVoted)?"flex":"none";
+      $("#voteWaitText").textContent=`${voted} of ${voters.length} in — waiting on the rest…`;
+    }
+    function castVote(target){
+      const mine=meInRoom();if(mine&&!mine.alive)return;
+      state.myVote=target;sfx.vote();
+      socket.emit("castVote",{roomCode:state.roomCode,target});renderVoting();
+    }
+
+    /* ejection animation */
+    function makeStars(){
+      const box=$("#ejStars");box.innerHTML="";
+      for(let i=0;i<50;i++){const s=document.createElement("div");
+        s.style.cssText=`position:absolute;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;border-radius:50%;background:#fff;opacity:${.2+Math.random()*.7};left:${Math.random()*100}%;top:${Math.random()*100}%`;
+        box.appendChild(s);}
+    }
+    const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function playEjection(res){
+      const ov=$("#eject");makeStars();
+      const ej=res.ejection;
+      const floater=$("#ejFloater"),nm=$("#ejName"),rl=$("#ejRole");
+      nm.style.opacity="0";rl.style.opacity="0";
+      floater.textContent=ej?(ej.icon||"🧑‍🚀"):"🧑‍🚀";
+      const dur=reduce?600:3000;
+      floater.style.animation="none";void floater.offsetWidth;
+      floater.style.animation=`floatAcross ${dur}ms linear forwards`;
+      ov.classList.add("show");sfx.whoosh();
+      setTimeout(()=>{nm.textContent=ej?`${ej.name} was ejected`:"Nobody was ejected";nm.style.animation="fadeUp .4s both";nm.style.opacity="1";},reduce?150:700);
+      setTimeout(()=>{
+        if(ej){rl.textContent=ej.wasImposter?"…the Imposter":"…not the Imposter";rl.className="ejrole "+(ej.wasImposter?"imp":"crew");}
+        else{rl.textContent="the round moves on";rl.className="ejrole none";}
+        rl.style.animation="fadeUp .4s both";rl.style.opacity="1";
+      },reduce?300:1500);
+      setTimeout(()=>{
+        ov.classList.remove("show");
+        if(state.results){renderScoreboard();show("over");if(didIWin()){sfx.win();confetti();}else{sfx.lose();}}
+        else{renderDiscussion();show("discussion");}
+      },dur+(reduce?300:600));
+    }
+    function didIWin(){
+      if(!state.results||!state.results.result)return false;
+      const w=state.results.result.winner;const amImp=state.role&&state.role.isImposter;
+      return (w==="crew"&&!amImp)||(w==="imposters"&&amImp);
+    }
+
+    /* game over */
+    function renderScoreboard(){
+      const r=state.room;if(!r)return;
+      if(state.results&&state.results.result){
+        const R=state.results;const crewWin=R.result.winner==="crew";
+        const v=$("#verdict");const iWon=didIWin();
+        v.className="verdict "+(iWon?"win":"lose");
+        $("#verdictEmoji").textContent=crewWin?"🎉":"🕵️";
+        $("#verdictTitle").textContent=crewWin?"Crew win!":"Imposters win!";
+        $("#verdictSub").textContent=R.result.reason||"";
+        const names=R.imposterNames||[];
+        $("#impLbl").textContent=names.length>1?"The imposters were":"The imposter was";
+        $("#impName").textContent=names.join(" & ")||"—";
+        const impPlayer=r.players.find(p=>p.name===names[0]);
+        $("#impAvatar").textContent=impPlayer?(impPlayer.icon||"🎭"):"🎭";
+        $("#overWord").textContent=R.word||"—";
+        $("#overCat").textContent=R.category?`from ${R.category}`:"";
+      }
+      const sorted=[...r.players].sort((a,b)=>b.score-a.score);const top=sorted.length?sorted[0].score:0;
+      const bd=$("#board");bd.innerHTML="";
+      sorted.forEach((p,i)=>{const li=document.createElement("li");li.className="brow"+(p.score===top&&top>0?" lead":"");
+        li.innerHTML=`<span class="rank">${i+1}</span><div class="avatar" style="width:30px;height:30px;font-size:15px">${esc(p.icon||"🎭")}</div>`+
+          `<span class="pname">${esc(p.name)}${p.pid===state.me.pid?' <span class="badge you" style="margin-left:4px">you</span>':''}</span><span class="sc">${p.score}</span>`;
+        bd.appendChild(li);});
+      $("#overHostControls").style.display=state.me.isHost?"block":"none";
+      $("#overGuestWait").style.display=state.me.isHost?"none":"flex";
+    }
+
+    /* ============ ACTIONS ============ */
+    const homeErr=(m)=>{const e=$("#homeErr");e.textContent=m;e.className="err show";};
+    const clearHomeErr=()=>{$("#homeErr").className="err";};
+    const readName=()=>{const n=$("#nameInput").value.trim();state.me.name=n;persistMe();return n;};
+
+    $("#createBtn").addEventListener("click",()=>{
+      clearHomeErr();ac();const name=readName();
+      if(name.length<2){homeErr("Enter a name (2–16 characters) first.");return;}
+      $("#createBtn").disabled=true;
+      socket.emit("createRoom",(res)=>{
+        if(!res||!res.ok){$("#createBtn").disabled=false;homeErr("Couldn't create a room. Try again.");return;}
+        if(res.categories)state.categories=res.categories;
+        socket.emit("joinRoom",{roomCode:res.roomCode,name,icon:state.me.icon},(jr)=>{
+          $("#createBtn").disabled=false;
+          if(!jr||!jr.ok){homeErr((jr&&jr.error)||"Couldn't join.");return;}
+          state.roomCode=res.roomCode;state.me.pid=jr.pid;state.me.isHost=jr.isHost;saveSeat();
+          applyState(jr.state);renderLobby();show("lobby");sfx.tap();
+        });
+      });
+    });
+    $("#joinBtn").addEventListener("click",()=>{
+      clearHomeErr();ac();const name=readName();const code=$("#codeInput").value.trim();
+      if(name.length<2){homeErr("Enter a name (2–16 characters) first.");return;}
+      if(code.length<4){homeErr("Enter the 4-digit room code.");return;}
+      $("#joinBtn").disabled=true;
+      socket.emit("joinRoom",{roomCode:code,name,icon:state.me.icon},(jr)=>{
+        $("#joinBtn").disabled=false;
+        if(!jr||!jr.ok){homeErr((jr&&jr.error)||"Couldn't join that room.");return;}
+        if(jr.categories)state.categories=jr.categories;
+        state.roomCode=code;state.me.pid=jr.pid;state.me.isHost=jr.isHost;saveSeat();
+        applyState(jr.state);renderLobby();show("lobby");sfx.tap();
+      });
+    });
+    $("#codeInput").addEventListener("input",(e)=>{e.target.value=e.target.value.replace(/\D/g,"").slice(0,4);});
+    $("#nameInput").addEventListener("keydown",(e)=>{if(e.key==="Enter")($("#codeInput").value.length===4?$("#joinBtn"):$("#createBtn")).click();});
+    $("#codeInput").addEventListener("keydown",(e)=>{if(e.key==="Enter")$("#joinBtn").click();});
+
+    $("#startBtn").addEventListener("click",()=>{socket.emit("startGame",{roomCode:state.roomCode});sfx.tap();});
+    $("#startDiscBtn").addEventListener("click",()=>{socket.emit("beginDiscussion",{roomCode:state.roomCode});sfx.tap();});
+    $("#callVoteBtn").addEventListener("click",()=>{socket.emit("callVote",{roomCode:state.roomCode});sfx.tap();});
+    $("#revealNowBtn").addEventListener("click",()=>{socket.emit("endVoting",{roomCode:state.roomCode});});
+    $("#newGameBtn").addEventListener("click",()=>{socket.emit("newGame",{roomCode:state.roomCode});sfx.tap();});
+
+    function goHome(){state.roomCode=null;state.room=null;state.role=null;state.results=null;state.myVote=null;state.me.pid=null;state.me.isHost=false;clearSeat();clearChat();show("home");}
+    $("#leaveLobby").addEventListener("click",()=>{if(state.roomCode)socket.emit("leaveRoom",{roomCode:state.roomCode});goHome();});
+    $("#leaveOver").addEventListener("click",()=>{if(state.roomCode)socket.emit("leaveRoom",{roomCode:state.roomCode});goHome();});
+
+    const invite=()=>`Join my Imposter game! Room code ${state.roomCode} → ${location.origin}`;
+    $("#copyCode").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(state.roomCode);toast("Room code copied");}catch(e){toast(state.roomCode);}});
+    $("#shareBtn").addEventListener("click",async()=>{const t=invite();if(navigator.share){try{await navigator.share({title:"Imposter",text:t});}catch(e){}}else{try{await navigator.clipboard.writeText(t);toast("Invite copied");}catch(e){toast(t);}}});
+
+    /* confetti */
+    const cvs=$("#confetti"),cx=cvs.getContext("2d");let parts=[],raf=null;
+    const rz=()=>{cvs.width=innerWidth;cvs.height=innerHeight;};rz();addEventListener("resize",rz);
+    function confetti(){if(reduce)return;const cols=["#FF4D8D","#FFC94D","#3DE0AC","#8B7BFF","#FFFFFF"];
+      for(let i=0;i<130;i++)parts.push({x:innerWidth/2+(Math.random()-.5)*120,y:innerHeight/3,vx:(Math.random()-.5)*11,vy:Math.random()*-13-4,g:.32+Math.random()*.14,s:5+Math.random()*7,rot:Math.random()*6.28,vr:(Math.random()-.5)*.3,c:cols[i%cols.length],life:0});
+      if(!raf)tick();}
+    function tick(){cx.clearRect(0,0,cvs.width,cvs.height);parts.forEach(p=>{p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.life++;});
+      parts=parts.filter(p=>p.y<innerHeight+40&&p.life<260);
+      parts.forEach(p=>{cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);cx.restore();});
+      if(parts.length)raf=requestAnimationFrame(tick);else{raf=null;cx.clearRect(0,0,cvs.width,cvs.height);}}
+
+    show("home");
+  })();
+  </script>
 </body>
 </html>
