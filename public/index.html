@@ -1491,7 +1491,14 @@
     function playEjection(res){
       const ov=$("#eject"),ej=res.ejection;
       const floater=$("#ejFloater"),nm=$("#ejName"),rl=$("#ejRole"),lf=$("#ejLeft");
-      nm.style.opacity="0";rl.style.opacity="0";lf.style.opacity="0";
+      // These still carry `animation: fadeUp .4s both` from the previous round.
+      // #eject is display:none in between, so the moment it is shown again that
+      // animation REPLAYS and fades the old text back in over the opacity reset
+      // — which flashed last round's "…they were The Imposter" at the start of
+      // the next cutscene. Clear the animation and the text, not just opacity.
+      [nm,rl,lf].forEach(el=>{el.style.animation="none";el.style.opacity="0";el.textContent="";});
+      rl.className="ejrole";
+      void nm.offsetWidth;   // flush, so re-setting the animation below replays it
       setIcon(floater,ej?(ej.icon||"crew:red"):"crew:red",ej?ej.name:"Nobody");
       const dur=reduce?600:3000;
       floater.style.animation="none";void floater.offsetWidth;

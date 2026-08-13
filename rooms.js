@@ -40,7 +40,19 @@ function normalize(s) {
   return (s || "").toString().normalize("NFD").replace(/\p{Mn}/gu, "")
     .toLowerCase().replace(/[^a-z0-9]/g, "");
 }
-function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+// Fisher-Yates. The old `sort(() => Math.random() - 0.5)` is not a shuffle: a
+// random comparator is inconsistent, so the sort leaves elements near where they
+// started. With 4 players the first to join drew position 0 — and therefore the
+// imposter role — 36% of the time instead of 25%, which is why the same person
+// kept being the imposter.
+function shuffle(arr) {
+  const out = [...arr];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
 
 function getRoom(code) { return rooms[code] || null; }
 function getPlayerByPid(room, pid) { return room ? room.players.find((p) => p.pid === pid) || null : null; }
