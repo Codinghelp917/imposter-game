@@ -311,10 +311,16 @@
               <button data-n="1" class="on">1 imposter · 3 rounds</button>
               <button data-n="2">2 imposters · 6 rounds</button>
             </div></div>
+          <div style="margin-top:16px"><span class="lab">Imposter hints</span>
+            <div class="seg" id="hintSeg">
+              <button data-h="on" class="on">Hints on · vague clue</button>
+              <button data-h="off">Hints off · blind</button>
+            </div></div>
         </div>
         <div class="setblock" id="settingsGuest" style="display:none">
           <div style="margin-top:18px"><span class="lab">Categories in play</span>
             <div class="chips" id="catChipsRO"></div></div>
+          <p class="hint-line" id="guestHintNote" style="margin-top:12px"></p>
         </div>
         <div id="hostControls" style="display:none;margin-top:18px">
           <button class="btn primary" id="startBtn">Start game</button>
@@ -448,7 +454,7 @@
     const state={
       me:{pid:null,name:"",icon:FALLBACK_AVATARS[0],isHost:false},
       roomCode:null, room:null, role:null, myVote:null, results:null,
-      categories:[], icons:[], selCats:["Famous People"], selImp:1
+      categories:[], icons:[], selCats:["Famous People"], selImp:1, selHints:true
     };
     try{const s=JSON.parse(localStorage.getItem("imposter.me")||"{}");if(s.name)state.me.name=s.name;if(s.icon)state.me.icon=s.icon;}catch(e){}
     const persistMe=()=>{try{localStorage.setItem("imposter.me",JSON.stringify({name:state.me.name,icon:state.me.icon}));}catch(e){}};
@@ -511,7 +517,7 @@
         socket.emit("rejoinRoom",seat,(res)=>{
           if(res&&res.ok){state.roomCode=seat.roomCode;state.me.pid=res.pid;state.me.isHost=res.isHost;
             if(res.categories)state.categories=res.categories;
-            if(res.state){state.selCats=res.state.settings.categories;state.selImp=res.state.settings.imposters;}
+            if(res.state){state.selCats=res.state.settings.categories;state.selImp=res.state.settings.imposters;state.selHints=res.state.settings.hintsEnabled!==false;}
             clearChat();if(res.chat){res.chat.forEach(m=>appendChat(m,true));}
             state.results=res.gameResult?{result:res.gameResult}:null; applyState(res.state); routeByPhase();
             if(wasReconnect)toast("Reconnected to the game");
@@ -548,7 +554,7 @@
     function applyState(s){
       if(!s)return; state.room=s;
       const mine=meInRoom(); if(mine)state.me.isHost=mine.isHost;
-      if(s.settings){state.selCats=s.settings.categories;state.selImp=s.settings.imposters;}
+      if(s.settings){state.selCats=s.settings.categories;state.selImp=s.settings.imposters;state.selHints=s.settings.hintsEnabled!==false;}
       const active=$(".screen.active"); if(!active)return;
       const id=active.id;
       if(id==="screen-lobby")renderLobby();
@@ -585,12 +591,17 @@
       if(i>=0){if(state.selCats.length===1){toast("Keep at least one category.",true);return;}state.selCats.splice(i,1);}
       else state.selCats.push(name);
       sfx.tap();renderCatChips();
-      socket.emit("updateSettings",{roomCode:state.roomCode,categories:state.selCats,imposters:state.selImp});
+      socket.emit("updateSettings",{roomCode:state.roomCode,categories:state.selCats,imposters:state.selImp,hintsEnabled:state.selHints});
     }
     $$("#impSeg button").forEach(b=>b.addEventListener("click",()=>{
       const n=parseInt(b.dataset.n,10);state.selImp=n;
       $$("#impSeg button").forEach(x=>x.classList.toggle("on",x===b));sfx.tap();
-      socket.emit("updateSettings",{roomCode:state.roomCode,categories:state.selCats,imposters:n});
+      socket.emit("updateSettings",{roomCode:state.roomCode,categories:state.selCats,imposters:n,hintsEnabled:state.selHints});
+    }));
+    $$("#hintSeg button").forEach(b=>b.addEventListener("click",()=>{
+      state.selHints=(b.dataset.h==="on");
+      $$("#hintSeg button").forEach(x=>x.classList.toggle("on",x===b));sfx.tap();
+      socket.emit("updateSettings",{roomCode:state.roomCode,categories:state.selCats,imposters:state.selImp,hintsEnabled:state.selHints});
     }));
 
     /* lobby */
@@ -613,6 +624,8 @@
       $("#hostNameWait").textContent=r.hostName||"the host";
       const n=r.players.filter(p=>p.connected).length;
       $$("#impSeg button").forEach(b=>{const bn=parseInt(b.dataset.n,10);b.classList.toggle("on",bn===state.selImp);b.disabled=(bn===2&&n<5);});
+      $$("#hintSeg button").forEach(b=>b.classList.toggle("on",(b.dataset.h==="on")===state.selHints));
+      const ghn=$("#guestHintNote"); if(ghn) ghn.textContent = state.selHints ? "Imposter hints: on — the faker gets a vague clue." : "Imposter hints: off — the faker is flying blind.";
       if(isHost){renderCatChips();const can=n>=3;$("#startBtn").disabled=!can;
         $("#startHint").textContent=can?`${n} players in. Deal a word when you're ready.`:`Need ${3-n} more player${3-n===1?"":"s"} (min 3).`;}
       else{renderCatChipsRO();}
@@ -626,8 +639,11 @@
       const back=$("#cardBack");
       if(state.role){
         if(state.role.isImposter){back.className="face back imp";
-          back.innerHTML=`<div class="role-kicker">You're the imposter</div><div class="role-note" style="margin-bottom:4px">Your vague hint is:</div>`+
-            `<div class="cluechip">${esc(state.role.hint||"No hint this round")}</div><div class="role-note">Use the hint to bluff a subtle clue. You do not get to see the category.</div>`;
+          const blind=state.role.hintsEnabled===false||!state.role.hint;
+          back.innerHTML=blind
+            ? `<div class="role-kicker">You're the imposter</div><div class="cluechip">🙈 Flying blind</div><div class="role-note">No hints this game. Listen to everyone's clues and bluff your way through. Blend in and don't get caught.</div>`
+            : `<div class="role-kicker">You're the imposter</div><div class="role-note" style="margin-bottom:4px">Your vague hint is:</div>`+
+              `<div class="cluechip">${esc(state.role.hint)}</div><div class="role-note">Use the hint to bluff a subtle clue. You don't get to see the category.</div>`;
         }else{back.className="face back crew";
           back.innerHTML=`<div class="role-kicker">You're a crewmate</div><div class="role-word">${esc(state.role.word)}</div>`+
             `<div class="role-note">Give a subtle one-word clue. Prove you know it — without handing it to the imposter.</div>`;}
@@ -642,7 +658,7 @@
       const r=state.room; const mine=meInRoom();
       const round=`Round ${r.round}/${r.maxRounds}`;
       if(mine&&!mine.alive) return {cls:"dead",html:`<span class="who">Ejected</span><b>Spectating</b><span class="roundpill">${round}</span>`};
-      if(state.role&&state.role.isImposter) return {cls:"imp",html:`<span class="who">You're the</span><b style="color:var(--danger)">Imposter</b><span style="color:var(--muted)">· hint: ${esc(state.role.hint||"none")}</span><span class="roundpill">${round}</span>`};
+      if(state.role&&state.role.isImposter){const blind=state.role.hintsEnabled===false||!state.role.hint;return {cls:"imp",html:`<span class="who">You're the</span><b style="color:var(--danger)">Imposter</b><span style="color:var(--muted)">· ${blind?"blind":"hint: "+esc(state.role.hint)}</span><span class="roundpill">${round}</span>`};}
       if(state.role) return {cls:"crew",html:`<span class="who">Your word</span><b style="color:var(--spot)">${esc(state.role.word)}</b><span class="roundpill">${round}</span>`};
       return {cls:"crew",html:`<span class="roundpill">${round}</span>`};
     }

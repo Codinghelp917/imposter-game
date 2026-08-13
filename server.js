@@ -51,7 +51,6 @@ app.get("/", (req, res, next) => {
 app.use(express.static(PUBLIC_DIR));
 
 const CATEGORIES = require("./categories.json");
-const WORD_HINTS = require("./words.json");
 const CATEGORY_LIST = Object.keys(CATEGORIES).map((name) => ({
   name, emoji: CATEGORIES[name].emoji, count: CATEGORIES[name].words.length
 }));
@@ -75,22 +74,26 @@ function clearDisconnectGrace(roomCode, pid) {
   disconnectTimers.delete(key);
 }
 
-function hintKey(value) {
-  return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]/g, "");
-}
-const HINT_BY_WORD = new Map(WORD_HINTS.filter((x) => x && x.word && x.hint).map((x) => [hintKey(x.word), x.hint]));
-function getHintForWord(word) { return HINT_BY_WORD.get(hintKey(word)) || null; }
 
 function broadcast(code) {
   const room = R.getRoom(code);
   if (room) io.to(code).emit("roomUpdate", R.publicRoomState(room));
+}
+function imposterHint(room) {
+  if (!room.settings || room.settings.hintsEnabled === false) return null;
+  const h = room.wordHints || [];
+  if (!h.length) return null;
+  const rot = room.hintRotation || 0;
+  const idx = (rot + Math.max(0, (room.round || 1) - 1)) % h.length;
+  return h[idx];
 }
 function rolePayload(room, player) {
   return {
     isImposter: player.isImposter,
     word: player.isImposter ? null : room.word,
     category: player.isImposter ? null : room.category,
-    hint: player.isImposter ? (room.hint || null) : null,
+    hint: player.isImposter ? imposterHint(room) : null,
+    hintsEnabled: room.settings ? room.settings.hintsEnabled !== false : true,
     round: room.round,
     maxRounds: room.maxRounds
   };
@@ -186,7 +189,7 @@ function doResolve(code, force) {
   if (!res) return;
   io.to(code).emit("voteResolved", { resolution: res, state: R.publicRoomState(room) });
   broadcast(code);
-  if (room.phase === "discussion") scheduleTurnTimer(code);
+  if (room.phase === "discussion") { dealRoles(room); scheduleTurnTimer(code); }
 }
 
 io.on("connection", (socket) => {
@@ -218,16 +221,15 @@ io.on("connection", (socket) => {
     if (typeof cb === "function") cb({ ok: true, pid: player.pid, isHost: room.hostId === socket.id, state: R.publicRoomState(room), chat: room.chat.slice(-60), gameResult: room.gameResult, categories: CATEGORY_LIST });
     broadcast(roomCode); scheduleTurnTimer(roomCode);
   });
-  socket.on("updateSettings", ({ roomCode, categories, imposters }) => {
+  socket.on("updateSettings", ({ roomCode, categories, imposters, hintsEnabled }) => {
     const room = R.getRoom(roomCode); if (!room || room.hostId !== socket.id) return;
-    R.setSettings(room, { categories, imposters }, CATEGORIES); broadcast(roomCode);
+    R.setSettings(room, { categories, imposters, hintsEnabled }, CATEGORIES); broadcast(roomCode);
   });
   socket.on("startGame", ({ roomCode }) => {
     const room = R.getRoom(roomCode); if (!room) return;
     if (room.hostId !== socket.id) return socket.emit("toast", { type: "error", message: "Only the host can start." });
     const result = R.startGame(room, CATEGORIES);
     if (!result.ok) return socket.emit("toast", { type: "error", message: result.error });
-    room.hint = getHintForWord(room.word);
     dealRoles(room); io.to(roomCode).emit("gameStarted", { state: R.publicRoomState(room) }); broadcast(roomCode);
   });
   socket.on("beginDiscussion", ({ roomCode }) => {

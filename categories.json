@@ -1,1152 +1,3966 @@
 {
- "Famous People": {
-  "emoji": "⭐",
+ "Technology": {
+  "emoji": "💻",
   "words": [
-   "Taylor Swift",
-   "Beyoncé",
-   "Rihanna",
-   "Adele",
-   "Lady Gaga",
-   "Miley Cyrus",
-   "Ariana Grande",
-   "Billie Eilish",
-   "Ed Sheeran",
-   "Drake",
-   "The Weeknd",
-   "Eminem",
-   "Kanye West",
-   "Nicki Minaj",
-   "Post Malone",
-   "Travis Scott",
-   "Harry Styles",
-   "Justin Bieber",
-   "Selena Gomez",
-   "Doja Cat",
-   "Katy Perry",
-   "Shakira",
-   "Jennifer Lopez",
-   "Madonna",
-   "Britney Spears",
-   "Dua Lipa",
-   "Bruno Mars",
-   "Cardi B",
-   "Snoop Dogg",
-   "Bad Bunny",
-   "Lionel Messi",
-   "Cristiano Ronaldo",
-   "Neymar",
-   "David Beckham",
-   "Kylian Mbappé",
-   "Serena Williams",
-   "Usain Bolt",
-   "Roger Federer",
-   "Lewis Hamilton",
-   "Tiger Woods",
-   "Michael Jordan",
-   "LeBron James",
-   "Kobe Bryant",
-   "Tom Brady",
-   "Conor McGregor",
-   "Mike Tyson",
-   "Virat Kohli",
-   "Naomi Osaka",
-   "Simone Biles",
-   "Novak Djokovic",
-   "Leonardo DiCaprio",
-   "Brad Pitt",
-   "Tom Cruise",
-   "Johnny Depp",
-   "Keanu Reeves",
-   "Ryan Reynolds",
-   "Dwayne Johnson",
-   "Will Smith",
-   "Robert Downey Jr.",
-   "Hugh Jackman",
-   "Chris Evans",
-   "Chris Hemsworth",
-   "Tom Holland",
-   "Zendaya",
-   "Margot Robbie",
-   "Emma Stone",
-   "Florence Pugh",
-   "Timothée Chalamet",
-   "Cillian Murphy",
-   "Tom Hardy",
-   "Angelina Jolie",
-   "Scarlett Johansson",
-   "Anne Hathaway",
-   "Jennifer Lawrence",
-   "Sandra Bullock",
-   "Julia Roberts",
-   "Emma Watson",
-   "Daniel Radcliffe",
-   "Robert Pattinson",
-   "Kristen Stewart",
-   "Elon Musk",
-   "Mark Zuckerberg",
-   "Bill Gates",
-   "Steve Jobs",
-   "Barack Obama",
-   "Donald Trump",
-   "Joe Biden",
-   "Rishi Sunak",
-   "King Charles",
-   "Princess Diana",
-   "England",
-   "Scotland",
-   "Wales",
-   "Ireland",
-   "France",
-   "Spain",
-   "Portugal",
-   "Italy",
-   "Germany",
-   "Netherlands",
-   "Belgium",
-   "Switzerland",
-   "Austria",
-   "Norway",
-   "Sweden",
-   "Finland",
-   "Denmark",
-   "Poland",
-   "Greece",
-   "Turkey",
-   "Russia",
-   "China",
-   "Japan",
-   "South Korea",
-   "India",
-   "Pakistan",
-   "Bangladesh",
-   "Nepal",
-   "Thailand",
-   "Vietnam",
-   "Philippines",
-   "Indonesia",
-   "Malaysia",
-   "Singapore",
-   "Australia",
-   "New Zealand",
-   "United States",
-   "Canada",
-   "Mexico",
-   "Brazil",
-   "Argentina",
-   "Chile",
-   "Peru",
-   "Colombia",
-   "Egypt",
-   "South Africa",
-   "Nigeria",
-   "Kenya",
-   "Ethiopia",
-   "Morocco",
-   "London",
-   "Paris",
-   "New York",
-   "Los Angeles",
-   "Tokyo",
-   "Dubai",
-   "Hong Kong",
-   "Rome",
-   "Barcelona",
-   "Berlin",
-   "Amsterdam",
-   "Venice",
-   "Milan",
-   "Madrid",
-   "Istanbul",
-   "Athens",
-   "Prague",
-   "Vienna",
-   "Budapest",
-   "Copenhagen",
-   "Stockholm",
-   "Oslo",
-   "Helsinki",
-   "Moscow",
-   "Beijing",
-   "Shanghai",
-   "Seoul",
-   "Bangkok",
-   "Mumbai",
-   "Delhi",
-   "Kuala Lumpur",
-   "Jakarta",
-   "Sydney",
-   "Melbourne",
-   "San Francisco",
-   "Chicago",
-   "Miami",
-   "Toronto",
-   "Vancouver",
-   "Mexico City",
-   "Rio de Janeiro",
-   "Buenos Aires",
-   "Cape Town",
-   "Cairo",
-   "Nairobi",
-   "Johannesburg",
-   "Doha",
-   "Riyadh",
-   "Dog",
-   "Cat",
-   "Horse",
-   "Cow",
-   "Sheep",
-   "Pig",
-   "Goat",
-   "Chicken",
-   "Duck",
-   "Goose",
-   "Lion",
-   "Tiger",
-   "Leopard",
-   "Cheetah",
-   "Bear",
-   "Wolf",
-   "Fox",
-   "Elephant",
-   "Giraffe",
-   "Zebra",
-   "Monkey",
-   "Gorilla",
-   "Chimpanzee",
-   "Kangaroo",
-   "Koala",
-   "Panda",
-   "Penguin",
-   "Polar Bear",
-   "Seal",
-   "Dolphin",
-   "Whale",
-   "Shark",
-   "Octopus",
-   "Crab",
-   "Turtle",
-   "Snake",
-   "Crocodile",
-   "Frog",
-   "Lizard",
-   "Bat",
-   "Eagle",
-   "Owl",
-   "Parrot",
-   "Peacock",
-   "Crow",
-   "Pigeon",
-   "Butterfly",
-   "Bee",
-   "Ant",
-   "Spider",
-   "Apple",
-   "Samsung",
-   "Microsoft",
-   "Google",
-   "Amazon",
-   "Netflix",
-   "YouTube",
-   "TikTok",
-   "Instagram",
-   "Facebook",
-   "Twitter",
-   "Spotify",
-   "Uber",
-   "Airbnb",
-   "Tesla",
-   "Nike",
-   "Adidas",
-   "Puma",
-   "Under Armour",
-   "Reebok",
-   "Coca-Cola",
-   "Pepsi",
-   "Starbucks",
-   "McDonald's",
-   "KFC",
-   "Subway",
-   "Nando’s",
-   "Domino’s",
-   "Burger King",
-   "Costa",
-   "IKEA",
-   "Primark",
-   "Zara",
-   "H&M",
-   "Gucci",
-   "Louis Vuitton",
-   "Rolex",
-   "Chanel",
-   "Dior",
-   "Burberry",
-   "Levi’s",
-   "Ray-Ban",
-   "L’Oréal",
-   "Apple Watch",
-   "PlayStation",
-   "Xbox",
-   "Nintendo",
-   "Disney",
-   "Lego",
-   "Canon",
-   "Pizza",
-   "Burger",
-   "Fries",
-   "Hot Dog",
-   "Sandwich",
-   "Taco",
-   "Burrito",
-   "Pasta",
-   "Spaghetti",
-   "Lasagna",
-   "Sushi",
-   "Ramen",
-   "Noodles",
-   "Rice",
-   "Curry",
-   "Steak",
-   "Fish",
-   "Shrimp",
-   "Salmon",
-   "Egg",
-   "Omelette",
-   "Bacon",
-   "Sausage",
-   "Ham",
-   "Beef",
-   "Lamb",
-   "Pork",
-   "Meatballs",
-   "Bread",
-   "Bagel",
-   "Croissant",
-   "Toast",
-   "Muffin",
-   "Pancake",
-   "Waffle",
-   "Cereal",
-   "Granola",
-   "Yogurt",
-   "Cheese",
-   "Butter",
-   "Milk",
-   "Cream",
-   "Ice Cream",
-   "Cake",
-   "Cupcake",
-   "Brownie",
-   "Cookie",
-   "Doughnut",
-   "Chocolate",
-   "Candy",
-   "Lollipop",
-   "Gum",
-   "Popcorn",
-   "Chips",
-   "Pretzel",
-   "Crackers",
-   "Nuts",
-   "Trail Mix",
-   "Banana",
-   "Orange",
-   "Lemon",
-   "Grapes",
-   "Strawberry",
-   "Blueberry",
-   "Pineapple",
-   "Watermelon",
-   "Mango",
-   "Pear",
-   "Peach",
-   "Kiwi",
-   "Coconut",
-   "Avocado",
-   "Tomato",
-   "Potato",
-   "Carrot",
-   "Broccoli",
-   "Cauliflower",
-   "Onion",
-   "Garlic",
-   "Lettuce",
-   "Cucumber",
-   "Spinach",
-   "Corn",
-   "Peas",
-   "Beans",
-   "Chili",
-   "Pumpkin",
-   "Soup",
-   "Salad",
-   "Samosa",
-   "Spring Roll",
-   "Dumpling",
-   "Curry Rice",
-   "Paella",
-   "Schnitzel",
-   "Kebab",
-   "Falafel",
-   "Hummus",
-   "Guacamole",
-   "Nachos",
-   "Pizza Slice",
-   "Hot Wings",
-   "BBQ Ribs",
-   "Fries Box",
-   "Mashed Potato",
-   "Gravy",
-   "Stuffing",
-   "Pancakes",
-   "French Toast",
-   "Waffles",
-   "Cereal Bowl",
-   "Toast Butter",
-   "Eggs Benedict",
-   "Bagel Cream",
-   "Croissant Jam",
-   "Oatmeal",
-   "Smoothie",
-   "Coffee",
-   "Tea",
-   "Juice",
-   "Water",
-   "Soda",
-   "Milkshake",
-   "Hot Chocolate",
-   "Beer",
-   "Wine",
-   "Cocktail",
-   "Pizza Margherita",
-   "Cheeseburger",
-   "Veggie Burger",
-   "Fried Chicken",
-   "Fish and Chips",
-   "Hot Soup",
-   "Caesar Salad",
-   "Greek Salad",
-   "Tuna Sandwich",
-   "Club Sandwich",
-   "Chocolate Cake",
-   "Apple Pie",
-   "Cheesecake",
-   "Ice Cream Sundae",
-   "Donut Glaze",
-   "Cupcake Frost",
-   "Cookies",
-   "Brownies",
-   "Macaron",
-   "Phone",
-   "Laptop",
-   "Tablet",
-   "Computer",
-   "Mouse",
-   "Keyboard",
-   "Charger",
-   "Headphones",
-   "Speaker",
-   "Camera",
-   "Television",
-   "Remote",
-   "Light Bulb",
-   "Lamp",
-   "Fan",
-   "Clock",
-   "Watch",
-   "Mirror",
-   "Glasses",
-   "Wallet",
-   "Purse",
-   "Bag",
-   "Backpack",
-   "Umbrella",
-   "Coat",
-   "Shoes",
-   "Socks",
-   "Hat",
-   "Scarf",
-   "Gloves",
-   "Chair",
-   "Table",
-   "Desk",
-   "Bed",
-   "Pillow",
-   "Blanket",
-   "Curtains",
-   "Carpet",
-   "Cushion",
-   "Shelf",
-   "Book",
-   "Notebook",
-   "Pen",
-   "Pencil",
-   "Ruler",
-   "Scissors",
-   "Glue",
-   "Tape",
-   "Paper",
-   "Envelope",
-   "Bottle",
-   "Glass",
-   "Cup",
-   "Plate",
-   "Bowl",
-   "Fork",
-   "Knife",
-   "Spoon",
-   "Pan",
-   "Pot",
-   "Kettle",
-   "Toaster",
-   "Microwave",
-   "Oven",
-   "Fridge",
-   "Freezer",
-   "Blender",
-   "Dishwasher",
-   "Vacuum",
-   "Iron",
-   "Washing Machine",
-   "Dryer",
-   "Broom",
-   "Mop",
-   "Bucket",
-   "Trash Can",
-   "Recycling Bin",
-   "Soap",
-   "Shampoo",
-   "Toothbrush",
-   "Toothpaste",
-   "Towel",
-   "Comb",
-   "Hairbrush",
-   "Razor",
-   "Soap Dish",
-   "Toilet",
-   "Toilet Paper",
-   "Shower",
-   "Bathtub",
-   "Sink",
-   "Door",
-   "Window",
-   "Key",
-   "Lock",
-   "Car",
-   "Bicycle",
-   "Motorbike",
-   "Bus",
-   "Train",
-   "Plane",
-   "Boat",
-   "Ship",
-   "Helmet",
-   "Seatbelt",
-   "Map",
-   "Compass",
-   "Ticket",
-   "Passport",
-   "Credit Card",
-   "Money",
-   "Coin",
-   "Receipt",
-   "Calendar",
-   "Sticky Notes",
-   "Highlighter",
-   "Marker",
-   "Stamp",
-   "Rope",
-   "String",
-   "Balloon",
-   "Candle",
-   "Matches",
-   "Lighter",
-   "Flashlight",
-   "Battery",
-   "Tripod",
-   "Binoculars",
-   "Sunglasses",
-   "Bracelet",
-   "Ring",
-   "Necklace",
-   "Earrings",
-   "Makeup Brush",
-   "Lipstick",
-   "Perfume",
-   "Nail Polish",
-   "Hair Dryer",
-   "Tissue",
-   "First Aid Kit",
-   "Medicine",
-   "Thermometer",
-   "Mask",
-   "Glasses Case",
-   "Running",
-   "Walking",
-   "Jogging",
-   "Cycling",
-   "Swimming",
-   "Hiking",
-   "Camping",
-   "Fishing",
-   "Surfing",
-   "Skateboarding",
-   "Snowboarding",
-   "Skiing",
-   "Dancing",
-   "Singing",
-   "Playing Guitar",
-   "Playing Piano",
-   "Drawing",
-   "Painting",
-   "Photography",
-   "Cooking",
-   "Baking",
-   "Grilling",
-   "Gardening",
-   "Reading",
-   "Writing",
-   "Meditating",
-   "Yoga",
-   "Gym Workout",
-   "Boxing",
-   "Martial Arts",
-   "Football",
-   "Basketball",
-   "Tennis",
-   "Golf",
-   "Baseball",
-   "Cricket",
-   "Badminton",
-   "Volleyball",
-   "Table Tennis",
-   "Bowling",
-   "Skating",
-   "Horse Riding",
-   "Rock Climbing",
-   "Skydiving",
-   "Scuba Diving",
-   "Sailing",
-   "Kayaking",
-   "Canoeing",
-   "Jet Skiing",
-   "Archery",
-   "Hunting",
-   "Cooking Class",
-   "Board Games",
-   "Card Games",
-   "Video Games",
-   "Watching TV",
-   "Movie Night",
-   "Shopping",
-   "Traveling",
-   "Road Trip",
-   "Picnic",
-   "BBQ",
-   "Photography Walk",
-   "Museum Visit",
-   "Zoo Visit",
-   "Concert",
-   "Festival",
-   "Theatre",
-   "Painting Class",
-   "Pottery",
-   "Calligraphy",
-   "Origami",
-   "Knitting",
-   "Sewing",
-   "DIY Craft",
-   "Building Lego",
-   "Puzzle Solving",
-   "Meditation",
-   "Running Marathon",
-   "Volunteering",
-   "Cleaning",
-   "Cooking Dinner",
-   "Eating Out",
-   "Studying",
-   "Teaching",
-   "Driving",
-   "Biking",
-   "Laundry",
-   "Shopping Online",
-   "Watching Sports",
-   "Eiffel Tower",
-   "Statue of Liberty",
-   "Big Ben",
-   "Colosseum",
-   "Great Wall of China",
-   "Taj Mahal",
-   "Pyramids of Giza",
-   "Sphinx",
-   "Christ the Redeemer",
-   "Machu Picchu",
-   "Stonehenge",
-   "Sydney Opera House",
-   "Golden Gate Bridge",
-   "Empire State Building",
-   "Times Square",
-   "Hollywood Sign",
-   "Mount Everest",
-   "Grand Canyon",
-   "Niagara Falls",
-   "Mount Rushmore",
-   "Leaning Tower of Pisa",
-   "Buckingham Palace",
-   "Louvre Museum",
-   "Cooking BBQ",
-   "Climbing",
-   "Darts",
-   "Flying",
-   "Ice Skating",
-   "Video Gaming",
-   "Sleeping"
+   {
+    "word": "Computer",
+    "hints": [
+     "machine",
+     "desktop",
+     "screen"
+    ]
+   },
+   {
+    "word": "Smartphone",
+    "hints": [
+     "pocket",
+     "apps",
+     "touchscreen"
+    ]
+   },
+   {
+    "word": "Tablet",
+    "hints": [
+     "flat",
+     "touchscreen",
+     "portable"
+    ]
+   },
+   {
+    "word": "Laptop",
+    "hints": [
+     "portable",
+     "foldable",
+     "work"
+    ]
+   },
+   {
+    "word": "Internet",
+    "hints": [
+     "online",
+     "global",
+     "web"
+    ]
+   },
+   {
+    "word": "WiFi",
+    "hints": [
+     "wireless",
+     "signal",
+     "connection"
+    ]
+   },
+   {
+    "word": "Bluetooth",
+    "hints": [
+     "wireless",
+     "pairing",
+     "headphones"
+    ]
+   },
+   {
+    "word": "Camera",
+    "hints": [
+     "lens",
+     "photos",
+     "shutter"
+    ]
+   },
+   {
+    "word": "Television",
+    "hints": [
+     "screen",
+     "channels",
+     "remote"
+    ]
+   },
+   {
+    "word": "Radio",
+    "hints": [
+     "audio",
+     "stations",
+     "waves"
+    ]
+   },
+   {
+    "word": "GPS",
+    "hints": [
+     "location",
+     "satellite",
+     "directions"
+    ]
+   },
+   {
+    "word": "Drone",
+    "hints": [
+     "flying",
+     "remote",
+     "aerial"
+    ]
+   },
+   {
+    "word": "Robot",
+    "hints": [
+     "machine",
+     "automation",
+     "metal"
+    ]
+   },
+   {
+    "word": "Artificial Intelligence",
+    "hints": [
+     "smart",
+     "learning",
+     "brainy"
+    ]
+   },
+   {
+    "word": "Virtual Reality",
+    "hints": [
+     "headset",
+     "immersive",
+     "simulation"
+    ]
+   },
+   {
+    "word": "Cloud Computing",
+    "hints": [
+     "storage",
+     "remote",
+     "servers"
+    ]
+   },
+   {
+    "word": "Database",
+    "hints": [
+     "records",
+     "storage",
+     "tables"
+    ]
+   },
+   {
+    "word": "Algorithm",
+    "hints": [
+     "steps",
+     "logic",
+     "formula"
+    ]
+   },
+   {
+    "word": "Network",
+    "hints": [
+     "connection",
+     "nodes",
+     "linked"
+    ]
+   },
+   {
+    "word": "Server",
+    "hints": [
+     "host",
+     "data",
+     "machine"
+    ]
+   },
+   {
+    "word": "Software",
+    "hints": [
+     "programs",
+     "code",
+     "apps"
+    ]
+   },
+   {
+    "word": "Hardware",
+    "hints": [
+     "physical",
+     "parts",
+     "components"
+    ]
+   },
+   {
+    "word": "Processor",
+    "hints": [
+     "chip",
+     "compute",
+     "core"
+    ]
+   },
+   {
+    "word": "Memory",
+    "hints": [
+     "storage",
+     "recall",
+     "RAM"
+    ]
+   },
+   {
+    "word": "Keyboard",
+    "hints": [
+     "keys",
+     "typing",
+     "input"
+    ]
+   }
   ]
  },
- "Footballers": {
-  "emoji": "⚽",
+ "Music": {
+  "emoji": "🎵",
   "words": [
-   "Messi",
-   "Ronaldo",
-   "Mbappé",
-   "Neymar",
-   "Haaland",
-   "Benzema",
-   "Modrić",
-   "Kane",
-   "Salah",
-   "De Bruyne",
-   "Lewandowski",
-   "Vinícius Jr",
-   "Bellingham",
-   "Griezmann",
-   "Suárez",
-   "Zidane",
-   "Ronaldinho",
-   "Beckham",
-   "Pelé",
-   "Maradona",
-   "Iniesta",
-   "Xavi",
-   "Pirlo",
-   "Kanté",
-   "Van Dijk",
-   "Son Heung-min",
-   "Sterling",
-   "Rashford",
-   "Foden",
-   "Saka",
-   "Grealish",
-   "Mount",
-   "Müller",
-   "Kroos",
-   "Ramos",
-   "Piqué",
-   "Buffon",
-   "Neuer",
-   "Courtois",
-   "Alisson"
+   {
+    "word": "Guitar",
+    "hints": [
+     "strings",
+     "strum",
+     "band"
+    ]
+   },
+   {
+    "word": "Piano",
+    "hints": [
+     "keys",
+     "grand",
+     "black-white"
+    ]
+   },
+   {
+    "word": "Drums",
+    "hints": [
+     "beat",
+     "sticks",
+     "rhythm"
+    ]
+   },
+   {
+    "word": "Violin",
+    "hints": [
+     "strings",
+     "bow",
+     "orchestra"
+    ]
+   },
+   {
+    "word": "Saxophone",
+    "hints": [
+     "brass",
+     "jazz",
+     "reed"
+    ]
+   },
+   {
+    "word": "Trumpet",
+    "hints": [
+     "brass",
+     "blow",
+     "fanfare"
+    ]
+   },
+   {
+    "word": "Flute",
+    "hints": [
+     "woodwind",
+     "breath",
+     "high"
+    ]
+   },
+   {
+    "word": "Harp",
+    "hints": [
+     "strings",
+     "plucked",
+     "angelic"
+    ]
+   },
+   {
+    "word": "Accordion",
+    "hints": [
+     "squeeze",
+     "bellows",
+     "folk"
+    ]
+   },
+   {
+    "word": "Harmonica",
+    "hints": [
+     "pocket",
+     "blow",
+     "blues"
+    ]
+   },
+   {
+    "word": "Jazz",
+    "hints": [
+     "improvise",
+     "swing",
+     "smooth"
+    ]
+   },
+   {
+    "word": "Rock",
+    "hints": [
+     "loud",
+     "guitars",
+     "rebel"
+    ]
+   },
+   {
+    "word": "Pop",
+    "hints": [
+     "catchy",
+     "charts",
+     "mainstream"
+    ]
+   },
+   {
+    "word": "Classical",
+    "hints": [
+     "orchestra",
+     "formal",
+     "old"
+    ]
+   },
+   {
+    "word": "Blues",
+    "hints": [
+     "soulful",
+     "sad",
+     "guitar"
+    ]
+   },
+   {
+    "word": "Opera",
+    "hints": [
+     "singing",
+     "dramatic",
+     "stage"
+    ]
+   },
+   {
+    "word": "Symphony",
+    "hints": [
+     "orchestra",
+     "movements",
+     "grand"
+    ]
+   },
+   {
+    "word": "Concert",
+    "hints": [
+     "live",
+     "crowd",
+     "stage"
+    ]
+   },
+   {
+    "word": "Orchestra",
+    "hints": [
+     "ensemble",
+     "strings",
+     "conductor"
+    ]
+   },
+   {
+    "word": "Band",
+    "hints": [
+     "group",
+     "players",
+     "gig"
+    ]
+   },
+   {
+    "word": "Melody",
+    "hints": [
+     "tune",
+     "notes",
+     "hummable"
+    ]
+   },
+   {
+    "word": "Rhythm",
+    "hints": [
+     "beat",
+     "timing",
+     "groove"
+    ]
+   },
+   {
+    "word": "Harmony",
+    "hints": [
+     "blend",
+     "chords",
+     "together"
+    ]
+   },
+   {
+    "word": "Composer",
+    "hints": [
+     "writer",
+     "notes",
+     "creator"
+    ]
+   },
+   {
+    "word": "Conductor",
+    "hints": [
+     "baton",
+     "leader",
+     "waves"
+    ]
+   }
+  ]
+ },
+ "Education": {
+  "emoji": "📚",
+  "words": [
+   {
+    "word": "Mathematics",
+    "hints": [
+     "numbers",
+     "equations",
+     "logic"
+    ]
+   },
+   {
+    "word": "Science",
+    "hints": [
+     "experiments",
+     "discovery",
+     "lab"
+    ]
+   },
+   {
+    "word": "History",
+    "hints": [
+     "past",
+     "events",
+     "dates"
+    ]
+   },
+   {
+    "word": "Geography",
+    "hints": [
+     "maps",
+     "places",
+     "earth"
+    ]
+   },
+   {
+    "word": "Literature",
+    "hints": [
+     "books",
+     "writing",
+     "novels"
+    ]
+   },
+   {
+    "word": "Biology",
+    "hints": [
+     "life",
+     "cells",
+     "organisms"
+    ]
+   },
+   {
+    "word": "Chemistry",
+    "hints": [
+     "elements",
+     "reactions",
+     "lab"
+    ]
+   },
+   {
+    "word": "Physics",
+    "hints": [
+     "forces",
+     "energy",
+     "motion"
+    ]
+   },
+   {
+    "word": "Art",
+    "hints": [
+     "painting",
+     "creative",
+     "canvas"
+    ]
+   },
+   {
+    "word": "Music",
+    "hints": [
+     "sound",
+     "notes",
+     "instruments"
+    ]
+   },
+   {
+    "word": "Philosophy",
+    "hints": [
+     "thinking",
+     "questions",
+     "ideas"
+    ]
+   },
+   {
+    "word": "Psychology",
+    "hints": [
+     "mind",
+     "behavior",
+     "therapy"
+    ]
+   },
+   {
+    "word": "Economics",
+    "hints": [
+     "money",
+     "markets",
+     "trade"
+    ]
+   },
+   {
+    "word": "Sociology",
+    "hints": [
+     "society",
+     "groups",
+     "people"
+    ]
+   },
+   {
+    "word": "Astronomy",
+    "hints": [
+     "stars",
+     "space",
+     "planets"
+    ]
+   },
+   {
+    "word": "Geology",
+    "hints": [
+     "rocks",
+     "earth",
+     "layers"
+    ]
+   },
+   {
+    "word": "Botany",
+    "hints": [
+     "plants",
+     "flowers",
+     "green"
+    ]
+   },
+   {
+    "word": "Zoology",
+    "hints": [
+     "animals",
+     "species",
+     "wildlife"
+    ]
+   },
+   {
+    "word": "Algebra",
+    "hints": [
+     "equations",
+     "letters",
+     "solve"
+    ]
+   },
+   {
+    "word": "Geometry",
+    "hints": [
+     "shapes",
+     "angles",
+     "lines"
+    ]
+   },
+   {
+    "word": "Grammar",
+    "hints": [
+     "rules",
+     "sentences",
+     "language"
+    ]
+   },
+   {
+    "word": "Vocabulary",
+    "hints": [
+     "words",
+     "meanings",
+     "list"
+    ]
+   },
+   {
+    "word": "Encyclopedia",
+    "hints": [
+     "reference",
+     "volumes",
+     "facts"
+    ]
+   },
+   {
+    "word": "Laboratory",
+    "hints": [
+     "experiments",
+     "coats",
+     "equipment"
+    ]
+   },
+   {
+    "word": "Textbook",
+    "hints": [
+     "pages",
+     "study",
+     "class"
+    ]
+   }
   ]
  },
  "Movies": {
   "emoji": "🎬",
   "words": [
-   "Titanic",
-   "Avatar",
-   "Inception",
-   "Gladiator",
-   "Jaws",
-   "Frozen",
-   "Shrek",
-   "Joker",
-   "Barbie",
-   "Oppenheimer",
-   "The Matrix",
-   "Interstellar",
-   "Parasite",
-   "Whiplash",
-   "La La Land",
-   "Rocky",
-   "Alien",
-   "Predator",
-   "Casino",
-   "Goodfellas",
-   "Scarface",
-   "Up",
-   "Coco",
-   "Encanto",
-   "Moana",
-   "Tangled",
-   "Cars",
-   "Zootopia",
-   "Ratatouille",
-   "Dune",
-   "Gravity",
-   "Twister",
-   "Speed",
-   "Heat",
-   "Se7en",
-   "Memento",
-   "Amelie",
-   "Rush",
-   "Sing",
-   "Elf"
+   {
+    "word": "Avatar",
+    "hints": [
+     "blue",
+     "aliens",
+     "jungle"
+    ]
+   },
+   {
+    "word": "Titanic",
+    "hints": [
+     "ship",
+     "iceberg",
+     "romance"
+    ]
+   },
+   {
+    "word": "Inception",
+    "hints": [
+     "dreams",
+     "layers",
+     "heist"
+    ]
+   },
+   {
+    "word": "Avengers",
+    "hints": [
+     "heroes",
+     "team",
+     "marvel"
+    ]
+   },
+   {
+    "word": "Matrix",
+    "hints": [
+     "simulation",
+     "green",
+     "code"
+    ]
+   },
+   {
+    "word": "Gladiator",
+    "hints": [
+     "arena",
+     "rome",
+     "revenge"
+    ]
+   },
+   {
+    "word": "Jaws",
+    "hints": [
+     "shark",
+     "ocean",
+     "fear"
+    ]
+   },
+   {
+    "word": "Rocky",
+    "hints": [
+     "boxing",
+     "underdog",
+     "training"
+    ]
+   },
+   {
+    "word": "Frozen",
+    "hints": [
+     "ice",
+     "sisters",
+     "snow"
+    ]
+   },
+   {
+    "word": "Shrek",
+    "hints": [
+     "ogre",
+     "swamp",
+     "green"
+    ]
+   },
+   {
+    "word": "Joker",
+    "hints": [
+     "clown",
+     "villain",
+     "laugh"
+    ]
+   },
+   {
+    "word": "Batman",
+    "hints": [
+     "bat",
+     "gotham",
+     "dark"
+    ]
+   },
+   {
+    "word": "Superman",
+    "hints": [
+     "cape",
+     "flying",
+     "krypton"
+    ]
+   },
+   {
+    "word": "Spiderman",
+    "hints": [
+     "web",
+     "spider",
+     "swing"
+    ]
+   },
+   {
+    "word": "Star Wars",
+    "hints": [
+     "space",
+     "force",
+     "lightsaber"
+    ]
+   },
+   {
+    "word": "Harry Potter",
+    "hints": [
+     "wizard",
+     "magic",
+     "wand"
+    ]
+   },
+   {
+    "word": "Jurassic Park",
+    "hints": [
+     "dinosaurs",
+     "island",
+     "escape"
+    ]
+   },
+   {
+    "word": "Terminator",
+    "hints": [
+     "robot",
+     "future",
+     "machine"
+    ]
+   },
+   {
+    "word": "Predator",
+    "hints": [
+     "alien",
+     "hunter",
+     "jungle"
+    ]
+   },
+   {
+    "word": "Aliens",
+    "hints": [
+     "space",
+     "creatures",
+     "scary"
+    ]
+   },
+   {
+    "word": "Indiana Jones",
+    "hints": [
+     "adventure",
+     "hat",
+     "whip"
+    ]
+   },
+   {
+    "word": "Godzilla",
+    "hints": [
+     "monster",
+     "giant",
+     "city"
+    ]
+   },
+   {
+    "word": "Transformers",
+    "hints": [
+     "robots",
+     "cars",
+     "disguise"
+    ]
+   },
+   {
+    "word": "Pirates",
+    "hints": [
+     "sea",
+     "treasure",
+     "ship"
+    ]
+   },
+   {
+    "word": "Wonder Woman",
+    "hints": [
+     "warrior",
+     "lasso",
+     "hero"
+    ]
+   }
   ]
  },
  "Animals": {
   "emoji": "🐾",
   "words": [
-   "Elephant",
-   "Giraffe",
-   "Penguin",
-   "Dolphin",
-   "Kangaroo",
-   "Octopus",
-   "Cheetah",
-   "Panda",
-   "Koala",
-   "Sloth",
-   "Flamingo",
-   "Hedgehog",
-   "Raccoon",
-   "Otter",
-   "Meerkat",
-   "Chameleon",
-   "Platypus",
-   "Narwhal",
-   "Walrus",
-   "Armadillo",
-   "Peacock",
-   "Toucan",
-   "Jaguar",
-   "Gorilla",
-   "Rhinoceros",
-   "Hippopotamus",
-   "Crocodile",
-   "Seahorse",
-   "Jellyfish",
-   "Starfish",
-   "Lobster",
-   "Hamster",
-   "Squirrel",
-   "Hummingbird",
-   "Owl",
-   "Falcon",
-   "Bison",
-   "Moose",
-   "Lemur",
-   "Wombat"
+   {
+    "word": "Lion",
+    "hints": [
+     "mane",
+     "roar",
+     "savanna"
+    ]
+   },
+   {
+    "word": "Tiger",
+    "hints": [
+     "stripes",
+     "orange",
+     "jungle"
+    ]
+   },
+   {
+    "word": "Elephant",
+    "hints": [
+     "trunk",
+     "huge",
+     "grey"
+    ]
+   },
+   {
+    "word": "Giraffe",
+    "hints": [
+     "tall",
+     "neck",
+     "spots"
+    ]
+   },
+   {
+    "word": "Zebra",
+    "hints": [
+     "stripes",
+     "striped",
+     "africa"
+    ]
+   },
+   {
+    "word": "Monkey",
+    "hints": [
+     "swing",
+     "banana",
+     "jungle"
+    ]
+   },
+   {
+    "word": "Panda",
+    "hints": [
+     "bamboo",
+     "black-white",
+     "china"
+    ]
+   },
+   {
+    "word": "Koala",
+    "hints": [
+     "tree",
+     "sleepy",
+     "australia"
+    ]
+   },
+   {
+    "word": "Kangaroo",
+    "hints": [
+     "hop",
+     "pouch",
+     "australia"
+    ]
+   },
+   {
+    "word": "Penguin",
+    "hints": [
+     "waddle",
+     "ice",
+     "tuxedo"
+    ]
+   },
+   {
+    "word": "Dolphin",
+    "hints": [
+     "smart",
+     "ocean",
+     "jump"
+    ]
+   },
+   {
+    "word": "Whale",
+    "hints": [
+     "huge",
+     "ocean",
+     "spout"
+    ]
+   },
+   {
+    "word": "Eagle",
+    "hints": [
+     "soar",
+     "talons",
+     "sharp"
+    ]
+   },
+   {
+    "word": "Owl",
+    "hints": [
+     "night",
+     "hoot",
+     "wise"
+    ]
+   },
+   {
+    "word": "Parrot",
+    "hints": [
+     "colorful",
+     "talk",
+     "tropical"
+    ]
+   },
+   {
+    "word": "Butterfly",
+    "hints": [
+     "wings",
+     "flutter",
+     "colorful"
+    ]
+   },
+   {
+    "word": "Crocodile",
+    "hints": [
+     "reptile",
+     "snap",
+     "swamp"
+    ]
+   },
+   {
+    "word": "Hippo",
+    "hints": [
+     "heavy",
+     "water",
+     "mouth"
+    ]
+   },
+   {
+    "word": "Rhino",
+    "hints": [
+     "horn",
+     "thick",
+     "charge"
+    ]
+   },
+   {
+    "word": "Cheetah",
+    "hints": [
+     "fast",
+     "spots",
+     "sprint"
+    ]
+   },
+   {
+    "word": "Gorilla",
+    "hints": [
+     "strong",
+     "chest",
+     "jungle"
+    ]
+   },
+   {
+    "word": "Bear",
+    "hints": [
+     "furry",
+     "hibernate",
+     "forest"
+    ]
+   },
+   {
+    "word": "Wolf",
+    "hints": [
+     "pack",
+     "howl",
+     "wild"
+    ]
+   },
+   {
+    "word": "Fox",
+    "hints": [
+     "sly",
+     "red",
+     "bushy"
+    ]
+   },
+   {
+    "word": "Deer",
+    "hints": [
+     "antlers",
+     "graceful",
+     "forest"
+    ]
+   }
   ]
  },
- "Food & Drink": {
-  "emoji": "🍔",
+ "Fruits": {
+  "emoji": "🍓",
   "words": [
-   "Pizza",
-   "Sushi",
-   "Burger",
-   "Tacos",
-   "Pasta",
-   "Ramen",
-   "Pancakes",
-   "Waffles",
-   "Croissant",
-   "Burrito",
-   "Dumplings",
-   "Lasagna",
-   "Nachos",
-   "Falafel",
-   "Hummus",
-   "Curry",
-   "Paella",
-   "Risotto",
-   "Gnocchi",
-   "Pretzel",
-   "Bagel",
-   "Doughnut",
-   "Cupcake",
-   "Brownie",
-   "Tiramisu",
-   "Cheesecake",
-   "Popcorn",
-   "Smoothie",
-   "Milkshake",
-   "Espresso",
-   "Lemonade",
-   "Guacamole",
-   "Kimchi",
-   "Pho",
-   "Gelato",
-   "Waffle",
-   "Churros",
-   "Baklava",
-   "Sorbet"
+   {
+    "word": "Apple",
+    "hints": [
+     "crunchy",
+     "orchard",
+     "red"
+    ]
+   },
+   {
+    "word": "Banana",
+    "hints": [
+     "yellow",
+     "peel",
+     "curved"
+    ]
+   },
+   {
+    "word": "Orange",
+    "hints": [
+     "citrus",
+     "peel",
+     "round"
+    ]
+   },
+   {
+    "word": "Strawberry",
+    "hints": [
+     "red",
+     "seeds",
+     "sweet"
+    ]
+   },
+   {
+    "word": "Grape",
+    "hints": [
+     "bunch",
+     "wine",
+     "small"
+    ]
+   },
+   {
+    "word": "Watermelon",
+    "hints": [
+     "huge",
+     "seeds",
+     "summer"
+    ]
+   },
+   {
+    "word": "Pineapple",
+    "hints": [
+     "spiky",
+     "tropical",
+     "crown"
+    ]
+   },
+   {
+    "word": "Mango",
+    "hints": [
+     "tropical",
+     "juicy",
+     "sweet"
+    ]
+   },
+   {
+    "word": "Peach",
+    "hints": [
+     "fuzzy",
+     "soft",
+     "pit"
+    ]
+   },
+   {
+    "word": "Cherry",
+    "hints": [
+     "small",
+     "stem",
+     "pair"
+    ]
+   },
+   {
+    "word": "Lemon",
+    "hints": [
+     "sour",
+     "yellow",
+     "citrus"
+    ]
+   },
+   {
+    "word": "Kiwi",
+    "hints": [
+     "fuzzy",
+     "green",
+     "seeds"
+    ]
+   },
+   {
+    "word": "Papaya",
+    "hints": [
+     "tropical",
+     "orange",
+     "soft"
+    ]
+   },
+   {
+    "word": "Coconut",
+    "hints": [
+     "hard",
+     "tropical",
+     "milk"
+    ]
+   },
+   {
+    "word": "Avocado",
+    "hints": [
+     "green",
+     "creamy",
+     "pit"
+    ]
+   },
+   {
+    "word": "Blueberry",
+    "hints": [
+     "tiny",
+     "blue",
+     "round"
+    ]
+   },
+   {
+    "word": "Raspberry",
+    "hints": [
+     "red",
+     "bumpy",
+     "tart"
+    ]
+   },
+   {
+    "word": "Blackberry",
+    "hints": [
+     "dark",
+     "cluster",
+     "thorns"
+    ]
+   },
+   {
+    "word": "Plum",
+    "hints": [
+     "purple",
+     "juicy",
+     "pit"
+    ]
+   },
+   {
+    "word": "Pear",
+    "hints": [
+     "green",
+     "curvy",
+     "sweet"
+    ]
+   }
+  ]
+ },
+ "Household Items": {
+  "emoji": "🏠",
+  "words": [
+   {
+    "word": "Sofa",
+    "hints": [
+     "seat",
+     "cushions",
+     "lounge"
+    ]
+   },
+   {
+    "word": "Refrigerator",
+    "hints": [
+     "cold",
+     "kitchen",
+     "food"
+    ]
+   },
+   {
+    "word": "Microwave",
+    "hints": [
+     "heat",
+     "kitchen",
+     "beep"
+    ]
+   },
+   {
+    "word": "Toaster",
+    "hints": [
+     "bread",
+     "pop",
+     "kitchen"
+    ]
+   },
+   {
+    "word": "Lamp",
+    "hints": [
+     "light",
+     "shade",
+     "table"
+    ]
+   },
+   {
+    "word": "Mirror",
+    "hints": [
+     "reflection",
+     "glass",
+     "wall"
+    ]
+   },
+   {
+    "word": "Clock",
+    "hints": [
+     "time",
+     "hands",
+     "tick"
+    ]
+   },
+   {
+    "word": "Broom",
+    "hints": [
+     "sweep",
+     "bristles",
+     "floor"
+    ]
+   },
+   {
+    "word": "Vacuum",
+    "hints": [
+     "suction",
+     "clean",
+     "carpet"
+    ]
+   },
+   {
+    "word": "Kettle",
+    "hints": [
+     "boil",
+     "water",
+     "tea"
+    ]
+   },
+   {
+    "word": "Blender",
+    "hints": [
+     "blend",
+     "smoothie",
+     "spin"
+    ]
+   },
+   {
+    "word": "Pillow",
+    "hints": [
+     "soft",
+     "sleep",
+     "bed"
+    ]
+   },
+   {
+    "word": "Blanket",
+    "hints": [
+     "warm",
+     "cozy",
+     "bed"
+    ]
+   },
+   {
+    "word": "Curtains",
+    "hints": [
+     "window",
+     "fabric",
+     "hang"
+    ]
+   },
+   {
+    "word": "Wardrobe",
+    "hints": [
+     "clothes",
+     "doors",
+     "closet"
+    ]
+   },
+   {
+    "word": "Bookshelf",
+    "hints": [
+     "books",
+     "shelves",
+     "wall"
+    ]
+   },
+   {
+    "word": "Doormat",
+    "hints": [
+     "entrance",
+     "wipe",
+     "floor"
+    ]
+   },
+   {
+    "word": "Dishwasher",
+    "hints": [
+     "dishes",
+     "kitchen",
+     "clean"
+    ]
+   },
+   {
+    "word": "Washing Machine",
+    "hints": [
+     "laundry",
+     "spin",
+     "clothes"
+    ]
+   },
+   {
+    "word": "Iron",
+    "hints": [
+     "flat",
+     "heat",
+     "press"
+    ]
+   },
+   {
+    "word": "Fan",
+    "hints": [
+     "breeze",
+     "spin",
+     "cool"
+    ]
+   },
+   {
+    "word": "Heater",
+    "hints": [
+     "warm",
+     "winter",
+     "radiator"
+    ]
+   },
+   {
+    "word": "Bucket",
+    "hints": [
+     "water",
+     "handle",
+     "carry"
+    ]
+   },
+   {
+    "word": "Ladder",
+    "hints": [
+     "climb",
+     "rungs",
+     "tall"
+    ]
+   },
+   {
+    "word": "Umbrella",
+    "hints": [
+     "rain",
+     "canopy",
+     "handle"
+    ]
+   }
   ]
  },
  "Countries": {
   "emoji": "🌍",
   "words": [
-   "Japan",
-   "Brazil",
-   "Canada",
-   "Egypt",
-   "France",
-   "Iceland",
-   "Kenya",
-   "Mexico",
-   "Norway",
-   "Peru",
-   "Spain",
-   "Thailand",
-   "Turkey",
-   "Vietnam",
-   "Morocco",
-   "Portugal",
-   "Greece",
-   "Ireland",
-   "Poland",
-   "Sweden",
-   "Argentina",
-   "Australia",
-   "Germany",
-   "India",
-   "Italy",
-   "Nigeria",
-   "Netherlands",
-   "Switzerland",
-   "Singapore",
-   "Indonesia",
-   "Colombia",
-   "Chile",
-   "Croatia",
-   "Finland",
-   "Jamaica",
-   "Nepal",
-   "Cuba",
-   "Ghana",
-   "Qatar"
+   {
+    "word": "Japan",
+    "hints": [
+     "island",
+     "sushi",
+     "tokyo"
+    ]
+   },
+   {
+    "word": "France",
+    "hints": [
+     "eiffel",
+     "wine",
+     "paris"
+    ]
+   },
+   {
+    "word": "Brazil",
+    "hints": [
+     "carnival",
+     "football",
+     "amazon"
+    ]
+   },
+   {
+    "word": "Egypt",
+    "hints": [
+     "pyramids",
+     "nile",
+     "desert"
+    ]
+   },
+   {
+    "word": "Italy",
+    "hints": [
+     "pasta",
+     "rome",
+     "boot"
+    ]
+   },
+   {
+    "word": "Canada",
+    "hints": [
+     "maple",
+     "cold",
+     "moose"
+    ]
+   },
+   {
+    "word": "Australia",
+    "hints": [
+     "outback",
+     "kangaroo",
+     "down-under"
+    ]
+   },
+   {
+    "word": "India",
+    "hints": [
+     "curry",
+     "taj",
+     "populous"
+    ]
+   },
+   {
+    "word": "China",
+    "hints": [
+     "wall",
+     "populous",
+     "dragon"
+    ]
+   },
+   {
+    "word": "Mexico",
+    "hints": [
+     "tacos",
+     "sombrero",
+     "aztec"
+    ]
+   },
+   {
+    "word": "Germany",
+    "hints": [
+     "beer",
+     "cars",
+     "berlin"
+    ]
+   },
+   {
+    "word": "Spain",
+    "hints": [
+     "flamenco",
+     "paella",
+     "madrid"
+    ]
+   },
+   {
+    "word": "Russia",
+    "hints": [
+     "cold",
+     "vast",
+     "moscow"
+    ]
+   },
+   {
+    "word": "Greece",
+    "hints": [
+     "ancient",
+     "islands",
+     "olympus"
+    ]
+   },
+   {
+    "word": "Norway",
+    "hints": [
+     "fjords",
+     "cold",
+     "viking"
+    ]
+   },
+   {
+    "word": "Kenya",
+    "hints": [
+     "safari",
+     "savanna",
+     "marathon"
+    ]
+   },
+   {
+    "word": "Thailand",
+    "hints": [
+     "temples",
+     "spicy",
+     "beaches"
+    ]
+   },
+   {
+    "word": "Argentina",
+    "hints": [
+     "tango",
+     "beef",
+     "messi"
+    ]
+   },
+   {
+    "word": "Peru",
+    "hints": [
+     "machu",
+     "andes",
+     "llama"
+    ]
+   },
+   {
+    "word": "Iceland",
+    "hints": [
+     "ice",
+     "volcano",
+     "geyser"
+    ]
+   },
+   {
+    "word": "Turkey",
+    "hints": [
+     "bridge",
+     "bazaar",
+     "kebab"
+    ]
+   },
+   {
+    "word": "Morocco",
+    "hints": [
+     "desert",
+     "market",
+     "spice"
+    ]
+   },
+   {
+    "word": "Netherlands",
+    "hints": [
+     "tulips",
+     "windmills",
+     "bikes"
+    ]
+   },
+   {
+    "word": "Sweden",
+    "hints": [
+     "ikea",
+     "cold",
+     "abba"
+    ]
+   },
+   {
+    "word": "Portugal",
+    "hints": [
+     "coast",
+     "port",
+     "lisbon"
+    ]
+   }
   ]
  },
- "Musicians": {
-  "emoji": "🎵",
+ "Cities": {
+  "emoji": "🏙️",
   "words": [
-   "Beyoncé",
-   "Drake",
-   "Adele",
-   "Rihanna",
-   "Eminem",
-   "Madonna",
-   "Prince",
-   "Beatles",
-   "Queen",
-   "Nirvana",
-   "Coldplay",
-   "Metallica",
-   "Bad Bunny",
-   "Billie Eilish",
-   "The Weeknd",
-   "Dua Lipa",
-   "Ed Sheeran",
-   "Bruno Mars",
-   "Kanye West",
-   "Kendrick Lamar",
-   "SZA",
-   "Lizzo",
-   "Harry Styles",
-   "Post Malone",
-   "Doja Cat",
-   "Ariana Grande",
-   "Justin Bieber",
-   "Lady Gaga",
-   "Katy Perry",
-   "Shakira",
-   "Elton John",
-   "Bob Marley",
-   "Michael Jackson",
-   "Whitney Houston",
-   "Frank Sinatra",
-   "David Bowie",
-   "Amy Winehouse",
-   "Stevie Wonder",
-   "Aretha Franklin",
-   "Freddie Mercury"
+   {
+    "word": "Paris",
+    "hints": [
+     "eiffel",
+     "romance",
+     "france"
+    ]
+   },
+   {
+    "word": "London",
+    "hints": [
+     "big-ben",
+     "thames",
+     "england"
+    ]
+   },
+   {
+    "word": "Tokyo",
+    "hints": [
+     "neon",
+     "busy",
+     "japan"
+    ]
+   },
+   {
+    "word": "New York",
+    "hints": [
+     "skyscrapers",
+     "liberty",
+     "busy"
+    ]
+   },
+   {
+    "word": "Rome",
+    "hints": [
+     "colosseum",
+     "ancient",
+     "italy"
+    ]
+   },
+   {
+    "word": "Dubai",
+    "hints": [
+     "tall",
+     "desert",
+     "luxury"
+    ]
+   },
+   {
+    "word": "Sydney",
+    "hints": [
+     "opera",
+     "harbor",
+     "australia"
+    ]
+   },
+   {
+    "word": "Venice",
+    "hints": [
+     "canals",
+     "gondola",
+     "water"
+    ]
+   },
+   {
+    "word": "Barcelona",
+    "hints": [
+     "gaudi",
+     "beach",
+     "spain"
+    ]
+   },
+   {
+    "word": "Cairo",
+    "hints": [
+     "pyramids",
+     "nile",
+     "egypt"
+    ]
+   },
+   {
+    "word": "Moscow",
+    "hints": [
+     "red-square",
+     "cold",
+     "russia"
+    ]
+   },
+   {
+    "word": "Rio",
+    "hints": [
+     "carnival",
+     "beach",
+     "statue"
+    ]
+   },
+   {
+    "word": "Bangkok",
+    "hints": [
+     "temples",
+     "street-food",
+     "busy"
+    ]
+   },
+   {
+    "word": "Istanbul",
+    "hints": [
+     "bridge",
+     "mosque",
+     "bazaar"
+    ]
+   },
+   {
+    "word": "Amsterdam",
+    "hints": [
+     "canals",
+     "bikes",
+     "tulips"
+    ]
+   },
+   {
+    "word": "Berlin",
+    "hints": [
+     "wall",
+     "history",
+     "germany"
+    ]
+   },
+   {
+    "word": "Toronto",
+    "hints": [
+     "tower",
+     "diverse",
+     "canada"
+    ]
+   },
+   {
+    "word": "Singapore",
+    "hints": [
+     "clean",
+     "modern",
+     "island"
+    ]
+   },
+   {
+    "word": "Athens",
+    "hints": [
+     "ancient",
+     "acropolis",
+     "greece"
+    ]
+   },
+   {
+    "word": "Vegas",
+    "hints": [
+     "casino",
+     "lights",
+     "desert"
+    ]
+   },
+   {
+    "word": "Mumbai",
+    "hints": [
+     "bollywood",
+     "crowded",
+     "india"
+    ]
+   },
+   {
+    "word": "Beijing",
+    "hints": [
+     "forbidden",
+     "wall",
+     "china"
+    ]
+   },
+   {
+    "word": "Madrid",
+    "hints": [
+     "plaza",
+     "football",
+     "spain"
+    ]
+   },
+   {
+    "word": "Vienna",
+    "hints": [
+     "music",
+     "palace",
+     "austria"
+    ]
+   },
+   {
+    "word": "Cape Town",
+    "hints": [
+     "table-mountain",
+     "coast",
+     "africa"
+    ]
+   }
+  ]
+ },
+ "Landmarks": {
+  "emoji": "🗿",
+  "words": [
+   {
+    "word": "Eiffel Tower",
+    "hints": [
+     "iron",
+     "paris",
+     "tall"
+    ]
+   },
+   {
+    "word": "Great Wall",
+    "hints": [
+     "long",
+     "china",
+     "ancient"
+    ]
+   },
+   {
+    "word": "Pyramids",
+    "hints": [
+     "egypt",
+     "triangle",
+     "tombs"
+    ]
+   },
+   {
+    "word": "Statue of Liberty",
+    "hints": [
+     "torch",
+     "green",
+     "new-york"
+    ]
+   },
+   {
+    "word": "Big Ben",
+    "hints": [
+     "clock",
+     "london",
+     "bell"
+    ]
+   },
+   {
+    "word": "Colosseum",
+    "hints": [
+     "rome",
+     "arena",
+     "ancient"
+    ]
+   },
+   {
+    "word": "Taj Mahal",
+    "hints": [
+     "white",
+     "marble",
+     "india"
+    ]
+   },
+   {
+    "word": "Leaning Tower",
+    "hints": [
+     "tilt",
+     "pisa",
+     "italy"
+    ]
+   },
+   {
+    "word": "Mount Rushmore",
+    "hints": [
+     "presidents",
+     "carved",
+     "rock"
+    ]
+   },
+   {
+    "word": "Christ the Redeemer",
+    "hints": [
+     "statue",
+     "rio",
+     "arms"
+    ]
+   },
+   {
+    "word": "Sydney Opera House",
+    "hints": [
+     "sails",
+     "harbor",
+     "white"
+    ]
+   },
+   {
+    "word": "Stonehenge",
+    "hints": [
+     "stones",
+     "ancient",
+     "circle"
+    ]
+   },
+   {
+    "word": "Golden Gate",
+    "hints": [
+     "bridge",
+     "red",
+     "francisco"
+    ]
+   },
+   {
+    "word": "Niagara Falls",
+    "hints": [
+     "waterfall",
+     "mist",
+     "border"
+    ]
+   },
+   {
+    "word": "Machu Picchu",
+    "hints": [
+     "inca",
+     "mountain",
+     "ruins"
+    ]
+   },
+   {
+    "word": "Sphinx",
+    "hints": [
+     "lion",
+     "egypt",
+     "riddle"
+    ]
+   },
+   {
+    "word": "Empire State",
+    "hints": [
+     "skyscraper",
+     "new-york",
+     "tall"
+    ]
+   },
+   {
+    "word": "Buckingham Palace",
+    "hints": [
+     "queen",
+     "guards",
+     "london"
+    ]
+   },
+   {
+    "word": "Grand Canyon",
+    "hints": [
+     "gorge",
+     "vast",
+     "arizona"
+    ]
+   },
+   {
+    "word": "Louvre",
+    "hints": [
+     "museum",
+     "glass",
+     "paris"
+    ]
+   },
+   {
+    "word": "Petra",
+    "hints": [
+     "carved",
+     "jordan",
+     "rose"
+    ]
+   },
+   {
+    "word": "Angkor Wat",
+    "hints": [
+     "temple",
+     "cambodia",
+     "ancient"
+    ]
+   },
+   {
+    "word": "Burj Khalifa",
+    "hints": [
+     "tallest",
+     "dubai",
+     "spire"
+    ]
+   },
+   {
+    "word": "Mount Everest",
+    "hints": [
+     "tallest",
+     "himalaya",
+     "climb"
+    ]
+   },
+   {
+    "word": "Acropolis",
+    "hints": [
+     "greek",
+     "hill",
+     "ruins"
+    ]
+   }
+  ]
+ },
+ "Food": {
+  "emoji": "🍔",
+  "words": [
+   {
+    "word": "Pizza",
+    "hints": [
+     "cheese",
+     "slices",
+     "italian"
+    ]
+   },
+   {
+    "word": "Burger",
+    "hints": [
+     "bun",
+     "patty",
+     "fast-food"
+    ]
+   },
+   {
+    "word": "Sushi",
+    "hints": [
+     "rice",
+     "raw",
+     "japanese"
+    ]
+   },
+   {
+    "word": "Pasta",
+    "hints": [
+     "noodles",
+     "sauce",
+     "italian"
+    ]
+   },
+   {
+    "word": "Tacos",
+    "hints": [
+     "shell",
+     "filling",
+     "mexican"
+    ]
+   },
+   {
+    "word": "Ramen",
+    "hints": [
+     "noodles",
+     "broth",
+     "bowl"
+    ]
+   },
+   {
+    "word": "Pancakes",
+    "hints": [
+     "stack",
+     "syrup",
+     "breakfast"
+    ]
+   },
+   {
+    "word": "Sandwich",
+    "hints": [
+     "bread",
+     "filling",
+     "lunch"
+    ]
+   },
+   {
+    "word": "Curry",
+    "hints": [
+     "spicy",
+     "sauce",
+     "indian"
+    ]
+   },
+   {
+    "word": "Fries",
+    "hints": [
+     "potato",
+     "crispy",
+     "salt"
+    ]
+   },
+   {
+    "word": "Soup",
+    "hints": [
+     "bowl",
+     "warm",
+     "spoon"
+    ]
+   },
+   {
+    "word": "Salad",
+    "hints": [
+     "greens",
+     "healthy",
+     "bowl"
+    ]
+   },
+   {
+    "word": "Steak",
+    "hints": [
+     "beef",
+     "grill",
+     "juicy"
+    ]
+   },
+   {
+    "word": "Noodles",
+    "hints": [
+     "long",
+     "slurp",
+     "asian"
+    ]
+   },
+   {
+    "word": "Dumplings",
+    "hints": [
+     "wrapped",
+     "steamed",
+     "filling"
+    ]
+   },
+   {
+    "word": "Waffles",
+    "hints": [
+     "grid",
+     "syrup",
+     "crispy"
+    ]
+   },
+   {
+    "word": "Hotdog",
+    "hints": [
+     "sausage",
+     "bun",
+     "mustard"
+    ]
+   },
+   {
+    "word": "Burrito",
+    "hints": [
+     "wrap",
+     "filling",
+     "mexican"
+    ]
+   },
+   {
+    "word": "Omelette",
+    "hints": [
+     "eggs",
+     "folded",
+     "breakfast"
+    ]
+   },
+   {
+    "word": "Lasagna",
+    "hints": [
+     "layers",
+     "cheese",
+     "baked"
+    ]
+   },
+   {
+    "word": "Nachos",
+    "hints": [
+     "chips",
+     "cheese",
+     "dip"
+    ]
+   },
+   {
+    "word": "Pie",
+    "hints": [
+     "crust",
+     "filling",
+     "baked"
+    ]
+   },
+   {
+    "word": "Cereal",
+    "hints": [
+     "milk",
+     "bowl",
+     "breakfast"
+    ]
+   },
+   {
+    "word": "Chocolate",
+    "hints": [
+     "sweet",
+     "brown",
+     "bar"
+    ]
+   },
+   {
+    "word": "Ice Cream",
+    "hints": [
+     "cold",
+     "scoop",
+     "sweet"
+    ]
+   }
+  ]
+ },
+ "Sports": {
+  "emoji": "⚽",
+  "words": [
+   {
+    "word": "Football",
+    "hints": [
+     "goal",
+     "kick",
+     "pitch"
+    ]
+   },
+   {
+    "word": "Basketball",
+    "hints": [
+     "hoop",
+     "dribble",
+     "court"
+    ]
+   },
+   {
+    "word": "Tennis",
+    "hints": [
+     "racket",
+     "net",
+     "serve"
+    ]
+   },
+   {
+    "word": "Cricket",
+    "hints": [
+     "bat",
+     "wicket",
+     "pitch"
+    ]
+   },
+   {
+    "word": "Golf",
+    "hints": [
+     "clubs",
+     "holes",
+     "swing"
+    ]
+   },
+   {
+    "word": "Boxing",
+    "hints": [
+     "gloves",
+     "ring",
+     "punch"
+    ]
+   },
+   {
+    "word": "Swimming",
+    "hints": [
+     "pool",
+     "laps",
+     "stroke"
+    ]
+   },
+   {
+    "word": "Rugby",
+    "hints": [
+     "oval",
+     "tackle",
+     "scrum"
+    ]
+   },
+   {
+    "word": "Baseball",
+    "hints": [
+     "bat",
+     "diamond",
+     "pitch"
+    ]
+   },
+   {
+    "word": "Hockey",
+    "hints": [
+     "stick",
+     "puck",
+     "ice"
+    ]
+   },
+   {
+    "word": "Volleyball",
+    "hints": [
+     "net",
+     "spike",
+     "serve"
+    ]
+   },
+   {
+    "word": "Cycling",
+    "hints": [
+     "bike",
+     "pedal",
+     "race"
+    ]
+   },
+   {
+    "word": "Skiing",
+    "hints": [
+     "snow",
+     "slopes",
+     "poles"
+    ]
+   },
+   {
+    "word": "Surfing",
+    "hints": [
+     "waves",
+     "board",
+     "ocean"
+    ]
+   },
+   {
+    "word": "Skating",
+    "hints": [
+     "wheels",
+     "glide",
+     "rink"
+    ]
+   },
+   {
+    "word": "Badminton",
+    "hints": [
+     "shuttle",
+     "racket",
+     "net"
+    ]
+   },
+   {
+    "word": "Wrestling",
+    "hints": [
+     "grapple",
+     "mat",
+     "pin"
+    ]
+   },
+   {
+    "word": "Archery",
+    "hints": [
+     "bow",
+     "arrow",
+     "target"
+    ]
+   },
+   {
+    "word": "Gymnastics",
+    "hints": [
+     "flips",
+     "balance",
+     "floor"
+    ]
+   },
+   {
+    "word": "Marathon",
+    "hints": [
+     "running",
+     "distance",
+     "endurance"
+    ]
+   },
+   {
+    "word": "Rowing",
+    "hints": [
+     "oars",
+     "boat",
+     "water"
+    ]
+   },
+   {
+    "word": "Fencing",
+    "hints": [
+     "sword",
+     "mask",
+     "lunge"
+    ]
+   },
+   {
+    "word": "Karate",
+    "hints": [
+     "belt",
+     "kick",
+     "chop"
+    ]
+   },
+   {
+    "word": "Darts",
+    "hints": [
+     "board",
+     "throw",
+     "bullseye"
+    ]
+   },
+   {
+    "word": "Bowling",
+    "hints": [
+     "pins",
+     "lane",
+     "strike"
+    ]
+   }
+  ]
+ },
+ "Vehicles": {
+  "emoji": "🚗",
+  "words": [
+   {
+    "word": "Car",
+    "hints": [
+     "wheels",
+     "drive",
+     "road"
+    ]
+   },
+   {
+    "word": "Bicycle",
+    "hints": [
+     "pedals",
+     "two-wheels",
+     "ride"
+    ]
+   },
+   {
+    "word": "Motorcycle",
+    "hints": [
+     "engine",
+     "two-wheels",
+     "helmet"
+    ]
+   },
+   {
+    "word": "Truck",
+    "hints": [
+     "big",
+     "cargo",
+     "haul"
+    ]
+   },
+   {
+    "word": "Bus",
+    "hints": [
+     "passengers",
+     "stops",
+     "big"
+    ]
+   },
+   {
+    "word": "Train",
+    "hints": [
+     "tracks",
+     "carriages",
+     "rail"
+    ]
+   },
+   {
+    "word": "Airplane",
+    "hints": [
+     "wings",
+     "fly",
+     "sky"
+    ]
+   },
+   {
+    "word": "Helicopter",
+    "hints": [
+     "rotor",
+     "hover",
+     "blades"
+    ]
+   },
+   {
+    "word": "Boat",
+    "hints": [
+     "water",
+     "float",
+     "sail"
+    ]
+   },
+   {
+    "word": "Ship",
+    "hints": [
+     "ocean",
+     "huge",
+     "cargo"
+    ]
+   },
+   {
+    "word": "Submarine",
+    "hints": [
+     "underwater",
+     "dive",
+     "sonar"
+    ]
+   },
+   {
+    "word": "Rocket",
+    "hints": [
+     "space",
+     "launch",
+     "blast"
+    ]
+   },
+   {
+    "word": "Scooter",
+    "hints": [
+     "kick",
+     "small",
+     "ride"
+    ]
+   },
+   {
+    "word": "Van",
+    "hints": [
+     "box",
+     "cargo",
+     "deliver"
+    ]
+   },
+   {
+    "word": "Ambulance",
+    "hints": [
+     "siren",
+     "medical",
+     "rush"
+    ]
+   },
+   {
+    "word": "Tractor",
+    "hints": [
+     "farm",
+     "plow",
+     "slow"
+    ]
+   },
+   {
+    "word": "Taxi",
+    "hints": [
+     "yellow",
+     "fare",
+     "hire"
+    ]
+   },
+   {
+    "word": "Ferry",
+    "hints": [
+     "water",
+     "cross",
+     "cars"
+    ]
+   },
+   {
+    "word": "Jet",
+    "hints": [
+     "fast",
+     "sky",
+     "engine"
+    ]
+   },
+   {
+    "word": "Tram",
+    "hints": [
+     "rails",
+     "city",
+     "electric"
+    ]
+   },
+   {
+    "word": "Canoe",
+    "hints": [
+     "paddle",
+     "narrow",
+     "water"
+    ]
+   },
+   {
+    "word": "Yacht",
+    "hints": [
+     "luxury",
+     "sail",
+     "sea"
+    ]
+   },
+   {
+    "word": "Forklift",
+    "hints": [
+     "lift",
+     "warehouse",
+     "pallet"
+    ]
+   },
+   {
+    "word": "Segway",
+    "hints": [
+     "balance",
+     "stand",
+     "wheels"
+    ]
+   }
+  ]
+ },
+ "Clothing": {
+  "emoji": "👕",
+  "words": [
+   {
+    "word": "Shirt",
+    "hints": [
+     "top",
+     "buttons",
+     "collar"
+    ]
+   },
+   {
+    "word": "Trousers",
+    "hints": [
+     "legs",
+     "waist",
+     "pants"
+    ]
+   },
+   {
+    "word": "Dress",
+    "hints": [
+     "flowy",
+     "elegant",
+     "one-piece"
+    ]
+   },
+   {
+    "word": "Jacket",
+    "hints": [
+     "outer",
+     "zip",
+     "warm"
+    ]
+   },
+   {
+    "word": "Sweater",
+    "hints": [
+     "knit",
+     "warm",
+     "pullover"
+    ]
+   },
+   {
+    "word": "Hat",
+    "hints": [
+     "head",
+     "brim",
+     "cap"
+    ]
+   },
+   {
+    "word": "Shoes",
+    "hints": [
+     "feet",
+     "laces",
+     "walk"
+    ]
+   },
+   {
+    "word": "Socks",
+    "hints": [
+     "feet",
+     "pair",
+     "warm"
+    ]
+   },
+   {
+    "word": "Scarf",
+    "hints": [
+     "neck",
+     "wrap",
+     "warm"
+    ]
+   },
+   {
+    "word": "Gloves",
+    "hints": [
+     "hands",
+     "fingers",
+     "warm"
+    ]
+   },
+   {
+    "word": "Jeans",
+    "hints": [
+     "denim",
+     "blue",
+     "casual"
+    ]
+   },
+   {
+    "word": "Skirt",
+    "hints": [
+     "waist",
+     "flowy",
+     "hem"
+    ]
+   },
+   {
+    "word": "Coat",
+    "hints": [
+     "outer",
+     "heavy",
+     "winter"
+    ]
+   },
+   {
+    "word": "Tie",
+    "hints": [
+     "neck",
+     "formal",
+     "knot"
+    ]
+   },
+   {
+    "word": "Belt",
+    "hints": [
+     "waist",
+     "buckle",
+     "hold"
+    ]
+   },
+   {
+    "word": "Boots",
+    "hints": [
+     "feet",
+     "tall",
+     "sturdy"
+    ]
+   },
+   {
+    "word": "Cap",
+    "hints": [
+     "head",
+     "brim",
+     "sporty"
+    ]
+   },
+   {
+    "word": "Suit",
+    "hints": [
+     "formal",
+     "jacket",
+     "matching"
+    ]
+   },
+   {
+    "word": "Hoodie",
+    "hints": [
+     "hood",
+     "casual",
+     "cozy"
+    ]
+   },
+   {
+    "word": "Shorts",
+    "hints": [
+     "legs",
+     "summer",
+     "short"
+    ]
+   },
+   {
+    "word": "Pyjamas",
+    "hints": [
+     "sleep",
+     "comfy",
+     "night"
+    ]
+   },
+   {
+    "word": "Sandals",
+    "hints": [
+     "feet",
+     "open",
+     "summer"
+    ]
+   },
+   {
+    "word": "Vest",
+    "hints": [
+     "sleeveless",
+     "layer",
+     "chest"
+    ]
+   },
+   {
+    "word": "Mittens",
+    "hints": [
+     "hands",
+     "warm",
+     "winter"
+    ]
+   }
+  ]
+ },
+ "Jobs": {
+  "emoji": "💼",
+  "words": [
+   {
+    "word": "Doctor",
+    "hints": [
+     "heal",
+     "hospital",
+     "stethoscope"
+    ]
+   },
+   {
+    "word": "Teacher",
+    "hints": [
+     "school",
+     "lessons",
+     "students"
+    ]
+   },
+   {
+    "word": "Chef",
+    "hints": [
+     "cook",
+     "kitchen",
+     "recipes"
+    ]
+   },
+   {
+    "word": "Pilot",
+    "hints": [
+     "fly",
+     "cockpit",
+     "plane"
+    ]
+   },
+   {
+    "word": "Nurse",
+    "hints": [
+     "care",
+     "hospital",
+     "patients"
+    ]
+   },
+   {
+    "word": "Firefighter",
+    "hints": [
+     "flames",
+     "hose",
+     "rescue"
+    ]
+   },
+   {
+    "word": "Police",
+    "hints": [
+     "law",
+     "badge",
+     "patrol"
+    ]
+   },
+   {
+    "word": "Lawyer",
+    "hints": [
+     "court",
+     "law",
+     "defend"
+    ]
+   },
+   {
+    "word": "Engineer",
+    "hints": [
+     "build",
+     "design",
+     "technical"
+    ]
+   },
+   {
+    "word": "Farmer",
+    "hints": [
+     "crops",
+     "land",
+     "harvest"
+    ]
+   },
+   {
+    "word": "Artist",
+    "hints": [
+     "create",
+     "paint",
+     "studio"
+    ]
+   },
+   {
+    "word": "Dentist",
+    "hints": [
+     "teeth",
+     "drill",
+     "clinic"
+    ]
+   },
+   {
+    "word": "Plumber",
+    "hints": [
+     "pipes",
+     "water",
+     "fix"
+    ]
+   },
+   {
+    "word": "Electrician",
+    "hints": [
+     "wires",
+     "current",
+     "fix"
+    ]
+   },
+   {
+    "word": "Carpenter",
+    "hints": [
+     "wood",
+     "build",
+     "hammer"
+    ]
+   },
+   {
+    "word": "Scientist",
+    "hints": [
+     "research",
+     "lab",
+     "experiment"
+    ]
+   },
+   {
+    "word": "Journalist",
+    "hints": [
+     "news",
+     "write",
+     "report"
+    ]
+   },
+   {
+    "word": "Accountant",
+    "hints": [
+     "numbers",
+     "money",
+     "books"
+    ]
+   },
+   {
+    "word": "Barber",
+    "hints": [
+     "hair",
+     "cut",
+     "shave"
+    ]
+   },
+   {
+    "word": "Waiter",
+    "hints": [
+     "serve",
+     "restaurant",
+     "orders"
+    ]
+   },
+   {
+    "word": "Mechanic",
+    "hints": [
+     "cars",
+     "repair",
+     "engine"
+    ]
+   },
+   {
+    "word": "Photographer",
+    "hints": [
+     "camera",
+     "photos",
+     "shoot"
+    ]
+   },
+   {
+    "word": "Astronaut",
+    "hints": [
+     "space",
+     "rocket",
+     "suit"
+    ]
+   },
+   {
+    "word": "Librarian",
+    "hints": [
+     "books",
+     "quiet",
+     "shelves"
+    ]
+   },
+   {
+    "word": "Actor",
+    "hints": [
+     "stage",
+     "role",
+     "perform"
+    ]
+   }
+  ]
+ },
+ "Vegetables": {
+  "emoji": "🥕",
+  "words": [
+   {
+    "word": "Carrot",
+    "hints": [
+     "orange",
+     "root",
+     "crunchy"
+    ]
+   },
+   {
+    "word": "Potato",
+    "hints": [
+     "starch",
+     "root",
+     "mash"
+    ]
+   },
+   {
+    "word": "Tomato",
+    "hints": [
+     "red",
+     "round",
+     "juicy"
+    ]
+   },
+   {
+    "word": "Broccoli",
+    "hints": [
+     "green",
+     "tree",
+     "florets"
+    ]
+   },
+   {
+    "word": "Onion",
+    "hints": [
+     "layers",
+     "tears",
+     "bulb"
+    ]
+   },
+   {
+    "word": "Cucumber",
+    "hints": [
+     "green",
+     "cool",
+     "crunchy"
+    ]
+   },
+   {
+    "word": "Spinach",
+    "hints": [
+     "leafy",
+     "green",
+     "iron"
+    ]
+   },
+   {
+    "word": "Pepper",
+    "hints": [
+     "colorful",
+     "crunchy",
+     "hollow"
+    ]
+   },
+   {
+    "word": "Corn",
+    "hints": [
+     "yellow",
+     "cob",
+     "kernels"
+    ]
+   },
+   {
+    "word": "Lettuce",
+    "hints": [
+     "leafy",
+     "green",
+     "salad"
+    ]
+   },
+   {
+    "word": "Cabbage",
+    "hints": [
+     "round",
+     "leafy",
+     "layers"
+    ]
+   },
+   {
+    "word": "Garlic",
+    "hints": [
+     "cloves",
+     "smelly",
+     "bulb"
+    ]
+   },
+   {
+    "word": "Mushroom",
+    "hints": [
+     "fungus",
+     "cap",
+     "earthy"
+    ]
+   },
+   {
+    "word": "Pumpkin",
+    "hints": [
+     "orange",
+     "round",
+     "halloween"
+    ]
+   },
+   {
+    "word": "Peas",
+    "hints": [
+     "green",
+     "pods",
+     "tiny"
+    ]
+   },
+   {
+    "word": "Cauliflower",
+    "hints": [
+     "white",
+     "florets",
+     "head"
+    ]
+   },
+   {
+    "word": "Celery",
+    "hints": [
+     "stalks",
+     "crunchy",
+     "green"
+    ]
+   },
+   {
+    "word": "Eggplant",
+    "hints": [
+     "purple",
+     "glossy",
+     "oval"
+    ]
+   },
+   {
+    "word": "Beetroot",
+    "hints": [
+     "red",
+     "root",
+     "earthy"
+    ]
+   },
+   {
+    "word": "Radish",
+    "hints": [
+     "red",
+     "root",
+     "peppery"
+    ]
+   }
+  ]
+ },
+ "Nature & Weather": {
+  "emoji": "🌦️",
+  "words": [
+   {
+    "word": "Rain",
+    "hints": [
+     "wet",
+     "drops",
+     "clouds"
+    ]
+   },
+   {
+    "word": "Snow",
+    "hints": [
+     "white",
+     "cold",
+     "flakes"
+    ]
+   },
+   {
+    "word": "Thunder",
+    "hints": [
+     "loud",
+     "storm",
+     "rumble"
+    ]
+   },
+   {
+    "word": "Lightning",
+    "hints": [
+     "bolt",
+     "flash",
+     "electric"
+    ]
+   },
+   {
+    "word": "Rainbow",
+    "hints": [
+     "colors",
+     "arc",
+     "sky"
+    ]
+   },
+   {
+    "word": "Wind",
+    "hints": [
+     "breeze",
+     "gust",
+     "blow"
+    ]
+   },
+   {
+    "word": "Tornado",
+    "hints": [
+     "spin",
+     "funnel",
+     "destroy"
+    ]
+   },
+   {
+    "word": "Volcano",
+    "hints": [
+     "lava",
+     "erupt",
+     "mountain"
+    ]
+   },
+   {
+    "word": "Earthquake",
+    "hints": [
+     "shake",
+     "tremor",
+     "ground"
+    ]
+   },
+   {
+    "word": "River",
+    "hints": [
+     "flow",
+     "water",
+     "banks"
+    ]
+   },
+   {
+    "word": "Mountain",
+    "hints": [
+     "peak",
+     "tall",
+     "climb"
+    ]
+   },
+   {
+    "word": "Ocean",
+    "hints": [
+     "vast",
+     "salty",
+     "waves"
+    ]
+   },
+   {
+    "word": "Desert",
+    "hints": [
+     "sand",
+     "dry",
+     "hot"
+    ]
+   },
+   {
+    "word": "Forest",
+    "hints": [
+     "trees",
+     "green",
+     "dense"
+    ]
+   },
+   {
+    "word": "Waterfall",
+    "hints": [
+     "cascade",
+     "drop",
+     "mist"
+    ]
+   },
+   {
+    "word": "Cloud",
+    "hints": [
+     "fluffy",
+     "sky",
+     "white"
+    ]
+   },
+   {
+    "word": "Sunshine",
+    "hints": [
+     "bright",
+     "warm",
+     "rays"
+    ]
+   },
+   {
+    "word": "Fog",
+    "hints": [
+     "misty",
+     "thick",
+     "grey"
+    ]
+   },
+   {
+    "word": "Hurricane",
+    "hints": [
+     "storm",
+     "spiral",
+     "wind"
+    ]
+   },
+   {
+    "word": "Glacier",
+    "hints": [
+     "ice",
+     "slow",
+     "frozen"
+    ]
+   },
+   {
+    "word": "Cave",
+    "hints": [
+     "dark",
+     "hollow",
+     "rock"
+    ]
+   },
+   {
+    "word": "Island",
+    "hints": [
+     "land",
+     "water",
+     "isolated"
+    ]
+   },
+   {
+    "word": "Valley",
+    "hints": [
+     "low",
+     "between",
+     "green"
+    ]
+   },
+   {
+    "word": "Lake",
+    "hints": [
+     "still",
+     "water",
+     "shore"
+    ]
+   }
+  ]
+ },
+ "Body Parts": {
+  "emoji": "🧍",
+  "words": [
+   {
+    "word": "Hand",
+    "hints": [
+     "fingers",
+     "grip",
+     "palm"
+    ]
+   },
+   {
+    "word": "Eye",
+    "hints": [
+     "see",
+     "blink",
+     "iris"
+    ]
+   },
+   {
+    "word": "Heart",
+    "hints": [
+     "beat",
+     "pump",
+     "chest"
+    ]
+   },
+   {
+    "word": "Brain",
+    "hints": [
+     "think",
+     "skull",
+     "control"
+    ]
+   },
+   {
+    "word": "Foot",
+    "hints": [
+     "walk",
+     "toes",
+     "sole"
+    ]
+   },
+   {
+    "word": "Ear",
+    "hints": [
+     "hear",
+     "listen",
+     "lobe"
+    ]
+   },
+   {
+    "word": "Nose",
+    "hints": [
+     "smell",
+     "breathe",
+     "nostrils"
+    ]
+   },
+   {
+    "word": "Mouth",
+    "hints": [
+     "speak",
+     "teeth",
+     "lips"
+    ]
+   },
+   {
+    "word": "Knee",
+    "hints": [
+     "joint",
+     "bend",
+     "leg"
+    ]
+   },
+   {
+    "word": "Elbow",
+    "hints": [
+     "joint",
+     "arm",
+     "bend"
+    ]
+   },
+   {
+    "word": "Shoulder",
+    "hints": [
+     "joint",
+     "carry",
+     "arm"
+    ]
+   },
+   {
+    "word": "Stomach",
+    "hints": [
+     "digest",
+     "belly",
+     "food"
+    ]
+   },
+   {
+    "word": "Tongue",
+    "hints": [
+     "taste",
+     "mouth",
+     "lick"
+    ]
+   },
+   {
+    "word": "Finger",
+    "hints": [
+     "hand",
+     "point",
+     "nail"
+    ]
+   },
+   {
+    "word": "Lungs",
+    "hints": [
+     "breathe",
+     "air",
+     "chest"
+    ]
+   },
+   {
+    "word": "Liver",
+    "hints": [
+     "organ",
+     "filter",
+     "internal"
+    ]
+   },
+   {
+    "word": "Spine",
+    "hints": [
+     "back",
+     "bones",
+     "support"
+    ]
+   },
+   {
+    "word": "Skin",
+    "hints": [
+     "cover",
+     "touch",
+     "outer"
+    ]
+   },
+   {
+    "word": "Hair",
+    "hints": [
+     "head",
+     "strands",
+     "grow"
+    ]
+   },
+   {
+    "word": "Teeth",
+    "hints": [
+     "chew",
+     "white",
+     "bite"
+    ]
+   },
+   {
+    "word": "Neck",
+    "hints": [
+     "head",
+     "connect",
+     "turn"
+    ]
+   },
+   {
+    "word": "Ankle",
+    "hints": [
+     "joint",
+     "foot",
+     "twist"
+    ]
+   }
   ]
  },
  "Video Games": {
   "emoji": "🎮",
   "words": [
-   "Minecraft",
-   "Fortnite",
-   "Zelda",
-   "Mario",
-   "Sonic",
-   "Pac-Man",
-   "Tetris",
-   "Pokémon",
-   "Halo",
-   "Doom",
-   "Portal",
-   "Skyrim",
-   "Overwatch",
-   "Valorant",
-   "Roblox",
-   "Terraria",
-   "Stardew Valley",
-   "Among Us",
-   "Fall Guys",
-   "Cuphead",
-   "Hollow Knight",
-   "Celeste",
-   "Undertale",
-   "Bloodborne",
-   "Elden Ring",
-   "God of War",
-   "Uncharted",
-   "Fallout",
-   "BioShock",
-   "Pikmin",
-   "Splatoon",
-   "Kirby",
-   "Metroid",
-   "Tekken",
-   "Fifa",
-   "Sims",
-   "Gran Turismo",
-   "Rocket League",
-   "Subway Surfers"
+   {
+    "word": "Minecraft",
+    "hints": [
+     "blocks",
+     "build",
+     "survival"
+    ]
+   },
+   {
+    "word": "Fortnite",
+    "hints": [
+     "battle",
+     "build",
+     "dance"
+    ]
+   },
+   {
+    "word": "Mario",
+    "hints": [
+     "plumber",
+     "mushroom",
+     "jump"
+    ]
+   },
+   {
+    "word": "Zelda",
+    "hints": [
+     "sword",
+     "hero",
+     "adventure"
+    ]
+   },
+   {
+    "word": "Sonic",
+    "hints": [
+     "hedgehog",
+     "fast",
+     "blue"
+    ]
+   },
+   {
+    "word": "Pokemon",
+    "hints": [
+     "catch",
+     "creatures",
+     "trainer"
+    ]
+   },
+   {
+    "word": "Tetris",
+    "hints": [
+     "blocks",
+     "stack",
+     "lines"
+    ]
+   },
+   {
+    "word": "Pacman",
+    "hints": [
+     "maze",
+     "dots",
+     "ghosts"
+    ]
+   },
+   {
+    "word": "Roblox",
+    "hints": [
+     "platform",
+     "blocky",
+     "create"
+    ]
+   },
+   {
+    "word": "Fifa",
+    "hints": [
+     "football",
+     "teams",
+     "matches"
+    ]
+   },
+   {
+    "word": "Halo",
+    "hints": [
+     "space",
+     "shooter",
+     "chief"
+    ]
+   },
+   {
+    "word": "Doom",
+    "hints": [
+     "demons",
+     "shooter",
+     "hell"
+    ]
+   },
+   {
+    "word": "Portal",
+    "hints": [
+     "puzzle",
+     "teleport",
+     "cake"
+    ]
+   },
+   {
+    "word": "Skyrim",
+    "hints": [
+     "dragons",
+     "fantasy",
+     "open"
+    ]
+   },
+   {
+    "word": "Overwatch",
+    "hints": [
+     "heroes",
+     "shooter",
+     "team"
+    ]
+   },
+   {
+    "word": "Valorant",
+    "hints": [
+     "tactical",
+     "shooter",
+     "agents"
+    ]
+   },
+   {
+    "word": "Terraria",
+    "hints": [
+     "dig",
+     "build",
+     "2d"
+    ]
+   },
+   {
+    "word": "Fall Guys",
+    "hints": [
+     "beans",
+     "obstacle",
+     "race"
+    ]
+   },
+   {
+    "word": "Among Us",
+    "hints": [
+     "imposter",
+     "crew",
+     "tasks"
+    ]
+   },
+   {
+    "word": "Cuphead",
+    "hints": [
+     "cartoon",
+     "hard",
+     "boss"
+    ]
+   },
+   {
+    "word": "God of War",
+    "hints": [
+     "kratos",
+     "axe",
+     "myth"
+    ]
+   },
+   {
+    "word": "Elden Ring",
+    "hints": [
+     "souls",
+     "hard",
+     "open"
+    ]
+   },
+   {
+    "word": "Rocket League",
+    "hints": [
+     "cars",
+     "soccer",
+     "boost"
+    ]
+   },
+   {
+    "word": "Subway Surfers",
+    "hints": [
+     "run",
+     "dodge",
+     "trains"
+    ]
+   }
   ]
  },
- "TV Shows": {
-  "emoji": "📺",
+ "Famous People": {
+  "emoji": "⭐",
   "words": [
-   "Friends",
-   "Seinfeld",
-   "Breaking Bad",
-   "The Office",
-   "Lost",
-   "Sherlock",
-   "Dexter",
-   "Fargo",
-   "Succession",
-   "Euphoria",
-   "The Crown",
-   "Ozark",
-   "Narcos",
-   "Vikings",
-   "Westworld",
-   "Community",
-   "Frasier",
-   "Cheers",
-   "Suits",
-   "House",
-   "Scrubs",
-   "Entourage",
-   "Billions",
-   "Homeland",
-   "Chernobyl",
-   "Peaky Blinders",
-   "Yellowstone",
-   "Bridgerton",
-   "Wednesday",
-   "Severance",
-   "Andor",
-   "Loki",
-   "Daredevil",
-   "Sopranos",
-   "Deadwood",
-   "Rome",
-   "Mindhunter",
-   "Bloodline",
-   "Manifest",
-   "Reacher"
-  ]
- },
- "Superheroes": {
-  "emoji": "🦸",
-  "words": [
-   "Batman",
-   "Superman",
-   "Spider-Man",
-   "Iron Man",
-   "Thor",
-   "Hulk",
-   "Wolverine",
-   "Deadpool",
-   "Wonder Woman",
-   "Aquaman",
-   "Flash",
-   "Black Panther",
-   "Captain America",
-   "Doctor Strange",
-   "Ant-Man",
-   "Green Lantern",
-   "Daredevil",
-   "Venom",
-   "Thanos",
-   "Loki",
-   "Groot",
-   "Star-Lord",
-   "Gamora",
-   "Vision",
-   "Scarlet Witch",
-   "Hawkeye",
-   "Cyclops",
-   "Storm",
-   "Magneto",
-   "Nightcrawler",
-   "Rogue",
-   "Gambit",
-   "Beast",
-   "Robin",
-   "Catwoman",
-   "Joker",
-   "Bane",
-   "Harley Quinn",
-   "Shazam",
-   "Cyborg"
-  ]
- },
- "Fruits & Veg": {
-  "emoji": "🥑",
-  "words": [
-   "Pineapple",
-   "Watermelon",
-   "Avocado",
-   "Mango",
-   "Strawberry",
-   "Blueberry",
-   "Raspberry",
-   "Coconut",
-   "Papaya",
-   "Pomegranate",
-   "Kiwi",
-   "Dragonfruit",
-   "Passionfruit",
-   "Lychee",
-   "Grapefruit",
-   "Cantaloupe",
-   "Broccoli",
-   "Cauliflower",
-   "Asparagus",
-   "Aubergine",
-   "Courgette",
-   "Pumpkin",
-   "Artichoke",
-   "Spinach",
-   "Cucumber",
-   "Radish",
-   "Beetroot",
-   "Cabbage",
-   "Celery",
-   "Parsnip",
-   "Sweetcorn",
-   "Mushroom",
-   "Pepper",
-   "Onion",
-   "Garlic",
-   "Ginger",
-   "Lettuce",
-   "Tomato",
-   "Carrot",
-   "Potato"
+   {
+    "word": "Einstein",
+    "hints": [
+     "genius",
+     "physics",
+     "hair"
+    ]
+   },
+   {
+    "word": "Beyonce",
+    "hints": [
+     "singer",
+     "diva",
+     "queen"
+    ]
+   },
+   {
+    "word": "Ronaldo",
+    "hints": [
+     "football",
+     "portugal",
+     "goals"
+    ]
+   },
+   {
+    "word": "Messi",
+    "hints": [
+     "football",
+     "argentina",
+     "dribble"
+    ]
+   },
+   {
+    "word": "Obama",
+    "hints": [
+     "president",
+     "usa",
+     "speech"
+    ]
+   },
+   {
+    "word": "Shakespeare",
+    "hints": [
+     "playwright",
+     "plays",
+     "quill"
+    ]
+   },
+   {
+    "word": "Gandhi",
+    "hints": [
+     "peace",
+     "india",
+     "protest"
+    ]
+   },
+   {
+    "word": "Elvis",
+    "hints": [
+     "rock",
+     "king",
+     "hips"
+    ]
+   },
+   {
+    "word": "Picasso",
+    "hints": [
+     "painter",
+     "cubism",
+     "art"
+    ]
+   },
+   {
+    "word": "Newton",
+    "hints": [
+     "gravity",
+     "apple",
+     "physics"
+    ]
+   },
+   {
+    "word": "Beethoven",
+    "hints": [
+     "composer",
+     "deaf",
+     "classical"
+    ]
+   },
+   {
+    "word": "Oprah",
+    "hints": [
+     "talkshow",
+     "host",
+     "media"
+    ]
+   },
+   {
+    "word": "Mandela",
+    "hints": [
+     "freedom",
+     "africa",
+     "prison"
+    ]
+   },
+   {
+    "word": "Darwin",
+    "hints": [
+     "evolution",
+     "species",
+     "beard"
+    ]
+   },
+   {
+    "word": "Mozart",
+    "hints": [
+     "composer",
+     "prodigy",
+     "classical"
+    ]
+   },
+   {
+    "word": "Elon",
+    "hints": [
+     "tesla",
+     "rockets",
+     "tweets"
+    ]
+   },
+   {
+    "word": "Taylor",
+    "hints": [
+     "singer",
+     "songs",
+     "swift"
+    ]
+   },
+   {
+    "word": "Drake",
+    "hints": [
+     "rapper",
+     "canada",
+     "hits"
+    ]
+   },
+   {
+    "word": "Adele",
+    "hints": [
+     "singer",
+     "ballads",
+     "powerful"
+    ]
+   },
+   {
+    "word": "Ronaldinho",
+    "hints": [
+     "football",
+     "brazil",
+     "smile"
+    ]
+   },
+   {
+    "word": "Serena",
+    "hints": [
+     "tennis",
+     "powerful",
+     "champion"
+    ]
+   },
+   {
+    "word": "Bolt",
+    "hints": [
+     "sprint",
+     "fast",
+     "jamaica"
+    ]
+   },
+   {
+    "word": "Jordan",
+    "hints": [
+     "basketball",
+     "bulls",
+     "legend"
+    ]
+   },
+   {
+    "word": "Curie",
+    "hints": [
+     "science",
+     "radioactive",
+     "nobel"
+    ]
+   },
+   {
+    "word": "Lincoln",
+    "hints": [
+     "president",
+     "beard",
+     "honest"
+    ]
+   }
   ]
  }
 }

@@ -125,7 +125,7 @@ function publicRoomState(room) {
     maxRounds: room.maxRounds,
     hostPid: host ? host.pid : null,
     hostName: host ? host.name : null,
-    settings: { categories: room.settings.categories.slice(), imposters: room.settings.imposters },
+    settings: { categories: room.settings.categories.slice(), imposters: room.settings.imposters, hintsEnabled: room.settings.hintsEnabled !== false },
     order: room.order || [],
     turn: {
       index: room.turnIndex ?? -1,
@@ -159,7 +159,7 @@ function createRoom(hostSocketId) {
     phase: "lobby",
     round: 0,
     maxRounds: 0,
-    settings: { categories: ["Famous People"], imposters: 1 },
+    settings: { categories: ["Famous People"], imposters: 1, hintsEnabled: true },
     word: null,
     category: null,
     hint: null,
@@ -217,7 +217,7 @@ function rejoinByPid({ roomCode, socketId, pid, name, icon }) {
   return { ok: true, room, player: existing, rejoined: true };
 }
 
-function setSettings(room, { categories, imposters }, CATEGORIES) {
+function setSettings(room, { categories, imposters, hintsEnabled }, CATEGORIES) {
   if (!room) return { ok: false, error: "Room not found." };
   if (room.phase !== "lobby") return { ok: false, error: "Can only change settings in the lobby." };
   if (Array.isArray(categories)) {
@@ -225,6 +225,7 @@ function setSettings(room, { categories, imposters }, CATEGORIES) {
     room.settings.categories = valid.length ? valid : ["Famous People"];
   }
   if (imposters === 1 || imposters === 2) room.settings.imposters = imposters;
+  if (typeof hintsEnabled === "boolean") room.settings.hintsEnabled = hintsEnabled;
   // cap imposters so a game is always winnable
   const maxImp = Math.max(1, Math.floor((room.players.length - 1) / 2));
   if (room.settings.imposters > maxImp) room.settings.imposters = 1;
@@ -260,9 +261,13 @@ function startGame(room, CATEGORIES) {
   const cats = room.settings.categories.filter((c) => CATEGORIES[c]);
   if (!cats.length) return { ok: false, error: "Pick at least one category." };
 
-  // build pool of {word, category}
+  // build pool of {word, category, hints}
   const pool = [];
-  cats.forEach((c) => CATEGORIES[c].words.forEach((w) => pool.push({ word: w, category: c })));
+  cats.forEach((c) => CATEGORIES[c].words.forEach((w) => {
+    const word = typeof w === "string" ? w : w.word;
+    const hints = w && Array.isArray(w.hints) ? w.hints : [];
+    if (word) pool.push({ word, category: c, hints });
+  }));
   if (!pool.length) return { ok: false, error: "No words in the chosen categories." };
 
   const maxImp = Math.max(1, Math.floor((connected.length - 1) / 2));
@@ -271,6 +276,8 @@ function startGame(room, CATEGORIES) {
   const pick = pool[Math.floor(Math.random() * pool.length)];
   room.word = pick.word;
   room.category = pick.category;
+  room.wordHints = pick.hints || [];
+  room.hintRotation = room.wordHints.length ? Math.floor(Math.random() * room.wordHints.length) : 0;
 
   // assign roles among connected players
   const order = shuffle(connected);
