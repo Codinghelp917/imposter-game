@@ -99,8 +99,22 @@ function setTurnClock(room, durationMs, startDelayMs = 0) {
   room.turnEndsAt = room.turnStartedAt + ms;
 }
 
+// The speaking order is drawn once per game and then held. Reshuffling every
+// round would throw away the read on who followed whom, which is half the game.
+// Ejected and disconnected players drop out; the survivors keep their places.
 function setupTurnOrder(room, durationMs = DEFAULT_TURN_DURATION_MS, startDelayMs = 0) {
-  const participants = shuffle(aliveConnected(room));
+  const byPid = new Map(room.players.map((p) => [p.pid, p]));
+  let participants;
+  if (room.baseOrder && room.baseOrder.length) {
+    participants = room.baseOrder.map((pid) => byPid.get(pid)).filter((p) => p && p.alive && p.connected);
+    // Anyone eligible but missing from the draw (e.g. reconnected after the
+    // order was set) goes on the end rather than being skipped forever.
+    const seen = new Set(participants.map((p) => p.pid));
+    aliveConnected(room).forEach((p) => { if (!seen.has(p.pid)) { participants.push(p); room.baseOrder.push(p.pid); } });
+  } else {
+    participants = shuffle(aliveConnected(room));
+    room.baseOrder = participants.map((p) => p.pid);
+  }
   room.turnOrder = participants.map((p) => p.pid);
   room.order = participants.map((p) => p.name);
   room.turnIndex = participants.length ? 0 : -1;
@@ -256,6 +270,7 @@ function createRoom(hostSocketId) {
     hint: null,
     order: [],
     turnOrder: [],
+    baseOrder: [],
     turnIndex: -1,
     turnStartedAt: null,
     turnEndsAt: null,
@@ -426,6 +441,7 @@ function startGame(room, CATEGORIES) {
   room.chat = [];
   room.order = [];
   room.turnOrder = [];
+  room.baseOrder = [];      // a fresh game draws a fresh speaking order
   room.turnIndex = -1;
   room.turnStartedAt = null;
   room.turnEndsAt = null;
@@ -745,6 +761,7 @@ function backToLobby(room) {
   room.hint = null;
   room.order = [];
   room.turnOrder = [];
+  room.baseOrder = [];
   room.turnIndex = -1;
   room.turnStartedAt = null;
   room.turnEndsAt = null;
