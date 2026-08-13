@@ -150,6 +150,39 @@ function ensureActiveTurn(room, durationMs = room && room.turnDurationMs) {
   return { ...advanceTurn(room, "unavailable", durationMs), changed: true };
 }
 
+// ---------------- auto-advance ----------------
+// The room drives itself: the host starts the game and starts the next one,
+// everything in between advances on its own. autoKind/autoAt tell the client
+// what it is counting down to so it can show the same deadline the server holds.
+function setAuto(room, kind, ms) {
+  if (!room) return;
+  room.autoKind = kind;
+  room.autoMs = ms;
+  room.autoAt = Date.now() + ms;
+}
+function clearAuto(room) {
+  if (!room) return;
+  room.autoKind = null;
+  room.autoMs = null;
+  room.autoAt = null;
+}
+
+// Players confirm they have seen their role by flipping the card. Once everyone
+// still in the room has peeked, there is nothing left to wait for.
+function markReady(room, pid) {
+  if (!room || room.phase !== "reveal") return { ok: false };
+  const p = getPlayerByPid(room, pid);
+  if (!p) return { ok: false };
+  room.ready = room.ready || [];
+  if (!room.ready.includes(pid)) room.ready.push(pid);
+  return { ok: true, ...readyTally(room) };
+}
+function readyTally(room) {
+  const waiting = room.players.filter((p) => p.connected && p.alive);
+  const ready = (room.ready || []).filter((pid) => waiting.some((p) => p.pid === pid));
+  return { count: ready.length, total: waiting.length, allReady: waiting.length > 0 && ready.length >= waiting.length };
+}
+
 // The guess in flight, minus anything that would spoil the reveal.
 function publicGuess(room) {
   const g = room && room.guess;
@@ -190,6 +223,8 @@ function publicRoomState(room) {
       complete: !!room.cluesComplete
     },
     guess: publicGuess(room),
+    auto: room.autoKind ? { kind: room.autoKind, endsAt: room.autoAt, durationMs: room.autoMs } : null,
+    ready: readyTally(room),
     players: room.players.map((p) => ({
       pid: p.pid,
       name: p.name,
@@ -229,7 +264,9 @@ function createRoom(hostSocketId) {
     chat: [],
     ejection: null,
     guess: null,
-    gameResult: null
+    gameResult: null,
+    ready: [],
+    autoKind: null, autoAt: null, autoMs: null
   };
   return { roomCode: code, room: rooms[code] };
 }
@@ -375,6 +412,8 @@ function startGame(room, CATEGORIES) {
   room.turnStartedAt = null;
   room.turnEndsAt = null;
   room.cluesComplete = false;
+  room.ready = [];
+  clearAuto(room);
   addSystem(room, `Game on — ${impCount} imposter${impCount > 1 ? "s" : ""} among us. ${room.maxRounds} rounds to catch ${impCount > 1 ? "them" : "them"}.`);
 
   return { ok: true, room };
@@ -385,6 +424,8 @@ function beginDiscussion(room, durationMs = DEFAULT_TURN_DURATION_MS) {
   if (!room) return { ok: false, error: "Room not found." };
   if (room.phase !== "reveal") return { ok: false, error: "Nothing to discuss yet." };
   room.phase = "discussion";
+  room.ready = [];
+  clearAuto(room);
   const first = setupTurnOrder(room, durationMs);
   addSystem(room, first
     ? `Round ${room.round} — ${first.name} goes first. You each have ${Math.round(room.turnDurationMs / 1000)} seconds.`
@@ -696,6 +737,8 @@ function backToLobby(room) {
   room.guess = null;
   room.gameResult = null;
   room.chat = [];
+  room.ready = [];
+  clearAuto(room);
   room.players.forEach((p) => { p.alive = true; p.isImposter = false; p.role = "crew"; });
 }
 
@@ -770,6 +813,7 @@ module.exports = {
   startGame, beginDiscussion, submitClue, advanceTurn, ensureActiveTurn, currentTurnPlayer,
   callVote, castVote, everyoneVoted,
   wordMatches, startImposterGuess, finalizeGuess, imposterSnapGuess, publicGuess, finishedSummary,
+  setAuto, clearAuto, markReady, readyTally,
   resolveVote, forceResolve, backToLobby,
   removePlayerFromRoom, removePlayerFromAll, publicRoomState, sweepRooms,
   impostersAlive, crewAlive, aliveConnected,

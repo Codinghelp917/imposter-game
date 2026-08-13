@@ -16,17 +16,35 @@ Then open `http://localhost:3000` (or set `PORT`).
 ## How a game plays
 
 1. Host creates a room, everyone joins with the 4-digit code.
-2. Roles are dealt: crewmates see the word, the imposter sees a vague hint that
-   rotates each round.
+2. Roles are dealt: crewmates see the word, the imposter sees one vague hint.
+   Each word carries a few possible hints and one is drawn at random per game,
+   so the same word plays differently next time — but the imposter keeps that
+   same hint for the whole game.
 3. Each round, players take turns giving one clue in the chat. 30 seconds each.
-4. Once everyone has played, the host calls a vote. Vote someone out, or skip.
-   Free chat is open during the vote so people can make their case.
+4. Once everyone has played, the vote opens on its own. Vote someone out, or
+   skip. Free chat is open during the vote so people can make their case.
 5. Eject a crewmate and the game rolls on. You get 3 rounds per imposter.
 6. **Eject the imposter and they get one last guess at the word.** Name it and
    the imposters steal the win.
 
 Imposters also win by surviving all the rounds, or by reaching the crew in
 numbers.
+
+## The room runs itself
+
+The host presses **Start game**, and later **New game**. Everything in between
+advances on its own:
+
+- **Reveal → discussion** when every player has flipped their role card. The
+  card flip *is* the "I'm ready" signal, so nobody gets rushed past their word.
+  The screen shows a live "3 of 5 have peeked" count.
+- **Discussion → vote** a few seconds after the last clue lands — just long
+  enough to read it.
+- **Vote → result** the moment the last ballot is in.
+
+Each of those has a backstop timer for someone who wanders off mid-game, so one
+idle player can never strand the room. The host keeps a button at every step to
+skip ahead rather than wait.
 
 ## The imposter's word guess
 
@@ -71,6 +89,9 @@ All optional, all milliseconds:
 | `TURN_DURATION_MS` | `30000` | Length of one clue turn |
 | `GUESS_DURATION_MS` | `25000` | Length of the caught imposter's guess window |
 | `RECONNECT_GRACE_MS` | `300000` | How long a seat is held for a disconnected player |
+| `REVEAL_MAX_MS` | `45000` | Backstop: start the discussion even if someone never flips their card |
+| `CLUES_TO_VOTE_MS` | `4000` | Pause after the last clue before the vote opens |
+| `VOTE_MAX_MS` | `60000` | Backstop: resolve the vote even if someone never votes |
 | `EJECTION_REVEAL_MS` | `3600` | Length of the ejection cutscene. Turn and guess clocks are scheduled to start only after it finishes, so nobody loses time to an animation they're still watching. Change it only if you also change the animation timing in `public/index.html`. |
 
 ## Reconnecting

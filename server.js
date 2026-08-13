@@ -68,6 +68,11 @@ const RECONNECT_GRACE_MS = envMs("RECONNECT_GRACE_MS", 5 * 60_000);
 // (and the imposter's guess clock) start only once it has finished, so nobody
 // loses time to an animation they are still watching.
 const EJECTION_REVEAL_MS = envMs("EJECTION_REVEAL_MS", 3_600);
+// The room runs itself between "Start game" and "New game". These are the
+// backstops; each phase normally advances as soon as everyone has acted.
+const REVEAL_MAX_MS = envMs("REVEAL_MAX_MS", 45_000, { min: 1 });      // if someone never flips
+const CLUES_TO_VOTE_MS = envMs("CLUES_TO_VOTE_MS", 4_000, { min: 0 }); // beat to read the last clue
+const VOTE_MAX_MS = envMs("VOTE_MAX_MS", 60_000, { min: 1 });          // if someone never votes
 
 const resolveOpts = () => ({
   turnDurationMs: TURN_DURATION_MS,
@@ -95,9 +100,11 @@ function imposterHint(room) {
   if (!room.settings || room.settings.hintsEnabled === false) return null;
   const h = room.wordHints || [];
   if (!h.length) return null;
-  const rot = room.hintRotation || 0;
-  const idx = (rot + Math.max(0, (room.round || 1) - 1)) % h.length;
-  return h[idx];
+  // One hint is picked at random when the game starts and stays put for the
+  // whole game. The extra hints per word exist so the same word plays
+  // differently across games — not to hand the imposter a fresh angle each
+  // round, which made them far too easy to piece together.
+  return h[(room.hintRotation || 0) % h.length];
 }
 function rolePayload(room, player) {
   return {
@@ -143,6 +150,7 @@ function scheduleTurnTimer(code) {
     io.to(code).emit("turnAdvanced", { reason: "timeout", state });
     broadcast(code);
     scheduleTurnTimer(code);
+    syncAuto(code);
   }, delay + 5));
 }
 function advanceUnavailableTurn(code) {
@@ -151,6 +159,7 @@ function advanceUnavailableTurn(code) {
   const result = R.ensureActiveTurn(room, TURN_DURATION_MS);
   if (result.changed) io.to(code).emit("turnAdvanced", { reason: "player-left", state: R.publicRoomState(room) });
   scheduleTurnTimer(code);
+  syncAuto(code);
 }
 
 /* ---------------- imposter's last-words guess ---------------- */
@@ -178,6 +187,7 @@ function finishGuess(code, text) {
   if (!res) return null;
   io.to(code).emit("guessResolved", { resolution: res, state: R.publicRoomState(room) });
   broadcast(code);
+  syncAuto(code);
   return res;
 }
 
@@ -225,7 +235,78 @@ function submitClueFromSocket(socket, roomCode, text, cb) {
   io.to(roomCode).emit("turnAdvanced", { reason: "submitted", state });
   broadcast(roomCode);
   scheduleTurnTimer(roomCode);
+  syncAuto(roomCode);
   if (typeof cb === "function") cb({ ok: true, state });
+}
+
+/* ---------------- auto-advance ----------------
+   The host presses Start game and, later, New game. Everything between those
+   two runs itself: the reveal ends when everyone has flipped their card, the
+   vote opens when the last clue lands, and the vote resolves when the last
+   ballot is in. The timers below are only backstops for someone who wanders
+   off, so one idle player can never strand the room.                        */
+const phaseTimers = new Map();
+function clearPhaseTimer(code) {
+  const entry = phaseTimers.get(code);
+  if (entry) clearTimeout(entry.timer);
+  phaseTimers.delete(code);
+}
+function armAuto(code, kind, ms, fn) {
+  const current = phaseTimers.get(code);
+  if (current && current.kind === kind) return;   // already ticking — don't push the deadline back
+  clearPhaseTimer(code);
+  const room = R.getRoom(code);
+  if (!room) return;
+  R.setAuto(room, kind, ms);
+  const timer = setTimeout(() => { phaseTimers.delete(code); fn(); }, ms + 5);
+  phaseTimers.set(code, { kind, timer });
+}
+// Single source of truth: look at the room and arm whatever it is waiting on.
+// Callers usually broadcast before reaching here, so re-broadcast whenever the
+// countdown actually changed — otherwise clients never see the new deadline.
+function syncAuto(code) {
+  const room = R.getRoom(code);
+  if (!room) return clearPhaseTimer(code);
+  const before = room.autoKind;
+
+  if (room.phase === "reveal")
+    armAuto(code, "discussion", REVEAL_MAX_MS, () => doBeginDiscussion(code));
+  else if (room.phase === "discussion" && room.cluesComplete)
+    armAuto(code, "vote", CLUES_TO_VOTE_MS, () => doCallVote(code));
+  else if (room.phase === "voting")
+    armAuto(code, "resolve", VOTE_MAX_MS, () => doResolve(code, true));
+  else { clearPhaseTimer(code); R.clearAuto(room); }
+
+  if (room.autoKind !== before) broadcast(code);
+}
+
+function doBeginDiscussion(code) {
+  const room = R.getRoom(code);
+  if (!room || room.phase !== "reveal") return;
+  const result = R.beginDiscussion(room, TURN_DURATION_MS);
+  if (!result.ok) return;
+  const state = R.publicRoomState(room);
+  io.to(code).emit("discussionStarted", { state, chat: room.chat.slice(-60) });
+  io.to(code).emit("turnAdvanced", { reason: "round-start", state });
+  broadcast(code);
+  scheduleTurnTimer(code);
+  syncAuto(code);
+}
+function doCallVote(code) {
+  const room = R.getRoom(code);
+  if (!room || room.phase !== "discussion" || !room.cluesComplete) return;
+  const result = R.callVote(room);
+  if (!result.ok) return;
+  clearTurnTimer(code);
+  io.to(code).emit("votingStarted", { state: R.publicRoomState(room) });
+  broadcast(code);
+  syncAuto(code);
+}
+// A player leaving during the reveal can be the one everyone was waiting on.
+function maybeAdvanceReveal(code) {
+  const room = R.getRoom(code);
+  if (!room || room.phase !== "reveal") return;
+  if (R.readyTally(room).allReady) doBeginDiscussion(code);
 }
 
 function doResolve(code, force) {
@@ -236,8 +317,9 @@ function doResolve(code, force) {
   if (!res) return;
   io.to(code).emit("voteResolved", { resolution: res, state: R.publicRoomState(room) });
   broadcast(code);
-  if (res.pendingGuess) { scheduleGuessTimer(code); return; }
+  if (res.pendingGuess) { scheduleGuessTimer(code); syncAuto(code); return; }
   if (room.phase === "discussion") { dealRoles(room); scheduleTurnTimer(code); }
+  syncAuto(code);
 }
 
 io.on("connection", (socket) => {
@@ -297,7 +379,7 @@ io.on("connection", (socket) => {
       state: R.publicRoomState(room), chat: room.chat.slice(-60),
       gameResult: room.gameResult, finished: R.finishedSummary(room), categories: CATEGORY_LIST
     });
-    broadcast(roomCode); scheduleTurnTimer(roomCode); scheduleGuessTimer(roomCode);
+    broadcast(roomCode); scheduleTurnTimer(roomCode); scheduleGuessTimer(roomCode); syncAuto(roomCode);
   });
 
   socket.on("updateSettings", ({ roomCode, categories, imposters, hintsEnabled, guessEnabled }) => {
@@ -310,15 +392,24 @@ io.on("connection", (socket) => {
     const result = R.startGame(room, CATEGORIES);
     if (!result.ok) return socket.emit("toast", { type: "error", message: result.error });
     dealRoles(room); io.to(roomCode).emit("gameStarted", { state: R.publicRoomState(room) }); broadcast(roomCode);
+    syncAuto(roomCode);
   });
 
+  // Flipping the role card is the "I've seen it" signal. When the last person
+  // flips, the discussion starts on its own.
+  socket.on("revealReady", ({ roomCode }) => {
+    const room = R.getRoom(roomCode); if (!room || room.phase !== "reveal") return;
+    const player = room.players.find((p) => p.id === socket.id); if (!player) return;
+    const res = R.markReady(room, player.pid);
+    if (!res.ok) return;
+    broadcast(roomCode);
+    if (res.allReady) doBeginDiscussion(roomCode);
+  });
+
+  // Host override: skip the wait and start now.
   socket.on("beginDiscussion", ({ roomCode }) => {
-    const room = hostGate(roomCode); if (!room) return;
-    const result = R.beginDiscussion(room, TURN_DURATION_MS); if (!result.ok) return;
-    const state = R.publicRoomState(room);
-    io.to(roomCode).emit("discussionStarted", { state, chat: room.chat.slice(-60) });
-    io.to(roomCode).emit("turnAdvanced", { reason: "round-start", state });
-    broadcast(roomCode); scheduleTurnTimer(roomCode);
+    if (!hostGate(roomCode)) return;
+    doBeginDiscussion(roomCode);
   });
 
   socket.on("chat", ({ roomCode, text }) => {
@@ -354,6 +445,7 @@ io.on("connection", (socket) => {
     io.to(roomCode).emit("guessResolved", { resolution, state });
     broadcast(roomCode);
     if (!res.result && room.phase === "discussion") scheduleTurnTimer(roomCode);
+    syncAuto(roomCode);
     if (typeof cb === "function") cb({ ok: true, correct: res.guess.correct });
   });
 
@@ -372,17 +464,18 @@ io.on("connection", (socket) => {
     if (typeof cb === "function") cb({ ok: true, correct: !!(res && res.guess && res.guess.correct) });
   });
 
+  // Host override: open the vote without waiting out the beat.
   socket.on("callVote", ({ roomCode }) => {
-    const room = hostGate(roomCode); if (!room) return;
-    const result = R.callVote(room); if (!result.ok) return socket.emit("toast", { type: "error", message: result.error });
-    clearTurnTimer(roomCode); io.to(roomCode).emit("votingStarted", { state: R.publicRoomState(room) }); broadcast(roomCode);
+    if (!hostGate(roomCode)) return;
+    doCallVote(roomCode);
   });
 
   socket.on("castVote", ({ roomCode, target }) => {
     const room = R.getRoom(roomCode); if (!room) return;
     const voter = room.players.find((p) => p.id === socket.id); if (!voter) return;
     const result = R.castVote(room, voter.pid, target); if (!result.ok) return socket.emit("toast", { type: "error", message: result.error });
-    broadcast(roomCode); if (result.complete) doResolve(roomCode, false);
+    broadcast(roomCode);
+    if (result.complete) doResolve(roomCode, false);
   });
 
   socket.on("endVoting", ({ roomCode }) => {
@@ -392,7 +485,7 @@ io.on("connection", (socket) => {
 
   socket.on("newGame", ({ roomCode }) => {
     const room = hostGate(roomCode); if (!room) return;
-    clearTurnTimer(roomCode); clearGuessTimer(roomCode);
+    clearTurnTimer(roomCode); clearGuessTimer(roomCode); clearPhaseTimer(roomCode);
     R.backToLobby(room); broadcast(roomCode); io.to(roomCode).emit("returnedToLobby", { state: R.publicRoomState(room) });
   });
 
@@ -402,20 +495,23 @@ io.on("connection", (socket) => {
     if (leaving) clearDisconnectGrace(roomCode, leaving.pid);
 
     const result = R.removePlayerFromRoom(roomCode, socket.id, true); socket.leave(roomCode);
-    if (!result || result.roomDeleted || !result.room) { clearTurnTimer(roomCode); clearGuessTimer(roomCode); return; }
+    if (!result || result.roomDeleted || !result.room) { clearTurnTimer(roomCode); clearGuessTimer(roomCode); clearPhaseTimer(roomCode); return; }
     if (result.guesserGone) finishGuess(roomCode, null);
-    advanceUnavailableTurn(roomCode); broadcast(roomCode); if (result.votingComplete) doResolve(roomCode, false);
+    advanceUnavailableTurn(roomCode); broadcast(roomCode);
+    if (result.votingComplete) doResolve(roomCode, false);
+    maybeAdvanceReveal(roomCode); syncAuto(roomCode);
   });
 
   socket.on("disconnect", () => {
     const pid = socket.data.pid;
     const result = R.removePlayerFromAll(socket.id); if (!result) return;
-    if (result.roomDeleted || !result.room) { clearTurnTimer(result.roomCode); clearGuessTimer(result.roomCode); return; }
+    if (result.roomDeleted || !result.room) { clearTurnTimer(result.roomCode); clearGuessTimer(result.roomCode); clearPhaseTimer(result.roomCode); return; }
 
     if (pid) scheduleDisconnectCleanup(result.roomCode, pid);
     advanceUnavailableTurn(result.roomCode);
     broadcast(result.roomCode);
     if (result.votingComplete) doResolve(result.roomCode, false);
+    maybeAdvanceReveal(result.roomCode); syncAuto(result.roomCode);
   });
 });
 
@@ -423,7 +519,7 @@ io.on("connection", (socket) => {
 // never joined. Sweep those, plus rooms everybody abandoned long ago.
 const sweeper = setInterval(() => {
   const dropped = R.sweepRooms();
-  dropped.forEach((code) => { clearTurnTimer(code); clearGuessTimer(code); });
+  dropped.forEach((code) => { clearTurnTimer(code); clearGuessTimer(code); clearPhaseTimer(code); });
   if (dropped.length) console.log(`swept ${dropped.length} stale room(s)`);
 }, 60_000);
 if (typeof sweeper.unref === "function") sweeper.unref();

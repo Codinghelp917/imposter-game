@@ -430,11 +430,10 @@
           <div class="face front"><div class="pulse"></div><div class="q">?</div><div class="tap">Tap to reveal</div></div>
           <div class="face back" id="cardBack"></div>
         </div></div>
-        <div id="revealHostControls" style="display:none">
-          <button class="btn crew" id="startDiscBtn">Everyone ready → start discussion</button>
-          <p class="note">Make sure each player has peeked at their card.</p>
+        <div class="waiting" id="revealReadyNote"><span class="spin"></span> <span id="revealReadyText">Tap your card to reveal your role</span></div>
+        <div id="revealHostControls" style="display:none;margin-top:4px">
+          <button class="btn ghost sm" id="startDiscBtn">Skip the wait → start now</button>
         </div>
-        <div id="revealGuestWait" class="waiting" style="display:none"><span class="spin"></span> Peek at your card, then wait for the host…</div>
       </div>
     </section>
 
@@ -892,12 +891,25 @@
             '<div class="role-note">Give a subtle one-word clue. Prove you know it — without handing it to the imposter.</div>';
         }
       } else { back.className="face back crew"; back.innerHTML='<div class="role-note">Dealing…</div>'; }
+
+      const rd=r.ready||{count:0,total:0};
+      const iFlipped=$("#flipCard").classList.contains("flipped");
+      $("#revealReadyText").textContent=!iFlipped
+        ? "Tap your card to reveal your role"
+        : rd.total>1
+          ? `${rd.count} of ${rd.total} have peeked — starts when everyone has`
+          : "Starting…";
       $("#revealHostControls").style.display=state.me.isHost?"block":"none";
-      $("#revealGuestWait").style.display=state.me.isHost?"none":"flex";
     }
     $("#flipCard").addEventListener("click",()=>{
       const c=$("#flipCard");if(!state.role){toast("Dealing your card…");return;}
-      c.classList.toggle("flipped");if(c.classList.contains("flipped"))sfx.flip();});
+      c.classList.toggle("flipped");
+      if(c.classList.contains("flipped")){
+        sfx.flip();
+        // Flipping is the "I've seen my role" signal — once everyone has, the
+        // server starts the discussion without anyone pressing anything.
+        socket.emit("revealReady",{roomCode:state.roomCode});
+      }});
 
     /* ============ ROLE BAR ============ */
     function renderRoleBars(){
@@ -965,7 +977,8 @@
     }
     setInterval(()=>{
       if(!state.room)return;
-      if(state.room.phase==="discussion"&&$("#screen-discussion").classList.contains("active"))updateTurnClock();
+      if(state.room.phase==="discussion"&&$("#screen-discussion").classList.contains("active")){updateTurnClock();updateAutoText();}
+      if(state.room.phase==="voting"&&$("#screen-voting").classList.contains("active"))updateAutoText();
       if(state.room.phase==="guessing"&&$("#screen-guess").classList.contains("active"))updateGuessClock();
     },200);
 
@@ -1013,17 +1026,36 @@
       const canGuess=!dead&&state.role&&state.role.isImposter&&r.settings&&r.settings.guessEnabled!==false;
       $("#impGuessWrap").style.display=canGuess?"block":"none";
 
-      $("#discHostControls").style.display=state.me.isHost?"block":"none";
-      const voteBtn=$("#callVoteBtn");
-      voteBtn.disabled=!turn.complete;
-      voteBtn.textContent=turn.complete?"Call a vote":"Waiting for everyone's clue…";
-      $("#callVoteHint").textContent=turn.complete?"Everyone has played — you can vote now.":"The vote unlocks after everyone has had their turn.";
+      // The vote opens by itself once the last clue lands; the host only gets a
+      // button to skip the short beat before it does.
+      $("#discHostControls").style.display=(state.me.isHost&&turn.complete)?"block":"none";
+      $("#callVoteBtn").disabled=!turn.complete;
+      $("#callVoteBtn").textContent="Open the vote now";
+      $("#callVoteHint").textContent="";
 
-      $("#discGuestWait").style.display=state.me.isHost?"none":"flex";
-      $("#discWaitText").textContent=turn.complete
-        ?"Everyone has played — waiting for the host to call the vote."
-        :myTurn?"It's your turn — submit your clue before the timer runs out."
-        :"Waiting for "+activeName+" to submit a clue…";
+      $("#discGuestWait").style.display="flex";
+      updateAutoText();
+    }
+    // Shared by the render pass and the 200ms tick so the countdown moves.
+    function updateAutoText(){
+      const r=state.room; if(!r)return;
+      const auto=r.auto,turn=r.turn||{},mine=meInRoom(),dead=!!(mine&&!mine.alive);
+      const secs=auto&&auto.endsAt?Math.max(0,Math.ceil((auto.endsAt-Date.now())/1000)):null;
+      if(r.phase==="discussion"){
+        const myTurn=!dead&&!turn.complete&&turn.activePid===state.me.pid;
+        const activeName=turn.activeName||"the next player";
+        const el=$("#discWaitText"); if(!el)return;
+        el.textContent=turn.complete
+          ?(secs!==null?`Everyone has played — voting opens in ${secs}…`:"Everyone has played — opening the vote…")
+          :myTurn?"It's your turn — submit your clue before the timer runs out."
+          :`Waiting for ${activeName} to submit a clue…`;
+      } else if(r.phase==="voting"){
+        const voters=r.players.filter(p=>p.alive&&p.connected);
+        const voted=voters.filter(p=>p.hasVoted).length;
+        const tail=secs!==null?` · auto-resolves in ${secs}s`:"";
+        const el=$("#voteWaitText"); if(el)el.textContent=`${voted} of ${voters.length} in — waiting on the rest…${tail}`;
+        const pg=$("#voteProgress"); if(pg)pg.textContent=`${voted} of ${voters.length} votes in.${tail}`;
+      }
     }
     function sendClue(){
       const r=state.room,turn=r&&r.turn,inp=$("#chatInput");
@@ -1091,9 +1123,8 @@
       const voters=r.players.filter(p=>p.alive&&p.connected);
       const voted=voters.filter(p=>p.hasVoted).length;
       $("#voteHostControls").style.display=state.me.isHost?"block":"none";
-      $("#voteProgress").textContent=voted+" of "+voters.length+" votes in.";
       $("#voteGuestWait").style.display=(!state.me.isHost&&(!!state.myVote||dead))?"flex":"none";
-      $("#voteWaitText").textContent=voted+" of "+voters.length+" in — waiting on the rest…";
+      updateAutoText();
     }
     function castVote(target){
       if(!amAlive())return;
