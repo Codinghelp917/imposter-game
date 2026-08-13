@@ -11,6 +11,7 @@
 
 const rooms = {};
 const MAX_CHAT = 120;
+const DEFAULT_TURN_DURATION_MS = 30_000;
 
 // ---------------- helpers ----------------
 function randomCode() {
@@ -49,6 +50,71 @@ function crewAlive(room) {
   return room.players.filter((p) => !p.isImposter && p.alive).length;
 }
 
+function currentTurnPlayer(room) {
+  if (!room || room.phase !== "discussion" || room.cluesComplete) return null;
+  const pid = room.turnOrder && room.turnOrder[room.turnIndex];
+  return pid ? getPlayerByPid(room, pid) : null;
+}
+
+function setTurnClock(room, durationMs) {
+  const ms = Number.isFinite(Number(durationMs)) && Number(durationMs) > 0
+    ? Number(durationMs) : DEFAULT_TURN_DURATION_MS;
+  room.turnDurationMs = ms;
+  room.turnStartedAt = Date.now();
+  room.turnEndsAt = room.turnStartedAt + ms;
+}
+
+function setupTurnOrder(room, durationMs = DEFAULT_TURN_DURATION_MS) {
+  const participants = shuffle(aliveConnected(room));
+  room.turnOrder = participants.map((p) => p.pid);
+  room.order = participants.map((p) => p.name);
+  room.turnIndex = participants.length ? 0 : -1;
+  room.cluesComplete = participants.length === 0;
+  if (participants.length) setTurnClock(room, durationMs);
+  else { room.turnStartedAt = null; room.turnEndsAt = null; }
+  return currentTurnPlayer(room);
+}
+
+function advanceTurn(room, reason = "submitted", durationMs = room && room.turnDurationMs) {
+  if (!room) return { ok: false, error: "Room not found." };
+  if (room.phase !== "discussion") return { ok: false, error: "Clue turns are not active." };
+  if (room.cluesComplete) return { ok: true, complete: true, room, activePlayer: null };
+
+  const previous = currentTurnPlayer(room);
+  if (reason === "timeout" && previous) addSystem(room, `${previous.name} ran out of time.`);
+
+  let nextIndex = room.turnIndex + 1;
+  let nextPlayer = null;
+  while (nextIndex < room.turnOrder.length) {
+    const candidate = getPlayerByPid(room, room.turnOrder[nextIndex]);
+    if (candidate && candidate.alive && candidate.connected) { nextPlayer = candidate; break; }
+    nextIndex += 1;
+  }
+
+  if (!nextPlayer) {
+    room.turnIndex = room.turnOrder.length;
+    room.cluesComplete = true;
+    room.turnStartedAt = null;
+    room.turnEndsAt = null;
+    addSystem(room, "Everyone has had their turn — the host can call the vote.");
+    return { ok: true, complete: true, room, previousPlayer: previous, activePlayer: null };
+  }
+
+  room.turnIndex = nextIndex;
+  room.cluesComplete = false;
+  setTurnClock(room, durationMs);
+  return { ok: true, complete: false, room, previousPlayer: previous, activePlayer: nextPlayer };
+}
+
+function ensureActiveTurn(room, durationMs = room && room.turnDurationMs) {
+  if (!room || room.phase !== "discussion" || room.cluesComplete)
+    return { ok: true, changed: false, complete: !!(room && room.cluesComplete) };
+  const active = currentTurnPlayer(room);
+  if (active && active.alive && active.connected)
+    return { ok: true, changed: false, complete: false, activePlayer: active };
+  return { ...advanceTurn(room, "unavailable", durationMs), changed: true };
+}
+
 // Public snapshot — never leaks who the imposter is or the secret word.
 function publicRoomState(room) {
   if (!room) return null;
@@ -61,6 +127,16 @@ function publicRoomState(room) {
     hostName: host ? host.name : null,
     settings: { categories: room.settings.categories.slice(), imposters: room.settings.imposters },
     order: room.order || [],
+    turn: {
+      index: room.turnIndex ?? -1,
+      total: room.turnOrder ? room.turnOrder.length : 0,
+      activePid: currentTurnPlayer(room)?.pid || null,
+      activeName: currentTurnPlayer(room)?.name || null,
+      startedAt: room.turnStartedAt || null,
+      endsAt: room.turnEndsAt || null,
+      durationMs: room.turnDurationMs || DEFAULT_TURN_DURATION_MS,
+      complete: !!room.cluesComplete
+    },
     players: room.players.map((p) => ({
       pid: p.pid,
       name: p.name,
@@ -86,7 +162,14 @@ function createRoom(hostSocketId) {
     settings: { categories: ["Famous People"], imposters: 1 },
     word: null,
     category: null,
+    hint: null,
     order: [],
+    turnOrder: [],
+    turnIndex: -1,
+    turnStartedAt: null,
+    turnEndsAt: null,
+    turnDurationMs: DEFAULT_TURN_DURATION_MS,
+    cluesComplete: false,
     votes: {},
     chat: [],
     ejection: null,
@@ -204,26 +287,50 @@ function startGame(room, CATEGORIES) {
   room.ejection = null;
   room.gameResult = null;
   room.chat = [];
-  room.order = shuffle(aliveConnected(room)).map((p) => p.name);
+  room.order = [];
+  room.turnOrder = [];
+  room.turnIndex = -1;
+  room.turnStartedAt = null;
+  room.turnEndsAt = null;
+  room.cluesComplete = false;
   addSystem(room, `Game on — ${impCount} imposter${impCount > 1 ? "s" : ""} hiding. ${room.maxRounds} rounds to catch ${impCount > 1 ? "them" : "them"}.`);
 
   return { ok: true, room };
 }
 
 // reveal -> discussion (host presses "start discussion", or auto)
-function beginDiscussion(room) {
+function beginDiscussion(room, durationMs = DEFAULT_TURN_DURATION_MS) {
   if (!room) return { ok: false, error: "Room not found." };
   if (room.phase !== "reveal") return { ok: false, error: "Nothing to discuss yet." };
   room.phase = "discussion";
-  addSystem(room, `Round ${room.round} — drop your clues.`);
-  return { ok: true, room };
+  const first = setupTurnOrder(room, durationMs);
+  addSystem(room, first
+    ? `Round ${room.round} — ${first.name} goes first. You each have ${Math.round(room.turnDurationMs / 1000)} seconds.`
+    : `Round ${room.round} — no connected players can give a clue.`);
+  return { ok: true, room, activePlayer: first };
+}
+
+function submitClue(room, pid, text, durationMs = room && room.turnDurationMs) {
+  if (!room) return { ok: false, error: "Room not found." };
+  if (room.phase !== "discussion") return { ok: false, error: "Clues are not being entered right now." };
+  if (room.cluesComplete) return { ok: false, error: "Everyone has already had their turn." };
+  const active = currentTurnPlayer(room);
+  if (!active) return { ok: false, error: "There is no active clue turn." };
+  if (active.pid !== pid) return { ok: false, error: `It is ${active.name}'s turn.` };
+  const msg = addChat(room, pid, text);
+  if (!msg) return { ok: false, error: "Enter a clue before submitting." };
+  const turnResult = advanceTurn(room, "submitted", durationMs);
+  return { ok: true, room, msg, ...turnResult };
 }
 
 // discussion -> voting
 function callVote(room) {
   if (!room) return { ok: false, error: "Room not found." };
   if (room.phase !== "discussion") return { ok: false, error: "Can only call a vote during discussion." };
+  if (!room.cluesComplete) return { ok: false, error: "Everyone needs to have their clue turn before voting." };
   room.phase = "voting";
+  room.turnStartedAt = null;
+  room.turnEndsAt = null;
   room.votes = {};
   addSystem(room, `Round ${room.round} vote — who's the imposter? (or skip)`);
   return { ok: true, room };
@@ -254,7 +361,7 @@ function everyoneVoted(room) {
 }
 
 // Tally, decide ejection, advance the game. Returns a resolution payload.
-function resolveVote(room) {
+function resolveVote(room, durationMs = DEFAULT_TURN_DURATION_MS) {
   if (!room) return null;
 
   const counts = {}; // pid -> votes
@@ -315,9 +422,11 @@ function resolveVote(room) {
     nextRound = room.round;
     room.phase = "discussion";
     room.votes = {};
-    room.order = shuffle(aliveConnected(room)).map((p) => p.name);
+    const first = setupTurnOrder(room, durationMs);
     nextPhase = "discussion";
-    addSystem(room, `Round ${room.round} — clues, please.`);
+    addSystem(room, first
+      ? `Round ${room.round} — ${first.name} goes first. You each have ${Math.round(room.turnDurationMs / 1000)} seconds.`
+      : `Round ${room.round} — no connected players can give a clue.`);
   }
 
   room.ejection = ejection;
@@ -343,9 +452,9 @@ function awardScores(room, result) {
 }
 
 // host force-resolve
-function forceResolve(room) {
+function forceResolve(room, durationMs = DEFAULT_TURN_DURATION_MS) {
   if (!room || room.phase !== "voting") return null;
-  return resolveVote(room);
+  return resolveVote(room, durationMs);
 }
 
 // gameover/any -> lobby for a fresh game (keep players + scores)
@@ -356,7 +465,14 @@ function backToLobby(room) {
   room.maxRounds = 0;
   room.word = null;
   room.category = null;
+  room.hint = null;
   room.order = [];
+  room.turnOrder = [];
+  room.turnIndex = -1;
+  room.turnStartedAt = null;
+  room.turnEndsAt = null;
+  room.turnDurationMs = DEFAULT_TURN_DURATION_MS;
+  room.cluesComplete = false;
   room.votes = {};
   room.ejection = null;
   room.gameResult = null;
@@ -405,7 +521,7 @@ module.exports = {
   rooms, getRoom, getPlayerByPid, getHostPlayer,
   createRoom, validateAndAddPlayer, rejoinByPid, setSettings,
   addChat, addSystem,
-  startGame, beginDiscussion, callVote, castVote, everyoneVoted,
+  startGame, beginDiscussion, submitClue, advanceTurn, ensureActiveTurn, currentTurnPlayer, callVote, castVote, everyoneVoted,
   resolveVote, forceResolve, backToLobby,
   removePlayerFromRoom, removePlayerFromAll, publicRoomState,
   impostersAlive, crewAlive, aliveConnected
