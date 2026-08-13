@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1" />
 <meta name="theme-color" content="#06070D" />
-<title>Imposter · one of us is lying</title>
+<title>Thilaksan&rsquo;s Imposter · one of us is lying</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -31,8 +31,8 @@
   #stars{position:fixed;inset:0;z-index:-2;pointer-events:none;display:block}
   /* Each phase gets its own temperature. */
   body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;transition:background 1.2s ease;
-    background:radial-gradient(ellipse at 50% -15%,rgba(60,90,190,.22),transparent 55%),
-               radial-gradient(ellipse at 85% 60%,rgba(150,50,190,.12),transparent 45%)}
+    background:radial-gradient(ellipse at 50% -15%,rgba(60,90,190,.16),transparent 55%),
+               radial-gradient(ellipse at 85% 60%,rgba(150,50,190,.09),transparent 45%)}
   body[data-phase="reveal"]::after{
     background:radial-gradient(ellipse at 50% -10%,rgba(255,201,77,.16),transparent 55%),
                radial-gradient(ellipse at 80% 70%,rgba(120,60,190,.14),transparent 45%)}
@@ -58,6 +58,10 @@
   /* ---------- header ---------- */
   header{width:100%;max-width:500px;display:flex;flex-direction:column;align-items:center;gap:2px;padding-top:2px}
   .brandrow{display:flex;align-items:center;justify-content:space-between;width:100%;gap:10px}
+  .brandstack{display:flex;flex-direction:column;align-items:center;min-width:0}
+  .byline{font-family:"Space Grotesk",sans-serif;font-size:clamp(10px,2.9vw,12px);letter-spacing:.32em;
+    text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:3px;white-space:nowrap;
+    text-shadow:0 0 18px rgba(255,201,77,.4)}
   .wordmark{font-family:"Luckiest Guy",cursive;font-size:clamp(30px,9vw,42px);line-height:1;letter-spacing:.02em;
     color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.55),0 0 34px rgba(140,180,255,.28);display:flex;align-items:center;gap:.18em}
   .wordmark .mate{width:.86em;height:1em;display:block;transform:translateY(-.04em);animation:bob 3.4s ease-in-out infinite}
@@ -73,7 +77,9 @@
   @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
   /* ---------- panels ---------- */
-  .card{background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);
+  /* Slightly translucent so the starfield shows through — on a phone the card
+     covers nearly the whole screen and the sky would otherwise be invisible. */
+  .card{background:linear-gradient(180deg,rgba(21,30,46,.90),rgba(14,21,33,.93));border:1px solid var(--line);
     border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;position:relative}
   .card + .card{margin-top:12px}
   .card.rivets::before,.card.rivets::after{content:"";position:absolute;top:12px;width:6px;height:6px;border-radius:50%;
@@ -407,7 +413,10 @@
   <header>
     <div class="brandrow">
       <div style="width:40px"></div>
-      <div class="wordmark">IMPOSTER<span class="mate" id="brandMate"></span></div>
+      <div class="brandstack">
+        <div class="byline">Thilaksan&rsquo;s</div>
+        <div class="wordmark">IMPOSTER<span class="mate" id="brandMate"></span></div>
+      </div>
       <button class="iconbtn" id="soundBtn" title="Sound" aria-label="Toggle sound">🔊</button>
     </div>
     <div class="tagline">one of us is lying</div>
@@ -743,14 +752,27 @@
     // shooting star. Distant stars are small, dim and slow; near ones drift.
     (function starfield(){
       const cv=$("#stars"),cx=cv.getContext("2d");
-      const LAYERS=[{n:.55,r:[.3,.9],a:[.18,.45],v:[.004,.014],tint:"#9FB6E8"},
-                    {n:.3, r:[.7,1.5],a:[.35,.7], v:[.018,.04], tint:"#FFFFFF"},
-                    {n:.15,r:[1.2,2.2],a:[.55,.95],v:[.05,.1],  tint:"#FFF3D6"}];
-      let stars=[],shots=[],w=0,h=0;
+      const LAYERS=[{n:.5, r:[.5,1.1],a:[.30,.60],v:[.004,.014],tint:"#B8C9F0"},
+                    {n:.32,r:[.9,1.7],a:[.45,.80],v:[.018,.04], tint:"#FFFFFF"},
+                    {n:.18,r:[1.3,2.4],a:[.62,1],  v:[.05,.1],  tint:"#FFF3D6"}];
+      let stars=[],shots=[],w=0,h=0,dpr=1,lastW=0;
       const rnd=(lo,hi)=>lo+Math.random()*(hi-lo);
+      // Phones render at 2–3 device pixels per CSS pixel. Sizing the canvas in
+      // CSS pixels leaves the backing store at a third of the real resolution,
+      // and sub-pixel stars get averaged away to nothing.
+      function resize(){
+        dpr=Math.min(3,window.devicePixelRatio||1);
+        w=innerWidth;h=innerHeight;
+        cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);
+        cv.style.width=w+"px";cv.style.height=h+"px";
+        cx.setTransform(dpr,0,0,dpr,0,0);   // resizing resets context state
+      }
       function build(){
-        w=cv.width=innerWidth;h=cv.height=innerHeight;
-        const total=Math.min(260,Math.round(w*h/7000));stars=[];
+        resize();lastW=w;
+        // A phone has a fraction of a laptop's viewport area, so a purely
+        // area-based count thins the sky out to a handful of specks. Floor it.
+        const total=Math.max(120,Math.min(320,Math.round(w*h/4200)));
+        stars=[];
         LAYERS.forEach(L=>{
           for(let i=0;i<Math.round(total*L.n);i++)stars.push({
             x:Math.random()*w,y:Math.random()*h,r:rnd(L.r[0],L.r[1]),a:rnd(L.a[0],L.a[1]),
@@ -783,11 +805,21 @@
         if(Math.random()<.0016&&shots.length<2)spawnShot();
         cx.globalAlpha=1;requestAnimationFrame(frame);
       }
-      build();addEventListener("resize",build);
-      if(reduce){
+      function drawStatic(){
+        cx.clearRect(0,0,w,h);
         for(const s of stars){cx.globalAlpha=s.a;cx.fillStyle=s.tint;cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.283);cx.fill();}
         cx.globalAlpha=1;
-      } else frame();
+      }
+      build();
+      // Mobile browsers fire resize every time the URL bar slides away. Only
+      // regenerate the field when the width really changed — otherwise just fix
+      // the backing store so the sky does not visibly reshuffle while scrolling.
+      addEventListener("resize",()=>{
+        if(Math.abs(innerWidth-lastW)>1){build();}
+        else{resize();}
+        if(reduce)drawStatic();
+      });
+      if(reduce)drawStatic(); else frame();
     })();
 
     /* ============ SOUND ============ */
