@@ -79,6 +79,22 @@ that folder automatically and offers whatever it finds under a "custom" divider
 in the picker — there's no filename list to edit. The listing is cached for five
 seconds, so a new file shows up on the next page load.
 
+## Bailing out mid-game
+
+The host gets a gear button in the header while a game is running (it's hidden in
+the lobby and on the results screen). It offers two escape hatches:
+
+- **Redeal** — someone already knew the word, or the round went wrong. Everyone
+  gets a fresh word and newly drawn roles without leaving the room. Ejected
+  players come back, the round counter resets, and scores are untouched — an
+  abandoned game never reached a result, so it scores nothing.
+- **End game** — drops everyone back to the lobby with the room and scores
+  intact.
+
+Both announce themselves to the room so it doesn't look like a crash. If a redeal
+isn't possible because players have dropped below the three-player minimum, it
+falls back to the lobby and tells the host why.
+
 ## Dev-only icons
 
 There's a hidden avatar only you can wear. Tap the little crewmate next to the

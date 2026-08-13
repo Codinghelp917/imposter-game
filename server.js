@@ -528,6 +528,36 @@ io.on("connection", (socket) => {
     doResolve(roomCode, true);
   });
 
+  // Mid-game escape hatches for the host: someone already knew the word, or the
+  // group just wants to stop. Scores are kept either way — an abandoned game
+  // scores nothing because it never reached a result.
+  socket.on("abandonGame", ({ roomCode, mode }) => {
+    const room = hostGate(roomCode); if (!room) return;
+    if (room.phase === "lobby") return;
+    clearTurnTimer(roomCode); clearGuessTimer(roomCode); clearPhaseTimer(roomCode);
+    const hostName = (R.actingHost(room) || {}).name || "The host";
+
+    R.backToLobby(room);
+
+    if (mode === "redeal") {
+      const result = R.startGame(room, CATEGORIES);
+      if (result.ok) {
+        R.addSystem(room, `${hostName} redealt — fresh word, fresh imposter.`);
+        dealRoles(room);
+        io.to(roomCode).emit("toast", { type: "info", message: "Redealt — new word and new roles." });
+        io.to(roomCode).emit("gameStarted", { state: R.publicRoomState(room) });
+        broadcast(roomCode); syncAuto(roomCode);
+        return;
+      }
+      // Not enough players left to redeal — fall back to the lobby.
+      io.to(roomCode).emit("toast", { type: "error", message: result.error });
+    }
+
+    io.to(roomCode).emit("toast", { type: "info", message: `${hostName} ended the game.` });
+    broadcast(roomCode);
+    io.to(roomCode).emit("returnedToLobby", { state: R.publicRoomState(room) });
+  });
+
   socket.on("newGame", ({ roomCode }) => {
     const room = hostGate(roomCode); if (!room) return;
     clearTurnTimer(roomCode); clearGuessTimer(roomCode); clearPhaseTimer(roomCode);

@@ -58,7 +58,11 @@
   /* ---------- header ---------- */
   header{width:100%;max-width:500px;display:flex;flex-direction:column;align-items:center;gap:2px;padding-top:2px}
   .brandrow{display:flex;align-items:center;justify-content:space-between;width:100%;gap:10px}
-  .brandstack{display:flex;flex-direction:column;align-items:center;min-width:0}
+  /* Equal-width sides keep the wordmark centred whether or not the host's
+     gear button is showing. */
+  .brandside{width:88px;flex:0 0 auto;display:flex;gap:8px;align-items:center}
+  .brandside.right{justify-content:flex-end}
+  .brandstack{display:flex;flex-direction:column;align-items:center;min-width:0;flex:1}
   .byline{font-family:"Space Grotesk",sans-serif;font-size:clamp(10px,2.9vw,12px);letter-spacing:.32em;
     text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:3px;white-space:nowrap;
     text-shadow:0 0 18px rgba(255,201,77,.4)}
@@ -395,14 +399,16 @@
   .avdiv.dev::after{background:rgba(255,64,64,.3)}
   .wordmark .mate{cursor:pointer}
 
-  #devModal,#modal{position:fixed;inset:0;z-index:78;display:none;place-items:center;background:rgba(3,4,9,.82);
+  #hostModal,#devModal,#modal{position:fixed;inset:0;z-index:78;display:none;place-items:center;background:rgba(3,4,9,.82);
     backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:20px}
-  #devModal.show,#modal.show{display:grid}
-  #devModal .box,#modal .box{width:100%;max-width:400px;background:linear-gradient(180deg,#26090C,#140406);
+  #hostModal.show,#devModal.show,#modal.show{display:grid}
+  #hostModal .box,#devModal .box,#modal .box{width:100%;max-width:400px;background:linear-gradient(180deg,#26090C,#140406);
     border:1px solid rgba(255,64,64,.45);border-radius:20px;padding:22px;box-shadow:var(--shadow);animation:rise .3s both}
-  #devModal h3,#modal h3{font-family:"Luckiest Guy",cursive;font-weight:400;font-size:22px;margin:0 0 6px;color:var(--imp-2);letter-spacing:.02em}
-  #devModal p,#modal p{color:var(--muted);font-size:13.5px;line-height:1.55;margin:0 0 14px}
+  #hostModal h3,#devModal h3,#modal h3{font-family:"Luckiest Guy",cursive;font-weight:400;font-size:22px;margin:0 0 6px;color:var(--imp-2);letter-spacing:.02em}
+  #hostModal p,#devModal p,#modal p{color:var(--muted);font-size:13.5px;line-height:1.55;margin:0 0 14px}
 
+  #hostModal .box{background:linear-gradient(180deg,#151E2E,#0B1220);border-color:var(--line-2)}
+  #hostModal h3{color:var(--gold)}
   #toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);
     background:#141C2C;border:1px solid var(--line-2);color:var(--ink);padding:12px 18px;border-radius:14px;font-size:14px;
     font-weight:600;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.3s;z-index:90;max-width:90vw;text-align:center}
@@ -422,12 +428,15 @@
 
   <header>
     <div class="brandrow">
-      <div style="width:40px"></div>
+      <div class="brandside"></div>
       <div class="brandstack">
         <div class="byline">Thilaksan&rsquo;s</div>
         <div class="wordmark">IMPOSTER<span class="mate" id="brandMate"></span></div>
       </div>
-      <button class="iconbtn" id="soundBtn" title="Sound" aria-label="Toggle sound">🔊</button>
+      <div class="brandside right">
+        <button class="iconbtn" id="hostBtn" title="Host controls" aria-label="Host controls" style="display:none">⚙</button>
+        <button class="iconbtn" id="soundBtn" title="Sound" aria-label="Toggle sound">🔊</button>
+      </div>
     </div>
     <div class="tagline">one of us is lying</div>
   </header>
@@ -660,6 +669,16 @@
       <div class="ejname" id="ejName"></div>
       <div class="ejrole" id="ejRole"></div>
       <div class="ejleft" id="ejLeft"></div>
+    </div>
+  </div>
+
+  <div id="hostModal">
+    <div class="box">
+      <h3>Host controls</h3>
+      <p>Someone already knows the word? Redeal and everyone gets a fresh word and new roles — you stay in the same room and scores are kept. An abandoned game scores nothing.</p>
+      <button class="btn gold" id="redealBtn">Redeal — new word &amp; roles</button>
+      <button class="btn ghost sm" id="endGameBtn" style="margin-top:10px">End game — back to the lobby</button>
+      <button class="btn link" id="hostCancel" style="margin:12px auto 0;display:block">Never mind</button>
     </div>
   </div>
 
@@ -1032,6 +1051,7 @@
       const mine=meInRoom(); if(mine){state.me.isHost=mine.isHost;if(mine.icon)state.me.icon=mine.icon;}
       if(s.settings){state.selCats=s.settings.categories;state.selImp=s.settings.imposters;
         state.selHints=s.settings.hintsEnabled!==false;state.selGuess=s.settings.guessEnabled!==false;}
+      updateHostBtn();
       const active=$(".screen.active"); if(!active)return;
       const id=active.id;
       if(id==="screen-lobby")renderLobby();
@@ -1378,6 +1398,23 @@
         if(!res||!res.ok)toast((res&&res.error)||"Couldn't send that guess.",true);
       });
     }
+    /* host controls sheet — only meaningful mid-game */
+    const hostModal=$("#hostModal");
+    const closeHost=()=>hostModal.classList.remove("show");
+    $("#hostBtn").addEventListener("click",()=>{hostModal.classList.add("show");sfx.tap();});
+    $("#hostCancel").addEventListener("click",closeHost);
+    hostModal.addEventListener("click",(e)=>{if(e.target===hostModal)closeHost();});
+    $("#redealBtn").addEventListener("click",()=>{
+      closeHost();socket.emit("abandonGame",{roomCode:state.roomCode,mode:"redeal"});});
+    $("#endGameBtn").addEventListener("click",()=>{
+      closeHost();socket.emit("abandonGame",{roomCode:state.roomCode,mode:"lobby"});});
+    function updateHostBtn(){
+      const r=state.room;
+      const live=!!r&&r.phase!=="lobby"&&r.phase!=="gameover";
+      $("#hostBtn").style.display=(live&&state.me.isHost)?"grid":"none";
+      if(!live)closeHost();
+    }
+
     /* dev unlock dialog */
     const devModal=$("#devModal");
     function openDev(){devModal.classList.add("show");$("#devInput").value="";setTimeout(()=>$("#devInput").focus(),60);}
@@ -1679,7 +1716,8 @@
     $("#newGameBtn").addEventListener("click",()=>{socket.emit("newGame",{roomCode:state.roomCode});sfx.tap();});
 
     function goHome(){state.roomCode=null;state.room=null;state.role=null;state.results=null;state.myVote=null;
-      state.lastGuess=null;state.me.pid=null;state.me.isHost=false;clearSeat();clearChat();show("home");}
+      state.lastGuess=null;state.me.pid=null;state.me.isHost=false;clearSeat();clearChat();
+      updateHostBtn();show("home");}
     $("#leaveLobby").addEventListener("click",()=>{if(state.roomCode)socket.emit("leaveRoom",{roomCode:state.roomCode});goHome();});
     $("#leaveOver").addEventListener("click",()=>{if(state.roomCode)socket.emit("leaveRoom",{roomCode:state.roomCode});goHome();});
 
