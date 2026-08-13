@@ -208,10 +208,12 @@ function rejoinByPid({ roomCode, socketId, pid, name, icon }) {
     if (room.phase === "lobby") return validateAndAddPlayer({ roomCode, socketId, name, icon });
     return { ok: false, error: "Your seat is no longer in this game." };
   }
+  const wasHost = room.hostId === existing.id;
   existing.id = socketId;
   existing.connected = true;
   if (icon) existing.icon = icon;
-  ensureHost(room);
+  if (wasHost) room.hostId = socketId;
+  else ensureHost(room);
   return { ok: true, room, player: existing, rejoined: true };
 }
 
@@ -482,21 +484,25 @@ function backToLobby(room) {
 
 // ---------------- removal ----------------
 function _handleLeave(room, code, player, hard) {
-  // In lobby, or a hard removal, drop the seat. Mid-game, keep the seat but mark
-  // disconnected so the player can reconnect (and the game can continue).
-  if (room.phase === "lobby" || hard) {
+  // A Socket.IO disconnect can be caused by switching apps, locking a phone,
+  // changing network, or a browser suspending the tab. Keep that seat reserved.
+  // Only an explicit leave (or grace-period cleanup) removes the player.
+  if (hard) {
     const idx = room.players.indexOf(player);
     if (idx !== -1) room.players.splice(idx, 1);
+    if (room.votes && room.votes[player.pid]) delete room.votes[player.pid];
   } else {
     player.connected = false;
   }
 
-  if (room.players.length === 0 || room.players.every((p) => !p.connected)) {
+  if (room.players.length === 0) {
     delete rooms[code];
     return { roomCode: code, room: null, roomDeleted: true, votingComplete: false };
   }
-  if (room.votes && room.votes[player.pid] && (room.phase === "lobby" || hard)) delete room.votes[player.pid];
-  ensureHost(room);
+
+  // Keep a temporarily disconnected host's seat/host status reserved. If they
+  // actually leave or their reconnect grace expires, choose a replacement.
+  if (hard) ensureHost(room);
   return { roomCode: code, room, roomDeleted: false, votingComplete: everyoneVoted(room) };
 }
 

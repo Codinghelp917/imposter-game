@@ -7,7 +7,12 @@ const fs = require("fs");
 const R = require("./rooms");
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  // Mobile browsers can pause timers/networking while backgrounded. A longer
+  // timeout avoids treating a short app switch as an immediate dead connection.
+  pingInterval: 25_000,
+  pingTimeout: 60_000
+});
 const PUBLIC_DIR = path.join(__dirname, "public");
 const ICON_DIR = path.join(PUBLIC_DIR, "images", "icons");
 const ICON_EXTENSIONS = new Set([".png", ".webp", ".jpg", ".jpeg", ".gif", ".svg"]);
@@ -52,6 +57,23 @@ const CATEGORY_LIST = Object.keys(CATEGORIES).map((name) => ({
 }));
 const parsedTurnDuration = Number(process.env.TURN_DURATION_MS || 30_000);
 const TURN_DURATION_MS = Number.isFinite(parsedTurnDuration) && parsedTurnDuration > 0 ? parsedTurnDuration : 30_000;
+
+const parsedReconnectGrace = Number(process.env.RECONNECT_GRACE_MS || 5 * 60_000);
+const RECONNECT_GRACE_MS = Number.isFinite(parsedReconnectGrace) && parsedReconnectGrace >= 0
+  ? parsedReconnectGrace
+  : 5 * 60_000;
+
+// Temporary disconnects reserve the player seat so switching apps/tabs does not
+// kick somebody out of a room. Timers are keyed by stable player PID, not socket id.
+const disconnectTimers = new Map();
+function disconnectKey(roomCode, pid) { return `${roomCode}:${pid}`; }
+function clearDisconnectGrace(roomCode, pid) {
+  if (!roomCode || !pid) return;
+  const key = disconnectKey(roomCode, pid);
+  const timer = disconnectTimers.get(key);
+  if (timer) clearTimeout(timer);
+  disconnectTimers.delete(key);
+}
 
 function hintKey(value) {
   return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -113,6 +135,31 @@ function advanceUnavailableTurn(code) {
   if (result.changed) io.to(code).emit("turnAdvanced", { reason: "player-left", state: R.publicRoomState(room) });
   scheduleTurnTimer(code);
 }
+function scheduleDisconnectCleanup(roomCode, pid) {
+  clearDisconnectGrace(roomCode, pid);
+  if (RECONNECT_GRACE_MS === 0) return;
+
+  const key = disconnectKey(roomCode, pid);
+  const timer = setTimeout(() => {
+    disconnectTimers.delete(key);
+    const room = R.getRoom(roomCode);
+    if (!room) return;
+    const player = R.getPlayerByPid(room, pid);
+    if (!player || player.connected) return;
+
+    const result = R.removePlayerFromRoom(roomCode, player.id, true);
+    if (!result || result.roomDeleted || !result.room) {
+      clearTurnTimer(roomCode);
+      return;
+    }
+
+    advanceUnavailableTurn(roomCode);
+    broadcast(roomCode);
+    if (result.votingComplete) doResolve(roomCode, false);
+  }, RECONNECT_GRACE_MS);
+
+  disconnectTimers.set(key, timer);
+}
 function submitClueFromSocket(socket, roomCode, text, cb) {
   const room = R.getRoom(roomCode);
   if (!room) return typeof cb === "function" && cb({ ok: false, error: "Room not found." });
@@ -157,7 +204,7 @@ io.on("connection", (socket) => {
     const result = R.validateAndAddPlayer({ roomCode, socketId: socket.id, name, icon: safePlayerIcon(icon) });
     if (!result.ok) { if (typeof cb === "function") cb(result); return; }
     const { room, player } = result;
-    socket.join(roomCode); socket.data.roomCode = roomCode;
+    socket.join(roomCode); socket.data.roomCode = roomCode; socket.data.pid = player.pid;
     if (typeof cb === "function") cb({ ok: true, pid: player.pid, isHost: room.hostId === socket.id, state: R.publicRoomState(room), categories: CATEGORY_LIST });
     broadcast(roomCode);
   });
@@ -165,7 +212,8 @@ io.on("connection", (socket) => {
     const result = R.rejoinByPid({ roomCode, socketId: socket.id, pid, name, icon: safePlayerIcon(icon) });
     if (!result.ok) { if (typeof cb === "function") cb(result); return; }
     const { room, player } = result;
-    socket.join(roomCode); socket.data.roomCode = roomCode;
+    clearDisconnectGrace(roomCode, player.pid);
+    socket.join(roomCode); socket.data.roomCode = roomCode; socket.data.pid = player.pid;
     if (room.phase !== "lobby") socket.emit("role", rolePayload(room, player));
     if (typeof cb === "function") cb({ ok: true, pid: player.pid, isHost: room.hostId === socket.id, state: R.publicRoomState(room), chat: room.chat.slice(-60), gameResult: room.gameResult, categories: CATEGORY_LIST });
     broadcast(roomCode); scheduleTurnTimer(roomCode);
@@ -218,14 +266,23 @@ io.on("connection", (socket) => {
     clearTurnTimer(roomCode); R.backToLobby(room); broadcast(roomCode); io.to(roomCode).emit("returnedToLobby", { state: R.publicRoomState(room) });
   });
   socket.on("leaveRoom", ({ roomCode }) => {
+    const room = R.getRoom(roomCode);
+    const leaving = room ? room.players.find((p) => p.id === socket.id) : null;
+    if (leaving) clearDisconnectGrace(roomCode, leaving.pid);
+
     const result = R.removePlayerFromRoom(roomCode, socket.id, true); socket.leave(roomCode);
     if (!result || result.roomDeleted || !result.room) { clearTurnTimer(roomCode); return; }
     advanceUnavailableTurn(roomCode); broadcast(roomCode); if (result.votingComplete) doResolve(roomCode, false);
   });
   socket.on("disconnect", () => {
+    const pid = socket.data.pid;
     const result = R.removePlayerFromAll(socket.id); if (!result) return;
     if (result.roomDeleted || !result.room) { clearTurnTimer(result.roomCode); return; }
-    advanceUnavailableTurn(result.roomCode); broadcast(result.roomCode); if (result.votingComplete) doResolve(result.roomCode, false);
+
+    if (pid) scheduleDisconnectCleanup(result.roomCode, pid);
+    advanceUnavailableTurn(result.roomCode);
+    broadcast(result.roomCode);
+    if (result.votingComplete) doResolve(result.roomCode, false);
   });
 });
 

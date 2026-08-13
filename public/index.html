@@ -489,22 +489,43 @@
     $("#nameInput").value=state.me.name;
 
     /* ============ SOCKET ============ */
-    const socket=io({transports:["websocket","polling"]});
+    const socket=io({
+      transports:["websocket","polling"],
+      reconnection:true,
+      reconnectionAttempts:Infinity,
+      reconnectionDelay:500,
+      reconnectionDelayMax:5000,
+      timeout:20000
+    });
+    let hasConnectedBefore=false;
     socket.on("categories",(list)=>{state.categories=list;renderCatChips();});
     socket.on("icons",(list)=>{state.icons=Array.isArray(list)?list:[];renderAvatarPicker(state.icons);});
     socket.on("connect",()=>{
+      const wasReconnect=hasConnectedBefore;hasConnectedBefore=true;
       let seat=null;try{seat=JSON.parse(localStorage.getItem("imposter.seat")||"null");}catch(e){}
-      if(seat&&seat.roomCode&&seat.pid&&!$("#screen-home").classList.contains("active")){
+
+      // Always try to restore a saved seat. Mobile browsers can discard/reload a
+      // background tab, which makes the home screen active again even though the
+      // player should still be in their room.
+      if(seat&&seat.roomCode&&seat.pid){
         socket.emit("rejoinRoom",seat,(res)=>{
           if(res&&res.ok){state.roomCode=seat.roomCode;state.me.pid=res.pid;state.me.isHost=res.isHost;
             if(res.categories)state.categories=res.categories;
             if(res.state){state.selCats=res.state.settings.categories;state.selImp=res.state.settings.imposters;}
-            if(res.chat){res.chat.forEach(m=>appendChat(m,true));}
+            clearChat();if(res.chat){res.chat.forEach(m=>appendChat(m,true));}
             state.results=res.gameResult?{result:res.gameResult}:null; applyState(res.state); routeByPhase();
+            if(wasReconnect)toast("Reconnected to the game");
           } else { clearSeat(); }
         });
       }
     });
+
+    // When a suspended phone/tab becomes active again, reconnect immediately
+    // instead of waiting for the next backoff attempt.
+    document.addEventListener("visibilitychange",()=>{
+      if(!document.hidden&&socket.disconnected)socket.connect();
+    });
+    window.addEventListener("online",()=>{if(socket.disconnected)socket.connect();});
     socket.on("roomUpdate",(s)=>applyState(s));
     socket.on("role",(r)=>{state.role=r;renderReveal(true);renderRoleBars();});
     socket.on("gameStarted",(d)=>{state.myVote=null;state.results=null;clearChat();applyState(d.state);renderReveal(true);show("reveal");});
