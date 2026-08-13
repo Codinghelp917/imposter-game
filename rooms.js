@@ -244,6 +244,7 @@ function publicRoomState(room) {
       name: p.name,
       icon: p.icon || null,
       color: p.color || null,
+      dev: !!p.dev,
       score: p.score || 0,
       isHost: !!(host && p.pid === host.pid),
       alive: p.alive,
@@ -313,7 +314,7 @@ function resolveIcon(room, wanted, iconPool) {
   return free || wanted;
 }
 
-function validateAndAddPlayer({ roomCode, socketId, name, icon, iconPool }) {
+function validateAndAddPlayer({ roomCode, socketId, name, icon, iconPool, dev }) {
   if (!roomCode || !name) return { ok: false, error: "Enter a room code and a name to join." };
   const room = getRoom(roomCode);
   if (!room) return { ok: false, error: "No room with that code. Check the digits and try again." };
@@ -328,7 +329,7 @@ function validateAndAddPlayer({ roomCode, socketId, name, icon, iconPool }) {
   const finalIcon = resolveIcon(room, icon, iconPool) || null;
   const player = {
     id: socketId, pid: randomPid(), name: trimmed, icon: finalIcon,
-    color: assignColor(room, finalIcon),
+    color: assignColor(room, finalIcon), dev: !!dev,
     score: 0, connected: true, isImposter: false, role: "crew", alive: true
   };
   room.players.push(player);
@@ -337,18 +338,19 @@ function validateAndAddPlayer({ roomCode, socketId, name, icon, iconPool }) {
 }
 
 // Reconnect by pid: restore an existing seat (keeps role/alive/score).
-function rejoinByPid({ roomCode, socketId, pid, name, icon, iconPool }) {
+function rejoinByPid({ roomCode, socketId, pid, name, icon, iconPool, dev }) {
   const room = getRoom(roomCode);
   if (!room) return { ok: false, error: "That room has closed." };
   const existing = getPlayerByPid(room, pid);
   if (!existing) {
     // seat gone (e.g. removed in lobby) -> try a fresh join if still in lobby
-    if (room.phase === "lobby") return validateAndAddPlayer({ roomCode, socketId, name, icon, iconPool });
+    if (room.phase === "lobby") return validateAndAddPlayer({ roomCode, socketId, name, icon, iconPool, dev });
     return { ok: false, error: "Your seat is no longer in this game." };
   }
   const wasHost = room.hostId === existing.id;
   existing.id = socketId;
   existing.connected = true;
+  if (dev) existing.dev = true;
   if (icon && icon !== existing.icon) {
     const taken = new Set(room.players.filter((p) => p !== existing).map((p) => p.icon));
     if (!taken.has(icon)) existing.icon = icon;
@@ -672,7 +674,8 @@ function resolveVote(room, opts = {}) {
   if (ejectPid) {
     const p = getPlayerByPid(room, ejectPid);
     p.alive = false;
-    ejection = { pid: p.pid, name: p.name, icon: p.icon || null, color: p.color || null, wasImposter: p.isImposter };
+    ejection = { pid: p.pid, name: p.name, icon: p.icon || null, color: p.color || null,
+                 dev: !!p.dev, wasImposter: p.isImposter };
     addSystem(room, `${p.name} was ejected — ${p.isImposter ? "the Imposter!" : "not the Imposter."}`);
   } else {
     addSystem(room, skipVotes > 0 ? "The crew skipped the vote." : "No majority — nobody was ejected.");

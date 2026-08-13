@@ -79,13 +79,39 @@ that folder automatically and offers whatever it finds under a "custom" divider
 in the picker — there's no filename list to edit. The listing is cached for five
 seconds, so a new file shows up on the next page load.
 
+## Dev-only icons
+
+There's a hidden avatar only you can wear. Tap the little crewmate next to the
+**IMPOSTER** wordmark five times, enter the passphrase, and a **dev only** row
+appears in the avatar picker.
+
+The gate is server-side. Secret icons are never included in the icon list sent to
+normal clients, and the server refuses to equip one unless that socket has
+unlocked first — so knowing the icon's name or its image URL is not enough to
+wear it. Unlock attempts are capped at 8 per connection to stop brute forcing.
+
+Set the passphrase with the `DEV_CODE` environment variable. **Change it from the
+default before deploying** — the default is in this repo and therefore public:
+
+```bash
+DEV_CODE=your-passphrase-here npm start
+```
+
+One icon ships built in (`secret:itachi`, drawn as SVG in the same crewmate
+style). To add more of your own, drop images in `public/images/secret/` — they're
+picked up automatically and are dev-only just like the built-in one.
+
+The unlock is remembered in `localStorage`, and re-asserted automatically when
+you reconnect so your seat keeps the icon across reloads.
+
 ## Configuration
 
 All optional, all milliseconds:
 
 | Variable | Default | What it does |
 | --- | --- | --- |
-| `PORT` | `3000` | HTTP port |
+| `PORT` | `3000` | HTTP port (not milliseconds) |
+| `DEV_CODE` | `sharingan` | Passphrase that unlocks the dev-only icons. Change this before deploying. |
 | `TURN_DURATION_MS` | `30000` | Length of one clue turn |
 | `GUESS_DURATION_MS` | `25000` | Length of the caught imposter's guess window |
 | `RECONNECT_GRACE_MS` | `300000` | How long a seat is held for a disconnected player |

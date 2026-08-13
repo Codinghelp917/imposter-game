@@ -42,12 +42,38 @@ function getPictureIcons() {
   iconCache = { at: now, list };
   return list;
 }
-function getIconList() { return [...CREW_ICONS, ...getPictureIcons()]; }
+// Dev-only icons. These are never sent to a normal client and the server
+// refuses to equip one unless that socket has unlocked it, so knowing the image
+// URL is not enough to wear it.
+const SECRET_DIR = path.join(PUBLIC_DIR, "images", "secret");
+const BUILTIN_SECRET = ["secret:itachi"];
+const DEV_CODE = (process.env.DEV_CODE || "sharingan").trim();
+const MAX_UNLOCK_TRIES = 8;
 
-function safePlayerIcon(icon) {
-  const icons = getIconList();
-  if (typeof icon === "string" && icons.includes(icon)) return icon;
-  return icons[0];
+let secretCache = { at: 0, list: [] };
+function getSecretIcons() {
+  const now = Date.now();
+  if (now - secretCache.at < ICON_CACHE_MS) return secretCache.list;
+  let files = [];
+  try {
+    files = fs.readdirSync(SECRET_DIR, { withFileTypes: true })
+      .filter((e) => e.isFile() && ICON_EXTENSIONS.has(path.extname(e.name).toLowerCase()))
+      .map((e) => `/images/secret/${encodeURIComponent(e.name)}`)
+      .sort((a, b) => a.localeCompare(b));
+  } catch (err) {
+    files = [];
+  }
+  secretCache = { at: now, list: [...BUILTIN_SECRET, ...files] };
+  return secretCache.list;
+}
+
+function getIconList() { return [...CREW_ICONS, ...getPictureIcons()]; }
+function getAllIcons() { return [...getIconList(), ...getSecretIcons()]; }
+
+function safePlayerIcon(icon, allowSecret) {
+  const allowed = allowSecret ? getAllIcons() : getIconList();
+  if (typeof icon === "string" && allowed.includes(icon)) return icon;
+  return getIconList()[0];
 }
 
 app.use(express.static(PUBLIC_DIR));
@@ -64,9 +90,6 @@ function envMs(name, fallback, { min = 0 } = {}) {
 const TURN_DURATION_MS = envMs("TURN_DURATION_MS", 30_000, { min: 1 });
 const GUESS_DURATION_MS = envMs("GUESS_DURATION_MS", 25_000, { min: 1 });
 const RECONNECT_GRACE_MS = envMs("RECONNECT_GRACE_MS", 5 * 60_000);
-// How long the client spends on the ejection cutscene. The next round's clock
-// (and the imposter's guess clock) start only once it has finished, so nobody
-// loses time to an animation they are still watching.
 // Vote tally screen (2.6s) + ejection cutscene (3.6s). Turn and guess clocks are
 // scheduled to start only once this whole sequence has played, so nobody loses
 // time to an animation they are still watching. Must match the client.
@@ -350,10 +373,29 @@ io.on("connection", (socket) => {
     if (typeof cb === "function") cb({ ok: true, roomCode, categories: CATEGORY_LIST });
   });
 
+  // Unlock the dev icons for this connection. Rate limited so the code can't be
+  // brute forced over the socket.
+  let unlockTries = 0;
+  socket.on("devUnlock", ({ code } = {}, cb) => {
+    const reply = (ok, icons) => { if (typeof cb === "function") cb({ ok, icons: icons || [] }); };
+    if (unlockTries >= MAX_UNLOCK_TRIES) return reply(false);
+    unlockTries += 1;
+    const ok = !!DEV_CODE && typeof code === "string" && code.trim() === DEV_CODE;
+    if (ok) {
+      socket.data.dev = true; unlockTries = 0;
+      // Unlocking while already sat in a room should light the badge up there
+      // and then, rather than only on the next join.
+      const room = R.getRoom(socket.data.roomCode);
+      const player = room && room.players.find((p) => p.id === socket.id);
+      if (player && !player.dev) { player.dev = true; broadcast(socket.data.roomCode); }
+    }
+    reply(ok, ok ? getSecretIcons() : []);
+  });
+
   socket.on("joinRoom", ({ roomCode, name, icon }, cb) => {
     const result = R.validateAndAddPlayer({
       roomCode, socketId: socket.id, name,
-      icon: safePlayerIcon(icon), iconPool: getIconList()
+      icon: safePlayerIcon(icon, socket.data.dev), iconPool: getIconList(), dev: socket.data.dev
     });
     if (!result.ok) { if (typeof cb === "function") cb(result); return; }
     const { room, player } = result;
@@ -369,7 +411,7 @@ io.on("connection", (socket) => {
   socket.on("rejoinRoom", ({ roomCode, pid, name, icon }, cb) => {
     const result = R.rejoinByPid({
       roomCode, socketId: socket.id, pid, name,
-      icon: safePlayerIcon(icon), iconPool: getIconList()
+      icon: safePlayerIcon(icon, socket.data.dev), iconPool: getIconList(), dev: socket.data.dev
     });
     if (!result.ok) { if (typeof cb === "function") cb(result); return; }
     const { room, player } = result;

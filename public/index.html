@@ -194,6 +194,8 @@
   .badge.tick{background:rgba(61,224,172,.18);color:var(--ok);border:1px solid rgba(61,224,172,.38)}
   .badge.out{background:rgba(197,17,17,.18);color:var(--imp-2);border:1px solid rgba(197,17,17,.42)}
   .badge.off{background:rgba(255,255,255,.07);color:var(--muted);border:1px solid var(--line)}
+  .badge.dev{background:rgba(197,17,17,.22);color:#FF8A8A;border:1px solid rgba(255,64,64,.5);
+    box-shadow:0 0 12px rgba(255,40,40,.25)}
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
   .chip{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:13px;border:1px solid var(--line);
     background:rgba(255,255,255,.04);cursor:pointer;font-weight:600;font-size:13.5px;transition:.14s;user-select:none}
@@ -385,13 +387,21 @@
   @keyframes floatAcross{0%{transform:translateX(-110px) rotate(0)}100%{transform:translateX(calc(100vw + 110px)) rotate(400deg)}}
   @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-  #modal{position:fixed;inset:0;z-index:78;display:none;place-items:center;background:rgba(3,4,9,.82);
+  /* dev-only icons in the picker */
+  .av.secret{border-color:rgba(197,17,17,.55);background:rgba(197,17,17,.10);
+    box-shadow:0 0 0 1px rgba(255,64,64,.28),0 0 18px rgba(255,40,40,.22)}
+  .av.secret.sel{border-color:var(--imp-2);box-shadow:0 0 0 3px rgba(255,64,64,.32),0 0 26px rgba(255,40,40,.35)}
+  .avdiv.dev{color:var(--imp-2)}
+  .avdiv.dev::after{background:rgba(255,64,64,.3)}
+  .wordmark .mate{cursor:pointer}
+
+  #devModal,#modal{position:fixed;inset:0;z-index:78;display:none;place-items:center;background:rgba(3,4,9,.82);
     backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:20px}
-  #modal.show{display:grid}
-  #modal .box{width:100%;max-width:400px;background:linear-gradient(180deg,#26090C,#140406);
+  #devModal.show,#modal.show{display:grid}
+  #devModal .box,#modal .box{width:100%;max-width:400px;background:linear-gradient(180deg,#26090C,#140406);
     border:1px solid rgba(255,64,64,.45);border-radius:20px;padding:22px;box-shadow:var(--shadow);animation:rise .3s both}
-  #modal h3{font-family:"Luckiest Guy",cursive;font-weight:400;font-size:22px;margin:0 0 6px;color:var(--imp-2);letter-spacing:.02em}
-  #modal p{color:var(--muted);font-size:13.5px;line-height:1.55;margin:0 0 14px}
+  #devModal h3,#modal h3{font-family:"Luckiest Guy",cursive;font-weight:400;font-size:22px;margin:0 0 6px;color:var(--imp-2);letter-spacing:.02em}
+  #devModal p,#modal p{color:var(--muted);font-size:13.5px;line-height:1.55;margin:0 0 14px}
 
   #toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);
     background:#141C2C;border:1px solid var(--line-2);color:var(--ink);padding:12px 18px;border-radius:14px;font-size:14px;
@@ -653,6 +663,18 @@
     </div>
   </div>
 
+  <div id="devModal">
+    <div class="box">
+      <h3>Who are you?</h3>
+      <p>Five taps. Someone knows something they shouldn't.</p>
+      <input class="txt" id="devInput" maxlength="40" autocomplete="off" type="password" placeholder="passphrase" />
+      <div class="row" style="margin-top:12px">
+        <button class="btn ghost sm" id="devCancel">Never mind</button>
+        <button class="btn imp sm" id="devGo">Unlock</button>
+      </div>
+    </div>
+  </div>
+
   <div id="modal">
     <div class="box">
       <h3>Call the word</h3>
@@ -681,7 +703,7 @@
       brown:["#71491E","#5E2615"], cyan:["#38FEDC","#24A8BE"],  lime:["#50EF39","#15A742"]
     };
     const isCrew=(i)=>typeof i==="string"&&i.startsWith("crew:");
-    const isPic=(i)=>typeof i==="string"&&i.startsWith("/images/icons/");
+    const isPic=(i)=>typeof i==="string"&&(i.startsWith("/images/icons/")||i.startsWith("/images/secret/"));
     // One bean: backpack, body, leg notch, visor. No gradients — duplicate SVG
     // defs across dozens of inline copies is a mess, flat shapes are safer.
     function crewSVG(color){
@@ -706,7 +728,35 @@
         '<circle cx="84" cy="46" r="5" fill="#0B1220" opacity=".55"/>'+
         '</svg>';
     }
+    // ---- dev-only crewmates -------------------------------------------------
+    // Black cloak, red clouds, sharingan visor. Same silhouette as the rest so
+    // it sits in the art style rather than looking pasted in.
+    function itachiSVG(){
+      // Cloud sits on the chest, clear of the leg notch.
+      const cloud='M38 90a7 7 0 0 1 7-8 9 9 0 0 1 12-6 8 8 0 0 1 12 4 7 7 0 0 1 6 10z';
+      // Tomoe ride well out from the pupil, or at small sizes the three of them
+      // merge into one blob in the middle of the eye.
+      const tomoe=(deg)=>'<g transform="rotate('+deg+' 70 48)">'+
+        '<circle cx="70" cy="35" r="2.9" fill="#140406"/>'+
+        '<path d="M71.9 37.3c-1.7 2.1-2.5 4.2-2.5 6.3" stroke="#140406" stroke-width="2" fill="none" stroke-linecap="round"/></g>';
+      return '<svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+
+        '<rect x="6" y="54" width="26" height="49" rx="13" fill="#0C0C11"/>'+
+        '<path d="M65 10c23 0 39 17 39 42v56c0 7-5 12-12 12H81c-4 0-7-3-7-7v-9c0-5-4-9-9-9s-9 4-9 9v9c0 4-3 7-7 7H38c-7 0-12-5-12-12V52c0-25 16-42 39-42z" fill="#1C1C24"/>'+
+        '<path d="M26 98v10c0 7 5 12 12 12h11c4 0 7-3 7-7v-9c0-5 4-9 9-9s9 4 9 9v9c0 4 3 7 7 7h11c7 0 12-5 12-12V98z" fill="#0A0A0F" opacity=".6"/>'+
+        '<path d="'+cloud+'" fill="#B4131C" stroke="#EDE3E3" stroke-width="2.2" stroke-linejoin="round"/>'+
+        '<ellipse cx="71" cy="49" rx="32" ry="24" fill="#FF2A2A" opacity=".10"/>'+
+        '<path d="M62 26c22 0 38 8 38 24 0 15-14 22-32 22-16 0-26-7-26-22 0-16 6-24 20-24z" fill="#A11319"/>'+
+        '<path d="M64 31c15 0 26 5 29 14-6-6-17-9-29-9-10 0-16 3-19 8 0-9 6-13 19-13z" fill="#E4585C" opacity=".38"/>'+
+        '<circle cx="70" cy="48" r="4" fill="#140406"/>'+
+        tomoe(0)+tomoe(120)+tomoe(240)+
+        '</svg>';
+    }
+    const SPECIALS={itachi:itachiSVG};
+    const isSecretId=(i)=>typeof i==="string"&&i.startsWith("secret:");
+    const secretLabel=(i)=>isSecretId(i)?i.slice(7):"";
+
     function iconHTML(icon,alt){
+      if(isSecretId(icon)){const f=SPECIALS[icon.slice(7)];if(f)return f();}
       if(isCrew(icon))return crewSVG(icon.slice(5));
       if(isPic(icon))return '<img src="'+esc(icon)+'" alt="'+esc(alt||"")+'" draggable="false">';
       return esc(icon||"🎭");
@@ -733,12 +783,22 @@
     }
 
     $("#brandMate").innerHTML=crewSVG("red");
+    // Easter egg: five taps on the little crewmate in the header.
+    (function devTrigger(){
+      const mate=$("#brandMate");if(!mate)return;
+      let taps=0,t=null;
+      mate.addEventListener("click",()=>{
+        taps++;clearTimeout(t);t=setTimeout(()=>{taps=0;},2500);
+        if(taps>=5){taps=0;clearTimeout(t);openDev();}
+      });
+    })();
 
     /* ============ STATE ============ */
     const state={
       me:{pid:null,name:"",icon:"crew:red",isHost:false},
       roomCode:null, room:null, role:null, myVote:null, results:null, lastGuess:null,
-      categories:[], icons:[], selCats:["Famous People"], selImp:1, selHints:true, selGuess:true
+      categories:[], icons:[], secretIcons:[],
+      selCats:["Famous People"], selImp:1, selHints:true, selGuess:true
     };
     try{const s=JSON.parse(localStorage.getItem("imposter.me")||"{}");if(s.name)state.me.name=s.name;if(s.icon)state.me.icon=s.icon;}catch(e){}
     const persistMe=()=>{try{localStorage.setItem("imposter.me",JSON.stringify({name:state.me.name,icon:state.me.icon}));}catch(e){}};
@@ -853,15 +913,20 @@
     /* ============ AVATAR PICKER ============ */
     const avWrap=$("#avatars");
     function renderAvatarPicker(list){
-      const choices=Array.isArray(list)&&list.length?list:["crew:red"];
+      const pub=Array.isArray(list)&&list.length?list:["crew:red"];
+      const choices=[...pub,...(state.secretIcons||[])];
       avWrap.innerHTML="";
       if(!choices.includes(state.me.icon)){state.me.icon=choices[0];persistMe();}
-      let picsStarted=false;
+      let picsStarted=false,secretStarted=false;
       choices.forEach(a=>{
-        if(isPic(a)&&!picsStarted){picsStarted=true;
+        const secret=isSecretId(a)||(typeof a==="string"&&a.startsWith("/images/secret/"));
+        if(secret&&!secretStarted){secretStarted=true;
+          const d=document.createElement("div");d.className="avdiv dev";d.textContent="dev only";avWrap.appendChild(d);}
+        else if(!secret&&isPic(a)&&!picsStarted){picsStarted=true;
           const d=document.createElement("div");d.className="avdiv";d.textContent="custom";avWrap.appendChild(d);}
-        const b=document.createElement("button");b.type="button";b.className="av"+(a===state.me.icon?" sel":"");
-        b.setAttribute("aria-label",isCrew(a)?crewName(a)+" crewmate":"Player icon");
+        const b=document.createElement("button");b.type="button";
+        b.className="av"+(a===state.me.icon?" sel":"")+(secret?" secret":"");
+        b.setAttribute("aria-label",isCrew(a)?crewName(a)+" crewmate":secret?"Dev icon":"Player icon");
         b.innerHTML=iconHTML(a,"Player icon");
         b.addEventListener("click",()=>{state.me.icon=a;persistMe();
           $$(".av").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");sfx.tap();});
@@ -879,11 +944,37 @@
     socket.on("categories",(list)=>{state.categories=list;renderCatChips();});
     socket.on("icons",(list)=>{state.icons=Array.isArray(list)?list:[];renderAvatarPicker(state.icons);});
 
+    /* dev icon unlock — the code is checked server-side, so this only ever
+       re-asserts an unlock the server already granted. */
+    const DEV_KEY="imposter.dev";
+    function tryUnlock(code,quiet){
+      return new Promise(res=>{
+        socket.emit("devUnlock",{code},(r)=>{
+          if(r&&r.ok){
+            state.secretIcons=r.icons||[];
+            try{localStorage.setItem(DEV_KEY,code);}catch(e){}
+            renderAvatarPicker(state.icons);
+            if(!quiet)toast("Dev icons unlocked 🔴");
+          } else if(!quiet){
+            toast("That's not it.",true);
+            try{localStorage.removeItem(DEV_KEY);}catch(e){}
+          }
+          res(!!(r&&r.ok));
+        });
+      });
+    }
+
     socket.on("connect",()=>{
       const wasReconnect=hasConnectedBefore;hasConnectedBefore=true;
       let seat=null;try{seat=JSON.parse(localStorage.getItem("imposter.seat")||"null");}catch(e){}
+      // Re-unlock before rejoining, or the server would reject the dev icon on
+      // the new socket and reset the seat to a default crewmate.
+      let stored=null;try{stored=localStorage.getItem(DEV_KEY);}catch(e){}
       // Mobile browsers can discard/reload a background tab, which drops us back
       // on the home screen even though the seat is still ours. Always try it.
+      // The dev unlock has to land first, or the server rejects the secret icon
+      // on this fresh socket and resets the seat to a default crewmate.
+      const rejoin=()=>{
       if(seat&&seat.roomCode&&seat.pid){
         socket.emit("rejoinRoom",seat,(res)=>{
           if(res&&res.ok){
@@ -900,6 +991,8 @@
           } else clearSeat();
         });
       }
+      };
+      if(stored)tryUnlock(stored,true).then(rejoin); else rejoin();
     });
     document.addEventListener("visibilitychange",()=>{if(!document.hidden&&socket.disconnected)socket.connect();});
     window.addEventListener("online",()=>{if(socket.disconnected)socket.connect();});
@@ -1005,7 +1098,8 @@
       r.players.forEach(p=>{
         const slot=document.createElement("div");
         slot.className="slot"+(p.connected?"":" away");
-        const tags=(p.isHost?'<span class="badge host">host</span>':'')+
+        const tags=(p.dev?'<span class="badge dev">dev</span>':'')+
+          (p.isHost?'<span class="badge host">host</span>':'')+
           (p.pid===state.me.pid?'<span class="badge you">you</span>':'')+
           (p.score?'<span class="badge score">'+p.score+'</span>':'')+
           (!p.connected?'<span class="badge off">away</span>':'');
@@ -1284,6 +1378,21 @@
         if(!res||!res.ok)toast((res&&res.error)||"Couldn't send that guess.",true);
       });
     }
+    /* dev unlock dialog */
+    const devModal=$("#devModal");
+    function openDev(){devModal.classList.add("show");$("#devInput").value="";setTimeout(()=>$("#devInput").focus(),60);}
+    const closeDev=()=>devModal.classList.remove("show");
+    $("#devCancel").addEventListener("click",closeDev);
+    devModal.addEventListener("click",(e)=>{if(e.target===devModal)closeDev();});
+    function submitDev(){
+      const c=$("#devInput").value.trim();
+      if(!c)return;
+      $("#devGo").disabled=true;
+      tryUnlock(c,false).then(ok=>{$("#devGo").disabled=false;if(ok)closeDev();});
+    }
+    $("#devGo").addEventListener("click",submitDev);
+    $("#devInput").addEventListener("keydown",(e)=>{if(e.key==="Enter"){e.preventDefault();submitDev();}});
+
     $("#modalGo").addEventListener("click",sendSnapGuess);
     $("#modalInput").addEventListener("keydown",(e)=>{if(e.key==="Enter"){e.preventDefault();sendSnapGuess();}});
 
@@ -1368,6 +1477,17 @@
     }
 
     /* ============ EJECTION CUTSCENE ============ */
+    // The dev doesn't get thrown out of an airlock like everyone else.
+    const DEV_EJECT_LINES=[
+      n=>n+" scattered into crows.",
+      n=>n+" was ejected. It was a clone.",
+      n=>"They ejected "+n+". Nothing happened."
+    ];
+    function ejectionLine(ej){
+      if(!ej)return "Nobody was ejected.";
+      if(ej.dev)return DEV_EJECT_LINES[Math.floor(Math.random()*DEV_EJECT_LINES.length)](ej.name);
+      return ej.name+" was ejected.";
+    }
     function playEjection(res){
       const ov=$("#eject"),ej=res.ejection;
       const floater=$("#ejFloater"),nm=$("#ejName"),rl=$("#ejRole"),lf=$("#ejLeft");
@@ -1378,7 +1498,7 @@
       floater.style.animation="floatAcross "+dur+"ms linear forwards";
       ov.classList.add("show");sfx.whoosh();
 
-      setTimeout(()=>{nm.textContent=ej?ej.name+" was ejected.":"Nobody was ejected.";
+      setTimeout(()=>{nm.textContent=ejectionLine(ej);
         nm.style.animation="fadeUp .4s both";nm.style.opacity="1";},reduce?150:700);
       setTimeout(()=>{
         if(ej){rl.textContent=ej.wasImposter?"…they were The Imposter.":"…they were not The Imposter.";
