@@ -116,6 +116,10 @@
   .avdiv{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);font-weight:700;
     grid-column:1/-1;margin:6px 0 0;display:flex;align-items:center;gap:8px}
   .avdiv::after{content:"";flex:1;height:1px;background:var(--line)}
+  /* Every .mate box sets its own size; the art inside must be told to fit it or
+     a full-resolution PNG renders at its natural size and escapes the card. */
+  .mate{overflow:hidden}
+  .mate>svg,.mate>img{width:100%;height:100%;object-fit:contain;display:block}
   .avatar{width:40px;height:40px;flex:0 0 auto;border-radius:12px;display:grid;place-items:center;font-size:19px;
     background:rgba(255,255,255,.05);border:1px solid var(--line);overflow:hidden;padding:3px}
   .avatar svg,.avatar img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
@@ -160,7 +164,8 @@
   .flip-inner{position:relative;width:100%;aspect-ratio:5/6.4;transform-style:preserve-3d;transition:transform .75s cubic-bezier(.2,.8,.2,1);cursor:pointer}
   .flip.flipped .flip-inner{transform:rotateY(180deg)}
   .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:22px;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;padding:20px;text-align:center;border:1px solid var(--line);box-shadow:var(--shadow)}
+    align-items:center;justify-content:center;padding:20px;text-align:center;border:1px solid var(--line);
+    box-shadow:var(--shadow);overflow:hidden}
   .face.front{background:repeating-linear-gradient(45deg,rgba(255,255,255,.035) 0 12px,transparent 12px 24px),
     linear-gradient(180deg,var(--panel-3),var(--panel))}
   .face.front .q{font-family:"Luckiest Guy",cursive;font-size:76px;color:var(--gold);text-shadow:0 0 34px rgba(255,201,77,.4)}
