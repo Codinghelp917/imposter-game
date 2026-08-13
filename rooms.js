@@ -1,29 +1,43 @@
 // rooms.js — Among Us–style imposter word game.
 //
-// A game = one secret word + hidden imposter(s). Players discuss via chat over
-// several rounds. Each round ends with an OPTIONAL vote. Skipping (or a tie)
-// advances to the next round. You get 3 rounds per imposter to catch them.
+// A game = one secret word + hidden imposter(s). Players take turns dropping a
+// clue, then the crew votes. Skipping (or a tie) advances to the next round.
+// You get 3 rounds per imposter to catch them.
 //   - Eject a crewmate  -> they're out, game continues.
-//   - Eject an imposter -> crew win.
+//   - Eject an imposter -> they get one last guess at the word. Name it and the
+//                          imposters steal the win; miss it and the crew win.
 //   - Run out of rounds / reach parity -> imposters win.
 //
-// phase: "lobby" | "reveal" | "discussion" | "voting" | "ejection" | "gameover"
+// A living imposter can also gamble a guess mid-discussion at any time.
+//
+// phase: "lobby" | "reveal" | "discussion" | "voting" | "guessing" | "gameover"
+
+const crypto = require("crypto");
 
 const rooms = {};
 const MAX_CHAT = 120;
 const DEFAULT_TURN_DURATION_MS = 30_000;
+const DEFAULT_GUESS_DURATION_MS = 25_000;
+const EMPTY_ROOM_TTL_MS = 2 * 60_000;       // created but nobody ever joined
+const ABANDONED_ROOM_TTL_MS = 30 * 60_000;  // everybody has been gone this long
 
 // ---------------- helpers ----------------
 function randomCode() {
+  // Always exactly 4 digits. (The old slice-of-a-float trick could, very rarely,
+  // produce a 1–3 digit code that the 4-digit join box could never enter.)
+  if (Object.keys(rooms).length >= 9000) return null;
   let code;
-  do { code = Math.random().toString().slice(2, 6); } while (rooms[code]);
+  do { code = String(Math.floor(Math.random() * 10000)).padStart(4, "0"); } while (rooms[code]);
   return code;
 }
 function randomPid() {
-  return Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-3);
+  // A pid is a bearer token for a seat — it restores your role on reconnect, so
+  // it should not be guessable from Math.random + a timestamp.
+  return crypto.randomBytes(9).toString("base64url");
 }
 function normalize(s) {
-  return (s || "").toString().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+  // NFD splits "é" into "e" + a combining mark; \p{Mn} strips the marks.
+  return (s || "").toString().normalize("NFD").replace(/\p{Mn}/gu, "")
     .toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
@@ -38,6 +52,24 @@ function ensureHost(room) {
     const firstConnected = room.players.find((p) => p.connected) || room.players[0];
     room.hostId = firstConnected ? firstConnected.id : null;
   }
+}
+
+// The host's *seat* stays reserved while they are temporarily away, but their
+// *powers* must not: otherwise one person locking their phone freezes the game
+// for everyone until the reconnect grace window expires.
+function actingHost(room) {
+  if (!room) return null;
+  const host = getHostPlayer(room);
+  if (host && host.connected) return host;
+  return room.players.find((p) => p.connected) || host || null;
+}
+function isActingHost(room, socketId) {
+  const h = actingHost(room);
+  return !!(h && socketId && h.id === socketId);
+}
+function hostIsAway(room) {
+  const host = getHostPlayer(room);
+  return !!(host && !host.connected);
 }
 
 function aliveConnected(room) {
@@ -56,21 +88,24 @@ function currentTurnPlayer(room) {
   return pid ? getPlayerByPid(room, pid) : null;
 }
 
-function setTurnClock(room, durationMs) {
+// startDelayMs lets the clock begin *after* a client-side cutscene finishes, so
+// the first player of a new round is not silently robbed of those seconds.
+function setTurnClock(room, durationMs, startDelayMs = 0) {
   const ms = Number.isFinite(Number(durationMs)) && Number(durationMs) > 0
     ? Number(durationMs) : DEFAULT_TURN_DURATION_MS;
+  const delay = Math.max(0, Number(startDelayMs) || 0);
   room.turnDurationMs = ms;
-  room.turnStartedAt = Date.now();
+  room.turnStartedAt = Date.now() + delay;
   room.turnEndsAt = room.turnStartedAt + ms;
 }
 
-function setupTurnOrder(room, durationMs = DEFAULT_TURN_DURATION_MS) {
+function setupTurnOrder(room, durationMs = DEFAULT_TURN_DURATION_MS, startDelayMs = 0) {
   const participants = shuffle(aliveConnected(room));
   room.turnOrder = participants.map((p) => p.pid);
   room.order = participants.map((p) => p.name);
   room.turnIndex = participants.length ? 0 : -1;
   room.cluesComplete = participants.length === 0;
-  if (participants.length) setTurnClock(room, durationMs);
+  if (participants.length) setTurnClock(room, durationMs, startDelayMs);
   else { room.turnStartedAt = null; room.turnEndsAt = null; }
   return currentTurnPlayer(room);
 }
@@ -115,17 +150,34 @@ function ensureActiveTurn(room, durationMs = room && room.turnDurationMs) {
   return { ...advanceTurn(room, "unavailable", durationMs), changed: true };
 }
 
+// The guess in flight, minus anything that would spoil the reveal.
+function publicGuess(room) {
+  const g = room && room.guess;
+  if (!g) return null;
+  return {
+    pid: g.pid, name: g.name, icon: g.icon || null,
+    startsAt: g.startsAt, endsAt: g.endsAt, durationMs: g.durationMs,
+    fromEjection: !!g.fromEjection, resolved: !!g.resolved
+  };
+}
+
 // Public snapshot — never leaks who the imposter is or the secret word.
 function publicRoomState(room) {
   if (!room) return null;
-  const host = getHostPlayer(room);
+  const host = actingHost(room);
   return {
     phase: room.phase,
     round: room.round,
     maxRounds: room.maxRounds,
     hostPid: host ? host.pid : null,
     hostName: host ? host.name : null,
-    settings: { categories: room.settings.categories.slice(), imposters: room.settings.imposters, hintsEnabled: room.settings.hintsEnabled !== false },
+    hostAway: hostIsAway(room),
+    settings: {
+      categories: room.settings.categories.slice(),
+      imposters: room.settings.imposters,
+      hintsEnabled: room.settings.hintsEnabled !== false,
+      guessEnabled: room.settings.guessEnabled !== false
+    },
     order: room.order || [],
     turn: {
       index: room.turnIndex ?? -1,
@@ -137,12 +189,13 @@ function publicRoomState(room) {
       durationMs: room.turnDurationMs || DEFAULT_TURN_DURATION_MS,
       complete: !!room.cluesComplete
     },
+    guess: publicGuess(room),
     players: room.players.map((p) => ({
       pid: p.pid,
       name: p.name,
       icon: p.icon || null,
       score: p.score || 0,
-      isHost: p.id === room.hostId,
+      isHost: !!(host && p.pid === host.pid),
       alive: p.alive,
       connected: p.connected,
       hasVoted: !!(room.votes && room.votes[p.pid])
@@ -153,13 +206,15 @@ function publicRoomState(room) {
 // ---------------- room lifecycle ----------------
 function createRoom(hostSocketId) {
   const code = randomCode();
+  if (!code) return { roomCode: null, room: null };
   rooms[code] = {
+    createdAt: Date.now(),
     players: [],
     hostId: hostSocketId,
     phase: "lobby",
     round: 0,
     maxRounds: 0,
-    settings: { categories: ["Famous People"], imposters: 1, hintsEnabled: true },
+    settings: { categories: ["Famous People"], imposters: 1, hintsEnabled: true, guessEnabled: true },
     word: null,
     category: null,
     hint: null,
@@ -173,24 +228,37 @@ function createRoom(hostSocketId) {
     votes: {},
     chat: [],
     ejection: null,
+    guess: null,
     gameResult: null
   };
   return { roomCode: code, room: rooms[code] };
 }
 
-function validateAndAddPlayer({ roomCode, socketId, name, icon }) {
+// Two crewmates in the same lobby should not wear the same colour. If the one
+// you picked is taken we quietly slide you to the next free colour rather than
+// bouncing you back to the home screen.
+function resolveIcon(room, wanted, iconPool) {
+  if (typeof wanted !== "string" || !wanted.startsWith("crew:")) return wanted;
+  const taken = new Set(room.players.map((p) => p.icon));
+  if (!taken.has(wanted)) return wanted;
+  const free = (iconPool || []).find((i) => typeof i === "string" && i.startsWith("crew:") && !taken.has(i));
+  return free || wanted;
+}
+
+function validateAndAddPlayer({ roomCode, socketId, name, icon, iconPool }) {
   if (!roomCode || !name) return { ok: false, error: "Enter a room code and a name to join." };
   const room = getRoom(roomCode);
   if (!room) return { ok: false, error: "No room with that code. Check the digits and try again." };
 
   const trimmed = name.trim();
-  if (trimmed.length < 2 || trimmed.length > 16) return { ok: false, error: "Name must be 2\u201316 characters." };
+  if (trimmed.length < 2 || trimmed.length > 16) return { ok: false, error: "Name must be 2–16 characters." };
   if (room.players.some((p) => p.name.toLowerCase() === trimmed.toLowerCase()))
     return { ok: false, error: "That name is taken in this room. Pick another." };
   if (room.phase !== "lobby") return { ok: false, error: "That game is already in progress." };
+  if (room.players.length >= 15) return { ok: false, error: "This room is full (15 players)." };
 
   const player = {
-    id: socketId, pid: randomPid(), name: trimmed, icon: icon || null,
+    id: socketId, pid: randomPid(), name: trimmed, icon: resolveIcon(room, icon, iconPool) || null,
     score: 0, connected: true, isImposter: false, role: "crew", alive: true
   };
   room.players.push(player);
@@ -199,25 +267,28 @@ function validateAndAddPlayer({ roomCode, socketId, name, icon }) {
 }
 
 // Reconnect by pid: restore an existing seat (keeps role/alive/score).
-function rejoinByPid({ roomCode, socketId, pid, name, icon }) {
+function rejoinByPid({ roomCode, socketId, pid, name, icon, iconPool }) {
   const room = getRoom(roomCode);
   if (!room) return { ok: false, error: "That room has closed." };
   const existing = getPlayerByPid(room, pid);
   if (!existing) {
     // seat gone (e.g. removed in lobby) -> try a fresh join if still in lobby
-    if (room.phase === "lobby") return validateAndAddPlayer({ roomCode, socketId, name, icon });
+    if (room.phase === "lobby") return validateAndAddPlayer({ roomCode, socketId, name, icon, iconPool });
     return { ok: false, error: "Your seat is no longer in this game." };
   }
   const wasHost = room.hostId === existing.id;
   existing.id = socketId;
   existing.connected = true;
-  if (icon) existing.icon = icon;
+  if (icon && icon !== existing.icon) {
+    const taken = new Set(room.players.filter((p) => p !== existing).map((p) => p.icon));
+    if (!taken.has(icon)) existing.icon = icon;
+  }
   if (wasHost) room.hostId = socketId;
   else ensureHost(room);
   return { ok: true, room, player: existing, rejoined: true };
 }
 
-function setSettings(room, { categories, imposters, hintsEnabled }, CATEGORIES) {
+function setSettings(room, { categories, imposters, hintsEnabled, guessEnabled }, CATEGORIES) {
   if (!room) return { ok: false, error: "Room not found." };
   if (room.phase !== "lobby") return { ok: false, error: "Can only change settings in the lobby." };
   if (Array.isArray(categories)) {
@@ -226,6 +297,7 @@ function setSettings(room, { categories, imposters, hintsEnabled }, CATEGORIES) 
   }
   if (imposters === 1 || imposters === 2) room.settings.imposters = imposters;
   if (typeof hintsEnabled === "boolean") room.settings.hintsEnabled = hintsEnabled;
+  if (typeof guessEnabled === "boolean") room.settings.guessEnabled = guessEnabled;
   // cap imposters so a game is always winnable
   const maxImp = Math.max(1, Math.floor((room.players.length - 1) / 2));
   if (room.settings.imposters > maxImp) room.settings.imposters = 1;
@@ -294,6 +366,7 @@ function startGame(room, CATEGORIES) {
   room.phase = "reveal";
   room.votes = {};
   room.ejection = null;
+  room.guess = null;
   room.gameResult = null;
   room.chat = [];
   room.order = [];
@@ -302,7 +375,7 @@ function startGame(room, CATEGORIES) {
   room.turnStartedAt = null;
   room.turnEndsAt = null;
   room.cluesComplete = false;
-  addSystem(room, `Game on — ${impCount} imposter${impCount > 1 ? "s" : ""} hiding. ${room.maxRounds} rounds to catch ${impCount > 1 ? "them" : "them"}.`);
+  addSystem(room, `Game on — ${impCount} imposter${impCount > 1 ? "s" : ""} among us. ${room.maxRounds} rounds to catch ${impCount > 1 ? "them" : "them"}.`);
 
   return { ok: true, room };
 }
@@ -369,9 +442,139 @@ function everyoneVoted(room) {
   return voters.length > 0 && voters.every((p) => room.votes[p.pid]);
 }
 
+// ---------------- the imposter's word guess ----------------
+// "the eiffel tower" matches "Eiffel Tower"; accents and punctuation are ignored.
+function wordMatches(guess, word) {
+  const bare = (s) => normalize(s).replace(/^the/, "");
+  const g = normalize(guess), w = normalize(word);
+  if (!g || !w) return false;
+  return g === w || (bare(guess) !== "" && bare(guess) === bare(word));
+}
+
+function startImposterGuess(room, guesser, durationMs = DEFAULT_GUESS_DURATION_MS, fromEjection = true, startDelayMs = 0) {
+  room.phase = "guessing";
+  room.turnStartedAt = null;
+  room.turnEndsAt = null;
+  room.votes = {};
+  const startsAt = Date.now() + Math.max(0, startDelayMs || 0);
+  room.guess = {
+    pid: guesser.pid, name: guesser.name, icon: guesser.icon || null,
+    durationMs, startsAt, endsAt: startsAt + durationMs,
+    text: null, correct: null, resolved: false, fromEjection
+  };
+  addSystem(room, `${guesser.name} was the Imposter — one last guess at the word decides it.`);
+  return room.guess;
+}
+
+function endGame(room, result) {
+  awardScores(room, result);
+  room.gameResult = result;
+  room.phase = "gameover";
+  addSystem(room, result.winner === "crew" ? "Crew win! 🎉" : "Imposters win! 🔪");
+  return result;
+}
+
+function imposterNamesOf(room) {
+  return room.players.filter((p) => p.isImposter).map((p) => p.name);
+}
+
+// Everything the game-over screen needs, for a player who reloads or reconnects
+// after the game already ended. Safe to send: the game is over, nothing to spoil.
+function finishedSummary(room) {
+  if (!room || room.phase !== "gameover") return null;
+  const g = room.guess;
+  return {
+    word: room.word,
+    category: room.category,
+    imposterNames: imposterNamesOf(room),
+    guess: g && g.resolved
+      ? { name: g.name, icon: g.icon || null, text: g.text, correct: g.correct, fromEjection: !!g.fromEjection }
+      : null
+  };
+}
+
+// Resolve the last-words guess. text === null means the clock ran out.
+function finalizeGuess(room, text) {
+  if (!room || room.phase !== "guessing" || !room.guess || room.guess.resolved) return null;
+  const g = room.guess;
+  g.resolved = true;
+  g.text = typeof text === "string" ? text.slice(0, 60).trim() : null;
+  g.correct = !!g.text && wordMatches(g.text, room.word);
+
+  const result = g.correct
+    ? { winner: "imposters", reason: `${g.name} was caught — then named the word anyway.`, viaGuess: true }
+    : {
+        winner: "crew",
+        reason: g.text ? `${g.name} guessed "${g.text}" — not the word.` : `${g.name} ran out of time to guess.`
+      };
+
+  addSystem(room, g.correct
+    ? `${g.name} guessed "${g.text}" — correct. The imposters steal it.`
+    : g.text ? `${g.name} guessed "${g.text}" — wrong.` : `${g.name} never guessed.`);
+  endGame(room, result);
+
+  return {
+    guess: { name: g.name, icon: g.icon || null, text: g.text, correct: g.correct, fromEjection: g.fromEjection },
+    result,
+    word: room.word,
+    category: room.category,
+    imposterNames: imposterNamesOf(room)
+  };
+}
+
+// A living imposter gambling a guess mid-discussion. Right = instant win.
+// Wrong = they blow their cover and are out.
+function imposterSnapGuess(room, pid, text, durationMs = room && room.turnDurationMs) {
+  if (!room) return { ok: false, error: "Room not found." };
+  if (room.settings.guessEnabled === false) return { ok: false, error: "Word guessing is off in this room." };
+  if (room.phase !== "discussion") return { ok: false, error: "You can only guess during the discussion." };
+  const p = getPlayerByPid(room, pid);
+  if (!p || !p.isImposter) return { ok: false, error: "Only the imposter can guess the word." };
+  if (!p.alive) return { ok: false, error: "You're already out." };
+  const clean = (text || "").toString().slice(0, 60).trim();
+  if (!clean) return { ok: false, error: "Type the word you think it is." };
+
+  const correct = wordMatches(clean, room.word);
+  const payload = {
+    guess: { name: p.name, icon: p.icon || null, text: clean, correct, fromEjection: false },
+    word: room.word, category: room.category
+  };
+
+  if (correct) {
+    addSystem(room, `${p.name} called it: the word was "${room.word}".`);
+    payload.result = endGame(room, {
+      winner: "imposters", reason: `${p.name} named the word out of nowhere.`, viaGuess: true
+    });
+    payload.imposterNames = imposterNamesOf(room);
+    return { ok: true, room, ...payload };
+  }
+
+  // Wrong: they've outed themselves.
+  p.alive = false;
+  addSystem(room, `${p.name} tried to call the word with "${clean}" — wrong. They're out.`);
+
+  if (impostersAlive(room) === 0) {
+    payload.result = endGame(room, { winner: "crew", reason: `${p.name} blew their cover on a bad guess.` });
+    payload.imposterNames = imposterNamesOf(room);
+    return { ok: true, room, ...payload };
+  }
+  if (impostersAlive(room) >= crewAlive(room)) {
+    payload.result = endGame(room, { winner: "imposters", reason: "Imposters reached the crew in numbers." });
+    payload.imposterNames = imposterNamesOf(room);
+    return { ok: true, room, ...payload };
+  }
+
+  payload.result = null;
+  payload.turn = ensureActiveTurn(room, durationMs);
+  return { ok: true, room, ...payload };
+}
+
 // Tally, decide ejection, advance the game. Returns a resolution payload.
-function resolveVote(room, durationMs = DEFAULT_TURN_DURATION_MS) {
+function resolveVote(room, opts = {}) {
   if (!room) return null;
+  const turnDurationMs = opts.turnDurationMs || DEFAULT_TURN_DURATION_MS;
+  const ejectionDelayMs = Math.max(0, opts.ejectionDelayMs || 0);
+  const guessDurationMs = opts.guessDurationMs || DEFAULT_GUESS_DURATION_MS;
 
   const counts = {}; // pid -> votes
   let skipVotes = 0;
@@ -404,34 +607,40 @@ function resolveVote(room, durationMs = DEFAULT_TURN_DURATION_MS) {
   const tally = room.players.filter((p) => counts[p.pid] !== undefined)
     .map((p) => ({ pid: p.pid, name: p.name, icon: p.icon || null, votes: counts[p.pid] || 0 }))
     .sort((a, b) => b.votes - a.votes);
-  tally.push({ pid: "skip", name: "Skip", icon: "\u23ED\uFE0F", votes: skipVotes, isSkip: true });
+  tally.push({ pid: "skip", name: "Skip", icon: "⏭️", votes: skipVotes, isSkip: true });
+
+  const impAlive = impostersAlive(room);
+  const crAlive = crewAlive(room);
+  const base = { ejection, tally, skipVotes, impostersLeft: impAlive };
+
+  // Caught the last imposter — but they get one last shot at the word.
+  if (ejection && ejection.wasImposter && impAlive === 0 && room.settings.guessEnabled !== false && room.word) {
+    const guesser = getPlayerByPid(room, ejection.pid);
+    startImposterGuess(room, guesser, guessDurationMs, true, ejectionDelayMs);
+    room.ejection = ejection;
+    return { ...base, result: null, pendingGuess: true, guess: publicGuess(room), nextPhase: "guessing", nextRound: room.round };
+  }
 
   // decide game outcome
   let result = null;
-  const impAlive = impostersAlive(room);
-  const crAlive = crewAlive(room);
-
   if (impAlive === 0) {
     result = { winner: "crew", reason: "All imposters were ejected." };
   } else if (impAlive >= crAlive) {
     result = { winner: "imposters", reason: "Imposters reached the crew in numbers." };
   } else if (room.round >= room.maxRounds) {
-    result = { winner: "imposters", reason: "The rounds ran out — imposter survived." };
+    result = { winner: "imposters", reason: "The rounds ran out — the imposter survived." };
   }
 
   let nextPhase, nextRound = room.round;
   if (result) {
-    awardScores(room, result);
-    room.gameResult = result;
-    room.phase = "gameover";
+    endGame(room, result);
     nextPhase = "gameover";
-    addSystem(room, result.winner === "crew" ? "Crew win! 🎉" : "Imposters win! 🕵️");
   } else {
     room.round += 1;
     nextRound = room.round;
     room.phase = "discussion";
     room.votes = {};
-    const first = setupTurnOrder(room, durationMs);
+    const first = setupTurnOrder(room, turnDurationMs, ejectionDelayMs);
     nextPhase = "discussion";
     addSystem(room, first
       ? `Round ${room.round} — ${first.name} goes first. You each have ${Math.round(room.turnDurationMs / 1000)} seconds.`
@@ -440,13 +649,12 @@ function resolveVote(room, durationMs = DEFAULT_TURN_DURATION_MS) {
 
   room.ejection = ejection;
   return {
-    ejection,          // {pid,name,icon,wasImposter} or null
-    tally,
-    skipVotes,
+    ...base,
     result,            // {winner,reason} or null
+    pendingGuess: false,
     nextPhase,
     nextRound,
-    imposterNames: result ? room.players.filter((p) => p.isImposter).map((p) => p.name) : null,
+    imposterNames: result ? imposterNamesOf(room) : null,
     word: result ? room.word : null,
     category: result ? room.category : null
   };
@@ -456,14 +664,15 @@ function awardScores(room, result) {
   if (result.winner === "crew") {
     room.players.forEach((p) => { if (!p.isImposter && p.alive) p.score += 1; });
   } else {
-    room.players.forEach((p) => { if (p.isImposter) p.score += 2; });
+    const points = result.viaGuess ? 3 : 2;   // naming the word is worth more
+    room.players.forEach((p) => { if (p.isImposter) p.score += points; });
   }
 }
 
 // host force-resolve
-function forceResolve(room, durationMs = DEFAULT_TURN_DURATION_MS) {
+function forceResolve(room, opts = {}) {
   if (!room || room.phase !== "voting") return null;
-  return resolveVote(room, durationMs);
+  return resolveVote(room, opts);
 }
 
 // gameover/any -> lobby for a fresh game (keep players + scores)
@@ -484,6 +693,7 @@ function backToLobby(room) {
   room.cluesComplete = false;
   room.votes = {};
   room.ejection = null;
+  room.guess = null;
   room.gameResult = null;
   room.chat = [];
   room.players.forEach((p) => { p.alive = true; p.isImposter = false; p.role = "crew"; });
@@ -500,17 +710,22 @@ function _handleLeave(room, code, player, hard) {
     if (room.votes && room.votes[player.pid]) delete room.votes[player.pid];
   } else {
     player.connected = false;
+    player.lastSeenAt = Date.now();
   }
 
   if (room.players.length === 0) {
     delete rooms[code];
-    return { roomCode: code, room: null, roomDeleted: true, votingComplete: false };
+    return { roomCode: code, room: null, roomDeleted: true, votingComplete: false, guesserGone: false };
   }
 
-  // Keep a temporarily disconnected host's seat/host status reserved. If they
-  // actually leave or their reconnect grace expires, choose a replacement.
   if (hard) ensureHost(room);
-  return { roomCode: code, room, roomDeleted: false, votingComplete: everyoneVoted(room) };
+  return {
+    roomCode: code, room, roomDeleted: false,
+    votingComplete: everyoneVoted(room),
+    // If the imposter making their final guess vanishes, the room must not hang.
+    guesserGone: room.phase === "guessing" && !!room.guess && !room.guess.resolved &&
+      (hard ? !getPlayerByPid(room, room.guess.pid) : false)
+  };
 }
 
 function removePlayerFromRoom(roomCode, socketId, hard) {
@@ -530,12 +745,33 @@ function removePlayerFromAll(socketId) {
   return null;
 }
 
+// Rooms live in process memory, so nothing reclaims a room that was created but
+// never joined (tap "Create", close the tab) — those used to leak forever.
+function sweepRooms(now = Date.now()) {
+  const dropped = [];
+  for (const [code, room] of Object.entries(rooms)) {
+    if (!room.players.length) {
+      if (now - (room.createdAt || 0) > EMPTY_ROOM_TTL_MS) dropped.push(code);
+      continue;
+    }
+    const anyConnected = room.players.some((p) => p.connected);
+    if (anyConnected) continue;
+    const lastSeen = Math.max(...room.players.map((p) => p.lastSeenAt || room.createdAt || 0));
+    if (now - lastSeen > ABANDONED_ROOM_TTL_MS) dropped.push(code);
+  }
+  dropped.forEach((code) => delete rooms[code]);
+  return dropped;
+}
+
 module.exports = {
-  rooms, getRoom, getPlayerByPid, getHostPlayer,
+  rooms, getRoom, getPlayerByPid, getHostPlayer, actingHost, isActingHost, hostIsAway,
   createRoom, validateAndAddPlayer, rejoinByPid, setSettings,
   addChat, addSystem,
-  startGame, beginDiscussion, submitClue, advanceTurn, ensureActiveTurn, currentTurnPlayer, callVote, castVote, everyoneVoted,
+  startGame, beginDiscussion, submitClue, advanceTurn, ensureActiveTurn, currentTurnPlayer,
+  callVote, castVote, everyoneVoted,
+  wordMatches, startImposterGuess, finalizeGuess, imposterSnapGuess, publicGuess, finishedSummary,
   resolveVote, forceResolve, backToLobby,
-  removePlayerFromRoom, removePlayerFromAll, publicRoomState,
-  impostersAlive, crewAlive, aliveConnected
+  removePlayerFromRoom, removePlayerFromAll, publicRoomState, sweepRooms,
+  impostersAlive, crewAlive, aliveConnected,
+  DEFAULT_GUESS_DURATION_MS
 };
