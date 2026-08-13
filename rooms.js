@@ -229,6 +229,7 @@ function publicRoomState(room) {
       pid: p.pid,
       name: p.name,
       icon: p.icon || null,
+      color: p.color || null,
       score: p.score || 0,
       isHost: !!(host && p.pid === host.pid),
       alive: p.alive,
@@ -274,6 +275,21 @@ function createRoom(hostSocketId) {
 // Two crewmates in the same lobby should not wear the same colour. If the one
 // you picked is taken we quietly slide you to the next free colour rather than
 // bouncing you back to the home screen.
+// Every player gets a crewmate colour, even if they picked a custom picture
+// icon, so the UI can tint their chat and turn chip. Colours stay unique per
+// room for as long as the palette holds out.
+const CREW_COLOR_KEYS = ["red", "blue", "green", "pink", "orange", "yellow",
+                         "black", "white", "purple", "brown", "cyan", "lime"];
+function assignColor(room, icon) {
+  if (typeof icon === "string" && icon.startsWith("crew:")) {
+    const c = icon.slice(5);
+    if (CREW_COLOR_KEYS.includes(c)) return c;
+  }
+  const taken = new Set(room.players.map((p) => p.color).filter(Boolean));
+  return CREW_COLOR_KEYS.find((c) => !taken.has(c))
+    || CREW_COLOR_KEYS[room.players.length % CREW_COLOR_KEYS.length];
+}
+
 function resolveIcon(room, wanted, iconPool) {
   if (typeof wanted !== "string" || !wanted.startsWith("crew:")) return wanted;
   const taken = new Set(room.players.map((p) => p.icon));
@@ -294,8 +310,10 @@ function validateAndAddPlayer({ roomCode, socketId, name, icon, iconPool }) {
   if (room.phase !== "lobby") return { ok: false, error: "That game is already in progress." };
   if (room.players.length >= 15) return { ok: false, error: "This room is full (15 players)." };
 
+  const finalIcon = resolveIcon(room, icon, iconPool) || null;
   const player = {
-    id: socketId, pid: randomPid(), name: trimmed, icon: resolveIcon(room, icon, iconPool) || null,
+    id: socketId, pid: randomPid(), name: trimmed, icon: finalIcon,
+    color: assignColor(room, finalIcon),
     score: 0, connected: true, isImposter: false, role: "crew", alive: true
   };
   room.players.push(player);
@@ -348,7 +366,7 @@ function addChat(room, pid, text) {
   if (!p) return null;
   const clean = (text || "").toString().slice(0, 240).trim();
   if (!clean) return null;
-  const msg = { pid: p.pid, name: p.name, icon: p.icon || null, text: clean, ts: Date.now(), system: false };
+  const msg = { pid: p.pid, name: p.name, icon: p.icon || null, color: p.color || null, text: clean, ts: Date.now(), system: false };
   room.chat.push(msg);
   if (room.chat.length > MAX_CHAT) room.chat.shift();
   return msg;
@@ -638,7 +656,7 @@ function resolveVote(room, opts = {}) {
   if (ejectPid) {
     const p = getPlayerByPid(room, ejectPid);
     p.alive = false;
-    ejection = { pid: p.pid, name: p.name, icon: p.icon || null, wasImposter: p.isImposter };
+    ejection = { pid: p.pid, name: p.name, icon: p.icon || null, color: p.color || null, wasImposter: p.isImposter };
     addSystem(room, `${p.name} was ejected — ${p.isImposter ? "the Imposter!" : "not the Imposter."}`);
   } else {
     addSystem(room, skipVotes > 0 ? "The crew skipped the vote." : "No majority — nobody was ejected.");
@@ -646,9 +664,9 @@ function resolveVote(room, opts = {}) {
 
   // build vote tally for the reveal
   const tally = room.players.filter((p) => counts[p.pid] !== undefined)
-    .map((p) => ({ pid: p.pid, name: p.name, icon: p.icon || null, votes: counts[p.pid] || 0 }))
+    .map((p) => ({ pid: p.pid, name: p.name, icon: p.icon || null, color: p.color || null, votes: counts[p.pid] || 0 }))
     .sort((a, b) => b.votes - a.votes);
-  tally.push({ pid: "skip", name: "Skip", icon: "⏭️", votes: skipVotes, isSkip: true });
+  tally.push({ pid: "skip", name: "Skip", icon: "⏭️", color: null, votes: skipVotes, isSkip: true });
 
   const impAlive = impostersAlive(room);
   const crAlive = crewAlive(room);

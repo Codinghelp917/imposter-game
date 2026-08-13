@@ -29,9 +29,31 @@
     overflow-x:hidden;
   }
   #stars{position:fixed;inset:0;z-index:-2;pointer-events:none;display:block}
-  body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  /* Each phase gets its own temperature. */
+  body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;transition:background 1.2s ease;
     background:radial-gradient(ellipse at 50% -15%,rgba(60,90,190,.22),transparent 55%),
                radial-gradient(ellipse at 85% 60%,rgba(150,50,190,.12),transparent 45%)}
+  body[data-phase="reveal"]::after{
+    background:radial-gradient(ellipse at 50% -10%,rgba(255,201,77,.16),transparent 55%),
+               radial-gradient(ellipse at 80% 70%,rgba(120,60,190,.14),transparent 45%)}
+  body[data-phase="voting"]::after{
+    background:radial-gradient(ellipse at 50% -10%,rgba(197,17,17,.26),transparent 58%),
+               radial-gradient(ellipse at 20% 75%,rgba(120,20,60,.16),transparent 45%)}
+  body[data-phase="guess"]::after{
+    background:radial-gradient(ellipse at 50% 20%,rgba(197,17,17,.34),transparent 62%),
+               radial-gradient(ellipse at 50% 100%,rgba(90,10,30,.28),transparent 50%);
+    animation:dread 2.6s ease-in-out infinite alternate}
+  @keyframes dread{to{opacity:.62}}
+  body[data-phase="over"]::after{
+    background:radial-gradient(ellipse at 50% -10%,rgba(61,224,172,.16),transparent 55%),
+               radial-gradient(ellipse at 80% 65%,rgba(44,123,229,.14),transparent 45%)}
+  body[data-phase="over"][data-win="imposters"]::after{
+    background:radial-gradient(ellipse at 50% -10%,rgba(197,17,17,.3),transparent 58%),
+               radial-gradient(ellipse at 75% 70%,rgba(120,15,15,.2),transparent 48%)}
+  /* Imposter victory: a red wash rather than a party. */
+  #redflash{position:fixed;inset:0;z-index:76;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 45%,rgba(255,40,40,.5),rgba(120,0,0,.25) 45%,transparent 72%)}
+  #redflash.go{animation:redwash 1.5s ease-out both}
+  @keyframes redwash{0%{opacity:0}12%{opacity:1}100%{opacity:0}}
 
   /* ---------- header ---------- */
   header{width:100%;max-width:500px;display:flex;flex-direction:column;align-items:center;gap:2px;padding-top:2px}
@@ -66,7 +88,7 @@
   label.field .lab,.lab{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:7px;display:block}
   input.txt{width:100%;height:var(--tap);border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.34);
     color:var(--ink);padding:0 15px;font:inherit;font-size:16px;transition:.16s;outline:none}
-  input.txt::placeholder{color:var(--muted-2)}
+  input.txt::placeholder{color:#7C87A3}
   input.txt:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(255,201,77,.15)}
   input.code{font-family:"Space Mono";letter-spacing:.42em;text-align:center;font-size:26px;font-weight:700;padding-left:.42em}
 
@@ -113,7 +135,7 @@
   .av.sel{border-color:var(--gold);background:rgba(255,201,77,.14);box-shadow:0 0 0 3px rgba(255,201,77,.2)}
   .av svg,.av img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;
     filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
-  .avdiv{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);font-weight:700;
+  .avdiv{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:700;
     grid-column:1/-1;margin:6px 0 0;display:flex;align-items:center;gap:8px}
   .avdiv::after{content:"";flex:1;height:1px;background:var(--line)}
   /* Every .mate box sets its own size; the art inside must be told to fit it or
@@ -132,7 +154,28 @@
   .codewrap{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:10px}
   .codebig{font-family:"Space Mono";font-weight:700;font-size:clamp(40px,13vw,58px);letter-spacing:.18em;
     color:var(--gold);text-shadow:0 0 30px rgba(255,201,77,.35);padding-left:.18em;border:none;background:none;cursor:pointer}
-  .codelabel{font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted-2);font-weight:700}
+  .codelabel{font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);font-weight:700}
+
+  /* Crew line-up: players stand on a floor instead of sitting in a list. */
+  .crewfloor{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-end;gap:4px 2px;
+    margin:18px 0 4px;padding:14px 6px 0;position:relative;min-height:96px}
+  .crewfloor::after{content:"";position:absolute;left:6%;right:6%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.18) 20%,rgba(255,255,255,.18) 80%,transparent)}
+  .slot{width:74px;display:flex;flex-direction:column;align-items:center;gap:3px;padding-bottom:9px;animation:rise .35s both}
+  .slot .art{width:46px;height:54px;position:relative;animation:idle 3.2s ease-in-out infinite}
+  .slot:nth-child(2n) .art{animation-delay:-.9s}
+  .slot:nth-child(3n) .art{animation-delay:-1.7s}
+  .slot .art>svg,.slot .art>img{width:100%;height:100%;object-fit:contain;display:block;
+    filter:drop-shadow(0 6px 6px rgba(0,0,0,.55))}
+  @keyframes idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  .slot .nm{font-size:11.5px;font-weight:700;max-width:74px;overflow:hidden;text-overflow:ellipsis;
+    white-space:nowrap;text-align:center}
+  .slot .tags{display:flex;gap:3px;flex-wrap:wrap;justify-content:center}
+  .slot .tags .badge{font-size:9px;padding:2px 6px}
+  .slot.away{opacity:.45}.slot.away .art{animation:none}
+  .slot.dead .art{animation:drift 4.5s ease-in-out infinite}
+  @keyframes drift{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-8px) rotate(4deg)}}
+
   .players{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
   .prow{display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.04);border:1px solid var(--line);
     border-radius:14px;padding:8px 12px;animation:rise .3s both}
@@ -148,7 +191,7 @@
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
   .chip{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:13px;border:1px solid var(--line);
     background:rgba(255,255,255,.04);cursor:pointer;font-weight:600;font-size:13.5px;transition:.14s;user-select:none}
-  .chip .ct{font-family:"Space Mono";font-size:10.5px;color:var(--muted-2)}
+  .chip .ct{font-family:"Space Mono";font-size:10.5px;color:var(--muted)}
   .chip:hover{border-color:var(--line-2)}
   .chip.on{border-color:var(--gold);background:rgba(255,201,77,.15);box-shadow:0 0 0 2px rgba(255,201,77,.13) inset}
   .chip.ro{cursor:default}.chip.ro:not(.on){display:none}
@@ -205,12 +248,17 @@
   .turnlabel{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:3px}
   .turnname{font-family:"Luckiest Guy",cursive;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.02em}
   .turnbox.mine .turnname{color:var(--gold)}
-  .turntimer{width:52px;height:52px;flex:0 0 auto;border-radius:50%;display:grid;place-items:center;font-family:"Space Mono";
-    font-size:18px;font-weight:700;border:2px solid rgba(255,201,77,.55);background:rgba(255,201,77,.08);color:var(--gold)}
-  .turntimer.warn{border-color:rgba(255,64,64,.75);background:rgba(197,17,17,.14);color:#FF8A8A;animation:tp .7s ease-in-out infinite alternate}
-  @keyframes tp{to{transform:scale(1.07)}}
-  .timertrack{height:5px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:10px}
-  .timerfill{height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--imp),var(--gold));transition:width .2s linear}
+  /* One draining ring instead of a number plus a separate bar. */
+  .turnring{width:58px;height:58px;flex:0 0 auto;position:relative;display:grid;place-items:center}
+  .turnring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+  .turnring circle{fill:none;stroke-width:4;stroke-linecap:round}
+  .turnring .ringbg{stroke:rgba(255,255,255,.09)}
+  .turnring .ringfg{stroke:var(--gold);transition:stroke-dashoffset .2s linear,stroke .3s}
+  .turnring .num{font-family:"Space Mono";font-size:18px;font-weight:700;color:var(--gold);position:relative}
+  .turnring.warn .ringfg{stroke:var(--imp-2)}
+  .turnring.warn .num{color:#FF8A8A}
+  .turnring.warn{animation:tp .7s ease-in-out infinite alternate}
+  @keyframes tp{to{transform:scale(1.06)}}
   .turnorder{display:flex;gap:6px;overflow-x:auto;padding:10px 1px 1px;scrollbar-width:none}
   .turnorder::-webkit-scrollbar{display:none}
   .turnchip{flex:0 0 auto;display:inline-flex;align-items:center;padding:5px 10px;border-radius:99px;border:1px solid var(--line);
@@ -229,7 +277,7 @@
   .msg.me{align-self:flex-end;background:linear-gradient(180deg,rgba(44,123,229,.35),rgba(44,123,229,.18));
     border:1px solid rgba(44,123,229,.5);border-bottom-right-radius:5px}
   .msg.me .nm{color:#A6CCFF;justify-content:flex-end}
-  .msg.sys{align-self:center;background:none;border:none;color:var(--muted-2);font-size:12.5px;text-align:center;max-width:94%;font-weight:600;padding:2px}
+  .msg.sys{align-self:center;background:none;border:none;color:var(--muted);font-size:12.5px;text-align:center;max-width:94%;font-weight:600;padding:2px}
   .chatbar{display:flex;gap:8px;margin-top:8px}
   .chatbar input{flex:1;height:50px}
   .chatbar .send{width:50px;height:50px;flex:0 0 auto;border-radius:14px;border:none;background:var(--crew);
@@ -284,7 +332,7 @@
   .theword{text-align:center;margin:14px 0}
   .theword .lab{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);font-weight:700}
   .theword .w{font-family:"Luckiest Guy",cursive;font-size:clamp(24px,7vw,32px);color:var(--gold);letter-spacing:.02em}
-  .theword .cat{font-size:12px;color:var(--muted-2);margin-top:3px}
+  .theword .cat{font-size:12px;color:var(--muted);margin-top:3px}
   .board{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
   .brow{display:flex;align-items:center;gap:11px;padding:7px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
   .brow .rank{font-family:"Space Mono";font-weight:700;color:var(--muted);width:20px;flex:0 0 auto}
@@ -295,7 +343,26 @@
   .waiting{display:flex;align-items:center;justify-content:center;gap:10px;color:var(--muted);font-size:13.5px;padding:12px;font-weight:600;text-align:center}
   .waiting .spin{width:16px;height:16px;flex:0 0 auto;border-radius:50%;border:2px solid rgba(255,255,255,.2);border-top-color:var(--gold);animation:spin .8s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
-  footer{color:var(--muted-2);font-size:10.5px;letter-spacing:.1em;text-align:center;padding-top:10px}
+  footer{color:var(--muted);font-size:10.5px;letter-spacing:.1em;text-align:center;padding-top:10px}
+
+  /* ---------- vote tally ---------- */
+  #tally{position:fixed;inset:0;z-index:68;display:none;place-items:center;padding:20px;
+    background:radial-gradient(circle at 50% 35%,#1A1030 0%,#05060D 72%)}
+  #tally.show{display:grid}
+  #tally .box{width:100%;max-width:400px}
+  #tally h3{font-family:"Luckiest Guy",cursive;font-weight:400;font-size:22px;margin:0 0 14px;text-align:center;
+    color:var(--gold);letter-spacing:.02em}
+  .trow{display:flex;align-items:center;gap:11px;padding:8px 12px;border-radius:14px;margin-bottom:8px;
+    background:rgba(255,255,255,.05);border:1px solid var(--line);animation:rise .35s both}
+  .trow.skiprow{border-style:dashed;opacity:.85}
+  .trow .avatar{width:38px;height:38px}
+  .trow .nm{font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pips{display:flex;gap:5px;flex:0 0 auto;flex-wrap:wrap;justify-content:flex-end;max-width:132px}
+  .pip{width:13px;height:13px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px rgba(255,201,77,.5);
+    animation:pipIn .3s cubic-bezier(.2,1.6,.4,1) both}
+  .trow.skiprow .pip{background:var(--muted);box-shadow:none}
+  @keyframes pipIn{from{transform:scale(0)}to{transform:scale(1)}}
+  .tnone{font-size:12px;color:var(--muted);font-family:"Space Mono"}
 
   /* ---------- overlays ---------- */
   #eject{position:fixed;inset:0;z-index:70;display:none;place-items:center;overflow:hidden;background:#04050B}
@@ -385,7 +452,7 @@
         </div>
         <div class="row"><button class="btn ghost sm" id="shareBtn">Share invite</button></div>
         <div class="warnbar" id="hostAwayBar" style="display:none"></div>
-        <ul class="players" id="lobbyPlayers"></ul>
+        <div class="crewfloor" id="lobbyPlayers"></div>
 
         <div id="settingsHost" style="display:none">
           <div class="setrow"><span class="lab">Categories to play</span><div class="chips" id="catChips"></div></div>
@@ -448,9 +515,14 @@
               <div class="turnlabel" id="turnLabel">Clue turn</div>
               <div class="turnname" id="turnName">Waiting…</div>
             </div>
-            <div class="turntimer" id="turnTimer" aria-live="polite">30</div>
+            <div class="turnring" id="turnRing">
+              <svg viewBox="0 0 58 58" aria-hidden="true">
+                <circle class="ringbg" cx="29" cy="29" r="25"></circle>
+                <circle class="ringfg" id="ringFg" cx="29" cy="29" r="25"></circle>
+              </svg>
+              <span class="num" id="turnTimer" aria-live="polite">30</span>
+            </div>
           </div>
-          <div class="timertrack"><div class="timerfill" id="timerFill"></div></div>
           <div class="turnorder" id="turnOrder" aria-label="Clue order"></div>
           <div class="turncomplete" id="turnComplete">✓ Everyone has given a clue</div>
         </div>
@@ -555,6 +627,12 @@
 
   <div id="toast" role="status" aria-live="polite"></div>
   <canvas id="confetti"></canvas>
+  <div id="redflash"></div>
+
+  <div id="tally"><div class="box">
+    <h3 id="tallyTitle">The votes are in</h3>
+    <div id="tallyRows"></div>
+  </div></div>
 
   <div id="eject">
     <div class="void"></div>
@@ -607,13 +685,43 @@
         '<path d="M64 31c15 0 26 5 29 14-6-6-17-9-29-9-10 0-16 3-19 8 0-9 6-13 19-13z" fill="#CFEEFF" opacity=".9"/>'+
         '</svg>';
     }
+    // Ejected players float as ghosts: same silhouette, translucent, legs
+    // replaced by a wavy tail.
+    function ghostSVG(color){
+      const c=CREW[color]||CREW.red, base=c[0], dark=c[1];
+      return '<svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" opacity=".62">'+
+        '<rect x="6" y="54" width="26" height="40" rx="13" fill="'+dark+'" opacity=".7"/>'+
+        '<path d="M26 52c0-25 16-42 39-42s39 17 39 42v48c-6.5 9-13 9-19.5 0c-6.5-9-13-9-19.5 0c-6.5 9-13 9-19.5 0c-6.5-9-13-9-19.5 0z" fill="'+base+'"/>'+
+        '<path d="M62 26c22 0 38 8 38 24 0 15-14 22-32 22-16 0-26-7-26-22 0-16 6-24 20-24z" fill="#DCEEFF" opacity=".72"/>'+
+        '<circle cx="62" cy="46" r="5" fill="#0B1220" opacity=".55"/>'+
+        '<circle cx="84" cy="46" r="5" fill="#0B1220" opacity=".55"/>'+
+        '</svg>';
+    }
     function iconHTML(icon,alt){
       if(isCrew(icon))return crewSVG(icon.slice(5));
       if(isPic(icon))return '<img src="'+esc(icon)+'" alt="'+esc(alt||"")+'" draggable="false">';
       return esc(icon||"🎭");
     }
+    // Ghost art only exists for crewmates; a custom picture just fades.
+    function bodyHTML(p,alt){
+      if(!p)return iconHTML(null,alt);
+      if(p.alive===false&&isCrew(p.icon))return ghostSVG(p.icon.slice(5));
+      return iconHTML(p.icon,alt||p.name);
+    }
     function setIcon(el,icon,alt){ if(el)el.innerHTML=iconHTML(icon,alt); }
     const crewName=(i)=>isCrew(i)?i.slice(5):"";
+    // Everyone has a colour — crewmate pickers get theirs, custom-picture
+    // players are assigned a free one by the server — so chat and turn chips
+    // can be tinted by who is speaking.
+    function hueOf(p){
+      const key=p&&(p.color||(isCrew(p.icon)?p.icon.slice(5):null));
+      return (CREW[key]||CREW.red)[0];
+    }
+    function hueByPid(pid){
+      const r=state.room;
+      const p=r&&r.players.find(x=>x.pid===pid);
+      return p?hueOf(p):CREW.red[0];
+    }
 
     $("#brandMate").innerHTML=crewSVG("red");
 
@@ -631,27 +739,53 @@
     const amAlive=()=>{const m=meInRoom();return !m||m.alive;};
 
     /* ============ STARFIELD ============ */
+    // Three parallax layers so the field has depth, plus the occasional
+    // shooting star. Distant stars are small, dim and slow; near ones drift.
     (function starfield(){
-      const cv=$("#stars"),cx=cv.getContext("2d");let stars=[],w=0,h=0;
+      const cv=$("#stars"),cx=cv.getContext("2d");
+      const LAYERS=[{n:.55,r:[.3,.9],a:[.18,.45],v:[.004,.014],tint:"#9FB6E8"},
+                    {n:.3, r:[.7,1.5],a:[.35,.7], v:[.018,.04], tint:"#FFFFFF"},
+                    {n:.15,r:[1.2,2.2],a:[.55,.95],v:[.05,.1],  tint:"#FFF3D6"}];
+      let stars=[],shots=[],w=0,h=0;
+      const rnd=(lo,hi)=>lo+Math.random()*(hi-lo);
       function build(){
         w=cv.width=innerWidth;h=cv.height=innerHeight;
-        const n=Math.min(220,Math.round(w*h/9000));stars=[];
-        for(let i=0;i<n;i++)stars.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5+.3,
-          a:Math.random()*.7+.25,tw:Math.random()*.02+.004,d:Math.random()*Math.PI*2,v:Math.random()*.05+.01});
+        const total=Math.min(260,Math.round(w*h/7000));stars=[];
+        LAYERS.forEach(L=>{
+          for(let i=0;i<Math.round(total*L.n);i++)stars.push({
+            x:Math.random()*w,y:Math.random()*h,r:rnd(L.r[0],L.r[1]),a:rnd(L.a[0],L.a[1]),
+            v:rnd(L.v[0],L.v[1]),tw:rnd(.004,.022),d:Math.random()*6.283,tint:L.tint});
+        });
+      }
+      function spawnShot(){
+        const fromLeft=Math.random()<.5;
+        shots.push({x:fromLeft?-40:w+40,y:rnd(0,h*.55),vx:(fromLeft?1:-1)*rnd(7,12),vy:rnd(2.5,4.5),life:0,len:rnd(70,130)});
       }
       function frame(){
         cx.clearRect(0,0,w,h);
         for(const s of stars){
-          s.d+=s.tw; s.y+=s.v; if(s.y>h+2)s.y=-2;
-          const a=s.a*(.62+.38*Math.sin(s.d));
-          cx.globalAlpha=a;cx.fillStyle="#fff";
-          cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.284);cx.fill();
+          s.d+=s.tw; s.y+=s.v; if(s.y>h+2){s.y=-2;s.x=Math.random()*w;}
+          cx.globalAlpha=s.a*(.6+.4*Math.sin(s.d));
+          cx.fillStyle=s.tint;
+          cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.283);cx.fill();
         }
+        for(const t of shots){
+          t.x+=t.vx;t.y+=t.vy;t.life++;
+          const fade=Math.max(0,1-t.life/70);
+          const g=cx.createLinearGradient(t.x,t.y,t.x-t.vx/Math.hypot(t.vx,t.vy)*t.len,t.y-t.vy/Math.hypot(t.vx,t.vy)*t.len);
+          g.addColorStop(0,"rgba(255,255,255,"+(.85*fade)+")");
+          g.addColorStop(1,"rgba(255,255,255,0)");
+          cx.globalAlpha=1;cx.strokeStyle=g;cx.lineWidth=1.6;cx.lineCap="round";
+          cx.beginPath();cx.moveTo(t.x,t.y);
+          cx.lineTo(t.x-t.vx/Math.hypot(t.vx,t.vy)*t.len,t.y-t.vy/Math.hypot(t.vx,t.vy)*t.len);cx.stroke();
+        }
+        shots=shots.filter(t=>t.life<70&&t.x>-260&&t.x<w+260);
+        if(Math.random()<.0016&&shots.length<2)spawnShot();
         cx.globalAlpha=1;requestAnimationFrame(frame);
       }
       build();addEventListener("resize",build);
-      if(reduce){ // draw once, no loop
-        for(const s of stars){cx.globalAlpha=s.a;cx.fillStyle="#fff";cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.284);cx.fill();}
+      if(reduce){
+        for(const s of stars){cx.globalAlpha=s.a;cx.fillStyle=s.tint;cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.283);cx.fill();}
         cx.globalAlpha=1;
       } else frame();
     })();
@@ -681,6 +815,7 @@
     function toast(m,e){const el=$("#toast");el.textContent=m;el.className="show"+(e?" error":"");
       clearTimeout(toastT);toastT=setTimeout(()=>el.className="",3200);}
     function show(id){$$(".screen").forEach(s=>s.classList.remove("active"));$("#screen-"+id).classList.add("active");
+      document.body.dataset.phase=id;   // drives the per-phase background tint
       window.scrollTo({top:0,behavior:"instant"});}
 
     /* ============ AVATAR PICKER ============ */
@@ -753,7 +888,10 @@
     socket.on("voteResolved",(d)=>{
       const r=d.resolution;
       state.results=r.result?{result:r.result,word:r.word,category:r.category,imposterNames:r.imposterNames}:null;
-      applyState(d.state);playEjection(r);});
+      applyState(d.state);
+      // Tally first, then the ejection. EJECTION_REVEAL_MS on the server covers
+      // both, so the next round's clock does not start under the cutscene.
+      playTally(r,()=>playEjection(r));});
     socket.on("guessResolved",(d)=>{
       const r=d.resolution;
       state.lastGuess=r.guess||null;
@@ -830,15 +968,19 @@
     function renderLobby(){
       const r=state.room; if(!r)return;
       $("#copyCode").textContent=state.roomCode||"----";
+      // The crew stands in a line-up rather than sitting in a list.
       const ul=$("#lobbyPlayers");ul.innerHTML="";
       r.players.forEach(p=>{
-        const li=document.createElement("li");li.className="prow";
-        li.innerHTML='<div class="avatar">'+iconHTML(p.icon,p.name)+'</div><div class="pname">'+esc(p.name)+'</div>'+
-          (p.score?'<span class="badge score">'+p.score+'</span>':'')+
+        const slot=document.createElement("div");
+        slot.className="slot"+(p.connected?"":" away");
+        const tags=(p.isHost?'<span class="badge host">host</span>':'')+
           (p.pid===state.me.pid?'<span class="badge you">you</span>':'')+
-          (p.isHost?'<span class="badge host">host</span>':'')+
+          (p.score?'<span class="badge score">'+p.score+'</span>':'')+
           (!p.connected?'<span class="badge off">away</span>':'');
-        ul.appendChild(li);});
+        slot.innerHTML='<div class="art">'+iconHTML(p.icon,p.name)+'</div>'+
+          '<div class="nm" style="color:'+hueOf(p)+'">'+esc(p.name)+'</div>'+
+          (tags?'<div class="tags">'+tags+'</div>':'');
+        ul.appendChild(slot);});
 
       const bar=$("#hostAwayBar");
       bar.style.display=r.hostAway?"flex":"none";
@@ -939,7 +1081,13 @@
         if(m.system){div.className="msg sys";div.textContent="◆ "+m.text;}
         else{
           const mine=m.pid===state.me.pid;div.className="msg "+(mine?"me":"them");
-          div.innerHTML='<div class="nm"><span class="msgicon">'+iconHTML(m.icon,m.name)+'</span><span>'+esc(m.name)+'</span></div>'+esc(m.text);
+          // Tint the bubble with the speaker's crewmate colour so the room is
+          // readable at a glance — "red said fungus" rather than reading names.
+          const hue=m.color?(CREW[m.color]||CREW.red)[0]:hueByPid(m.pid);
+          div.style.background="linear-gradient(180deg,"+hue+"38,"+hue+"1C)";
+          div.style.borderColor=hue+"88";
+          div.innerHTML='<div class="nm" style="color:'+hue+'"><span class="msgicon">'+iconHTML(m.icon,m.name)+
+            '</span><span>'+esc(m.name)+'</span></div>'+esc(m.text);
         }
         log.appendChild(div);
         if(near||m.pid===state.me.pid)log.scrollTop=log.scrollHeight;
@@ -948,12 +1096,15 @@
 
     /* ============ CLOCKS ============ */
     let lastTurnPid=null,lastTickSec=null;
+    const RING_C=2*Math.PI*25;   // r=25 in the 58x58 viewBox
+    (function initRing(){const fg=$("#ringFg");if(fg)fg.style.strokeDasharray=RING_C;})();
     function updateTurnClock(){
       const r=state.room,turn=r&&r.turn;
-      const timer=$("#turnTimer"),fill=$("#timerFill");
-      if(!timer||!fill||!turn||turn.complete||!turn.endsAt){
-        if(timer){timer.textContent="—";timer.classList.remove("warn");}
-        if(fill)fill.style.width="0%";
+      const timer=$("#turnTimer"),ring=$("#turnRing"),fg=$("#ringFg");
+      if(!timer||!turn||turn.complete||!turn.endsAt){
+        if(timer)timer.textContent="—";
+        if(ring)ring.classList.remove("warn");
+        if(fg)fg.style.strokeDashoffset=RING_C;   // fully drained
         return;
       }
       const duration=Math.max(1,turn.durationMs||30000);
@@ -962,8 +1113,8 @@
       const remaining=Math.max(0,Math.min(duration,turn.endsAt-Date.now()));
       const seconds=Math.ceil(remaining/1000);
       timer.textContent=String(seconds);
-      timer.classList.toggle("warn",seconds<=10);
-      fill.style.width=Math.max(0,Math.min(100,(remaining/duration)*100))+"%";
+      if(ring)ring.classList.toggle("warn",seconds<=10);
+      if(fg)fg.style.strokeDashoffset=RING_C*(1-remaining/duration);
     }
     function updateGuessClock(){
       const g=state.room&&state.room.guess;const el=$("#guessCount");if(!el)return;
@@ -989,9 +1140,14 @@
       (r.order||[]).forEach((name,i)=>{
         const chip=document.createElement("span");
         const player=r.players.find(p=>p.name===name);
+        const isActive=!turn.complete&&i===turn.index;
         chip.className="turnchip"+(i<turn.index?" done":"")+
-          (!turn.complete&&i===turn.index?" active":"")+
+          (isActive?" active":"")+
           (player&&player.pid===state.me.pid?" you":"");
+        if(player&&!isActive){
+          const hue=hueOf(player);
+          chip.style.color=hue;chip.style.borderColor=hue+"66";chip.style.background=hue+"14";
+        }
         chip.innerHTML='<span class="turnmini">'+iconHTML(player&&player.icon,name)+"</span>"+(i+1)+". "+esc(name);
         host.appendChild(chip);
       });
@@ -1114,6 +1270,14 @@
           '<span class="mark">'+(state.myVote===p.pid?"✓":"")+"</span></div>";
         b.addEventListener("click",()=>castVote(p.pid));list.appendChild(b);
       });
+      // Show who is already out, as ghosts — you can see the whole room, but
+      // they are not votable.
+      r.players.filter(p=>!p.alive).forEach(p=>{
+        const g=document.createElement("button");g.type="button";g.className="vopt";g.disabled=true;
+        g.innerHTML='<div class="avatar">'+bodyHTML(p,p.name)+'</div><span class="pname">'+esc(p.name)+"</span>"+
+          '<div class="vmeta"><span class="badge out">out</span></div>';
+        list.appendChild(g);
+      });
       const skip=document.createElement("button");skip.type="button";
       skip.className="vopt skip"+(state.myVote==="skip"?" picked":"");skip.disabled=dead;
       skip.innerHTML='⏭️ Skip — no ejection <span class="mark" style="margin-left:8px">'+(state.myVote==="skip"?"✓":"")+"</span>";
@@ -1137,6 +1301,38 @@
         const r=state.room,me=meInRoom();
         if(r&&r.phase==="voting"&&me&&!me.hasVoted&&state.myVote===target){state.myVote=prev;renderVoting();}
       },900);
+    }
+
+    /* ============ VOTE TALLY ============ */
+    // The server has always sent a full breakdown with every vote; this is it.
+    const TALLY_MS=reduce?500:2600;
+    function playTally(res,then){
+      const rows=res.tally||[];
+      const host=$("#tallyRows");
+      if(!rows.length){then();return;}
+      const total=rows.reduce((n,t)=>n+t.votes,0);
+      $("#tallyTitle").textContent=total?"The votes are in":"Nobody voted";
+      host.innerHTML="";
+      let delay=0;
+      rows.filter(t=>t.votes>0||t.isSkip).forEach(t=>{
+        const row=document.createElement("div");
+        row.className="trow"+(t.isSkip?" skiprow":"");
+        row.style.animationDelay=delay+"ms";
+        const hue=t.color?(CREW[t.color]||CREW.red)[0]:null;
+        const pips=t.votes
+          ? Array.from({length:t.votes},(_,i)=>
+              '<span class="pip" style="animation-delay:'+(delay+320+i*130)+'ms'+
+              (hue&&!t.isSkip?';background:'+hue+';box-shadow:0 0 10px '+hue+'88':'')+'"></span>').join("")
+          : '<span class="tnone">0</span>';
+        row.innerHTML='<div class="avatar">'+(t.isSkip?"⏭️":iconHTML(t.icon,t.name))+'</div>'+
+          '<span class="nm"'+(hue&&!t.isSkip?' style="color:'+hue+'"':'')+'>'+esc(t.name)+'</span>'+
+          '<div class="pips">'+pips+'</div>';
+        host.appendChild(row);
+        delay+=110;
+      });
+      $("#tally").classList.add("show");
+      sfx.vote();
+      setTimeout(()=>{$("#tally").classList.remove("show");then();},TALLY_MS);
     }
 
     /* ============ EJECTION CUTSCENE ============ */
@@ -1224,7 +1420,19 @@
       const w=state.results.result.winner,amImp=state.role&&state.role.isImposter;
       return (w==="crew"&&!amImp)||(w==="imposters"&&!!amImp);
     }
-    function finishFx(){ if(didIWin()){sfx.win();confetti();} else sfx.lose(); }
+    // The screen reflects who won; the sound reflects whether *you* did.
+    // An imposter victory should feel like getting away with it, not a party.
+    function finishFx(){
+      const res=state.results&&state.results.result;
+      const crewWin=res&&res.winner==="crew";
+      document.body.dataset.win=res?res.winner:"";
+      if(crewWin){ if(!reduce)confetti(); }
+      else{
+        const f=$("#redflash");
+        if(f&&!reduce){f.classList.remove("go");void f.offsetWidth;f.classList.add("go");}
+      }
+      if(didIWin())sfx.win(); else sfx.lose();
+    }
     function renderScoreboard(){
       const r=state.room;if(!r)return;
       if(state.results&&state.results.result){
@@ -1257,8 +1465,9 @@
       const bd=$("#board");bd.innerHTML="";
       sorted.forEach((p,i)=>{
         const li=document.createElement("li");li.className="brow"+(p.score===top&&top>0?" lead":"");
-        li.innerHTML='<span class="rank">'+(i+1)+'</span><div class="avatar">'+iconHTML(p.icon,p.name)+"</div>"+
-          '<span class="pname">'+esc(p.name)+(p.pid===state.me.pid?' <span class="badge you">you</span>':"")+
+        li.innerHTML='<span class="rank">'+(i+1)+'</span><div class="avatar">'+bodyHTML(p,p.name)+"</div>"+
+          '<span class="pname" style="color:'+hueOf(p)+'">'+esc(p.name)+
+          (p.pid===state.me.pid?' <span class="badge you">you</span>':"")+
           '</span><span class="sc">'+p.score+"</span>";
         bd.appendChild(li);});
       $("#overHostControls").style.display=state.me.isHost?"block":"none";

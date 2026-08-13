@@ -67,7 +67,10 @@ const RECONNECT_GRACE_MS = envMs("RECONNECT_GRACE_MS", 5 * 60_000);
 // How long the client spends on the ejection cutscene. The next round's clock
 // (and the imposter's guess clock) start only once it has finished, so nobody
 // loses time to an animation they are still watching.
-const EJECTION_REVEAL_MS = envMs("EJECTION_REVEAL_MS", 3_600);
+// Vote tally screen (2.6s) + ejection cutscene (3.6s). Turn and guess clocks are
+// scheduled to start only once this whole sequence has played, so nobody loses
+// time to an animation they are still watching. Must match the client.
+const EJECTION_REVEAL_MS = envMs("EJECTION_REVEAL_MS", 6_200);
 // The room runs itself between "Start game" and "New game". These are the
 // backstops; each phase normally advances as soon as everyone has acted.
 const REVEAL_MAX_MS = envMs("REVEAL_MAX_MS", 45_000, { min: 1 });      // if someone never flips
