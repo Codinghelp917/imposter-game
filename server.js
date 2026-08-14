@@ -467,9 +467,9 @@ io.on("connection", (socket) => {
     broadcast(roomCode); scheduleTurnTimer(roomCode); scheduleGuessTimer(roomCode); syncAuto(roomCode);
   });
 
-  socket.on("updateSettings", ({ roomCode, categories, imposters, hintsEnabled, guessEnabled, tier }) => {
+  socket.on("updateSettings", ({ roomCode, categories, imposters, hintsEnabled, guessEnabled }) => {
     const room = hostGate(roomCode); if (!room) return;
-    R.setSettings(room, { categories, imposters, hintsEnabled, guessEnabled, tier }, libraryFor(room)); broadcast(roomCode);
+    R.setSettings(room, { categories, imposters, hintsEnabled, guessEnabled }, libraryFor(room)); broadcast(roomCode);
   });
 
   socket.on("startGame", ({ roomCode }) => {

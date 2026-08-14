@@ -539,13 +539,6 @@
               <button data-h="on" class="on">Hints on · vague clue</button>
               <button data-h="off">Hints off · blind</button>
             </div></div>
-          <div class="setrow" id="tierRow" style="display:none"><span class="lab">Knowledge level</span>
-            <div class="seg" id="tierSeg">
-              <button data-t="casual">🟢 Casual</button>
-              <button data-t="fan">🟡 Football fan</button>
-              <button data-t="ball" class="on">🔴 Ball knowledge</button>
-            </div>
-            <p class="note" id="tierNote"></p></div>
           <div class="setrow"><span class="lab">Imposter can guess the word</span>
             <div class="seg" id="guessSeg">
               <button data-g="on" class="on">Guessing on</button>
@@ -870,7 +863,7 @@
       roomCode:null, room:null, role:null, myVote:null, results:null, lastGuess:null,
       mode:"classic",
       categories:[], icons:[], secretIcons:[],
-      selCats:[], selImp:1, selHints:true, selGuess:true, selTier:"ball"
+      selCats:[], selImp:1, selHints:true, selGuess:true
     };
     try{const s=JSON.parse(localStorage.getItem("imposter.me")||"{}");if(s.name)state.me.name=s.name;if(s.icon)state.me.icon=s.icon;}catch(e){}
     const persistMe=()=>{try{localStorage.setItem("imposter.me",JSON.stringify({name:state.me.name,icon:state.me.icon}));}catch(e){}};
@@ -1050,13 +1043,12 @@
     const isMode=(m)=>Object.prototype.hasOwnProperty.call(MODES,m);
     function applyMode(mode){
       state.mode=isMode(mode)?mode:"classic";
-      const m=MODES[state.mode],football=state.mode==="football";
+      const m=MODES[state.mode];
       document.body.dataset.mode=state.mode;
       $("#brandWord").textContent=m.word;
       $("#tagline").textContent=m.tag;
       $("#homeLead").textContent=m.lead;
       $$("#modePick .modecard").forEach(b=>b.classList.toggle("on",b.dataset.mode===state.mode));
-      const tierRow=$("#tierRow"); if(tierRow)tierRow.style.display=football?"block":"none";
       sky.setMode(state.mode);
     }
     $$("#modePick .modecard").forEach(b=>b.addEventListener("click",()=>{
@@ -1194,8 +1186,7 @@
       const mine=meInRoom(); if(mine){state.me.isHost=mine.isHost;if(mine.icon)state.me.icon=mine.icon;}
       if(s.mode&&s.mode!==state.mode)applyMode(s.mode);   // the room decides, not the client
       if(s.settings){state.selCats=s.settings.categories;state.selImp=s.settings.imposters;
-        state.selHints=s.settings.hintsEnabled!==false;state.selGuess=s.settings.guessEnabled!==false;
-        state.selTier=s.settings.tier||"ball";}
+        state.selHints=s.settings.hintsEnabled!==false;state.selGuess=s.settings.guessEnabled!==false;}
       updateHostBtn();
       const active=$(".screen.active"); if(!active)return;
       const id=active.id;
@@ -1218,7 +1209,7 @@
     function pushSettings(extra){
       socket.emit("updateSettings",Object.assign({
         roomCode:state.roomCode,categories:state.selCats,imposters:state.selImp,
-        hintsEnabled:state.selHints,guessEnabled:state.selGuess,tier:state.selTier
+        hintsEnabled:state.selHints,guessEnabled:state.selGuess
       },extra||{}));
     }
 
@@ -1248,9 +1239,6 @@
     $$("#hintSeg button").forEach(b=>b.addEventListener("click",()=>{
       state.selHints=(b.dataset.h==="on");
       $$("#hintSeg button").forEach(x=>x.classList.toggle("on",x===b));sfx.tap();pushSettings();}));
-    $$("#tierSeg button").forEach(b=>b.addEventListener("click",()=>{
-      state.selTier=b.dataset.t;
-      $$("#tierSeg button").forEach(x=>x.classList.toggle("on",x===b));sfx.tap();pushSettings();}));
     $$("#guessSeg button").forEach(b=>b.addEventListener("click",()=>{
       state.selGuess=(b.dataset.g==="on");
       $$("#guessSeg button").forEach(x=>x.classList.toggle("on",x===b));sfx.tap();pushSettings();}));
@@ -1292,11 +1280,6 @@
         b.classList.toggle("on",bn===state.selImp);b.disabled=(bn===2&&n<5);});
       $$("#hintSeg button").forEach(b=>b.classList.toggle("on",(b.dataset.h==="on")===state.selHints));
       $$("#guessSeg button").forEach(b=>b.classList.toggle("on",(b.dataset.g==="on")===state.selGuess));
-      $$("#tierSeg button").forEach(b=>b.classList.toggle("on",b.dataset.t===state.selTier));
-      const tn=$("#tierNote");
-      if(tn)tn.textContent={casual:"Household names only.",
-        fan:"Adds less obvious names from more leagues.",
-        ball:"Everything, including cult heroes and obscure clubs."}[state.selTier]||"";
       $("#guessNote").textContent=state.selGuess
         ? "A caught imposter gets one last shot at naming the word — and can gamble a guess mid-round."
         : "Once the imposter is caught, that's it. No last words.";

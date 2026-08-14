@@ -99,14 +99,11 @@ automatically. Nothing in the game engine needs to know it exists.
 
 ### Writing a word list
 
-Top-level keys are the categories the host can tick. Each word may carry a
-`tier` of `casual`, `fan` or `ball`. **Tiers are cumulative** — "Casual" plays
-only casual words, "Football Fan" plays casual + fan, "Ball Knowledge" plays
-everything. A word with no tier counts as casual, so a partially-tiered file
-still works.
+Top-level keys are the categories the host can tick. Each word is an object with
+a `word` and a list of `hints`:
 
 ```json
-{ "word": "Lionel Messi", "tier": "casual", "hints": ["left", "dribbler", "ten"] }
+{ "word": "Lionel Messi", "hints": ["left", "dribbler", "ten"] }
 ```
 
 The imposter gets **one** of those hints, drawn at random and held for the whole

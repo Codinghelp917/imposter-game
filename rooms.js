@@ -236,8 +236,7 @@ function publicRoomState(room) {
       categories: room.settings.categories.slice(),
       imposters: room.settings.imposters,
       hintsEnabled: room.settings.hintsEnabled !== false,
-      guessEnabled: room.settings.guessEnabled !== false,
-      tier: room.settings.tier || "ball"
+      guessEnabled: room.settings.guessEnabled !== false
     },
     order: room.order || [],
     turn: {
@@ -269,11 +268,6 @@ function publicRoomState(room) {
 }
 
 // ---------------- room lifecycle ----------------
-// Difficulty tiers are cumulative: picking "fan" plays casual + fan. A word with
-// no tier counts as casual, so partially-tiered word lists still work.
-const TIER_RANK = { casual: 0, fan: 1, ball: 2 };
-const tierRank = (t) => (TIER_RANK[t] !== undefined ? TIER_RANK[t] : 0);
-
 function createRoom(hostSocketId, mode = "classic", defaultCategories = []) {
   const code = randomCode();
   if (!code) return { roomCode: null, room: null };
@@ -287,7 +281,7 @@ function createRoom(hostSocketId, mode = "classic", defaultCategories = []) {
     maxRounds: 0,
     settings: {
       categories: defaultCategories.slice(),
-      imposters: 1, hintsEnabled: true, guessEnabled: true, tier: "ball"
+      imposters: 1, hintsEnabled: true, guessEnabled: true
     },
     word: null,
     category: null,
@@ -383,7 +377,7 @@ function rejoinByPid({ roomCode, socketId, pid, name, icon, iconPool, dev }) {
   return { ok: true, room, player: existing, rejoined: true };
 }
 
-function setSettings(room, { categories, imposters, hintsEnabled, guessEnabled, tier }, CATEGORIES) {
+function setSettings(room, { categories, imposters, hintsEnabled, guessEnabled }, CATEGORIES) {
   if (!room) return { ok: false, error: "Room not found." };
   if (room.phase !== "lobby") return { ok: false, error: "Can only change settings in the lobby." };
   if (Array.isArray(categories)) {
@@ -395,7 +389,6 @@ function setSettings(room, { categories, imposters, hintsEnabled, guessEnabled, 
   if (imposters === 1 || imposters === 2) room.settings.imposters = imposters;
   if (typeof hintsEnabled === "boolean") room.settings.hintsEnabled = hintsEnabled;
   if (typeof guessEnabled === "boolean") room.settings.guessEnabled = guessEnabled;
-  if (TIER_RANK[tier] !== undefined) room.settings.tier = tier;
   // cap imposters so a game is always winnable
   const maxImp = Math.max(1, Math.floor((room.players.length - 1) / 2));
   if (room.settings.imposters > maxImp) room.settings.imposters = 1;
@@ -431,17 +424,15 @@ function startGame(room, CATEGORIES) {
   const cats = room.settings.categories.filter((c) => CATEGORIES[c]);
   if (!cats.length) return { ok: false, error: "Pick at least one category." };
 
-  // build pool of {word, category, hints}, filtered by difficulty tier
-  const maxTier = tierRank(room.settings.tier);
+  // build pool of {word, category, hints}
   const pool = [];
   cats.forEach((c) => CATEGORIES[c].words.forEach((w) => {
     const word = typeof w === "string" ? w : w.word;
     const hints = w && Array.isArray(w.hints) ? w.hints : [];
     if (!word) return;
-    if (tierRank(w && w.tier) > maxTier) return;
     pool.push({ word, category: c, hints });
   }));
-  if (!pool.length) return { ok: false, error: "No words at that difficulty in the chosen categories." };
+  if (!pool.length) return { ok: false, error: "No words in the chosen categories." };
 
   const maxImp = Math.max(1, Math.floor((connected.length - 1) / 2));
   const impCount = Math.min(room.settings.imposters, maxImp);
