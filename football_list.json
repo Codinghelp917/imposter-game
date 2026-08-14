@@ -1,0 +1,5640 @@
+{
+  "Players": {
+    "emoji": "⚽",
+    "words": [
+      {
+        "word": "Lionel Messi",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Cristiano Ronaldo",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Neymar",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Kylian Mbappe",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "Erling Haaland",
+        "hints": [
+          "movement"
+        ]
+      },
+      {
+        "word": "Mohamed Salah",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Harry Kane",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Robert Lewandowski",
+        "hints": [
+          "flair"
+        ]
+      },
+      {
+        "word": "Vinicius Junior",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "Bukayo Saka",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Lamine Yamal",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Son Heung-min",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "Lautaro Martinez",
+        "hints": [
+          "burst"
+        ]
+      },
+      {
+        "word": "Victor Osimhen",
+        "hints": [
+          "wing"
+        ]
+      },
+      {
+        "word": "Alexander Isak",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Jude Bellingham",
+        "hints": [
+          "strike"
+        ]
+      },
+      {
+        "word": "Cole Palmer",
+        "hints": [
+          "dribble"
+        ]
+      },
+      {
+        "word": "Rodrygo",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Raphinha",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Khvicha Kvaratskhelia",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Ousmane Dembele",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Marcus Rashford",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Bruno Fernandes",
+        "hints": [
+          "wing"
+        ]
+      },
+      {
+        "word": "Antoine Griezmann",
+        "hints": [
+          "strike"
+        ]
+      },
+      {
+        "word": "Julian Alvarez",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Luis Diaz",
+        "hints": [
+          "wing"
+        ]
+      },
+      {
+        "word": "Darwin Nunez",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Cody Gakpo",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "Diogo Jota",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Gabriel Martinelli",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "Leandro Trossard",
+        "hints": [
+          "wing"
+        ]
+      },
+      {
+        "word": "Kai Havertz",
+        "hints": [
+          "dribble"
+        ]
+      },
+      {
+        "word": "Phil Foden",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Jack Grealish",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Jeremy Doku",
+        "hints": [
+          "strike"
+        ]
+      },
+      {
+        "word": "Savinho",
+        "hints": [
+          "movement"
+        ]
+      },
+      {
+        "word": "Ollie Watkins",
+        "hints": [
+          "direct"
+        ]
+      },
+      {
+        "word": "Dominic Solanke",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Jarrod Bowen",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Anthony Gordon",
+        "hints": [
+          "direct"
+        ]
+      },
+      {
+        "word": "Eberechi Eze",
+        "hints": [
+          "direct"
+        ]
+      },
+      {
+        "word": "Michael Olise",
+        "hints": [
+          "flair"
+        ]
+      },
+      {
+        "word": "Pedro Neto",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "Matheus Cunha",
+        "hints": [
+          "dribble"
+        ]
+      },
+      {
+        "word": "Bryan Mbeumo",
+        "hints": [
+          "power"
+        ]
+      },
+      {
+        "word": "Yoane Wissa",
+        "hints": [
+          "movement"
+        ]
+      },
+      {
+        "word": "Nicolas Jackson",
+        "hints": [
+          "flair"
+        ]
+      },
+      {
+        "word": "Christopher Nkunku",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Raheem Sterling",
+        "hints": [
+          "direct"
+        ]
+      },
+      {
+        "word": "Jadon Sancho",
+        "hints": [
+          "power"
+        ]
+      },
+      {
+        "word": "Alejandro Garnacho",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Rasmus Hojlund",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Amad Diallo",
+        "hints": [
+          "dribble"
+        ]
+      },
+      {
+        "word": "Joshua Zirkzee",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Luis Suarez",
+        "hints": [
+          "power"
+        ]
+      },
+      {
+        "word": "Karim Benzema",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Sadio Mane",
+        "hints": [
+          "power"
+        ]
+      },
+      {
+        "word": "Riyad Mahrez",
+        "hints": [
+          "strike"
+        ]
+      },
+      {
+        "word": "Roberto Firmino",
+        "hints": [
+          "movement"
+        ]
+      },
+      {
+        "word": "Pierre-Emerick Aubameyang",
+        "hints": [
+          "direct"
+        ]
+      },
+      {
+        "word": "Edinson Cavani",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Angel Di Maria",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "Gareth Bale",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Eden Hazard",
+        "hints": [
+          "wing"
+        ]
+      },
+      {
+        "word": "Arjen Robben",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Franck Ribery",
+        "hints": [
+          "burst"
+        ]
+      },
+      {
+        "word": "Zlatan Ibrahimovic",
+        "hints": [
+          "dribble"
+        ]
+      },
+      {
+        "word": "Wayne Rooney",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Thierry Henry",
+        "hints": [
+          "wing"
+        ]
+      },
+      {
+        "word": "Didier Drogba",
+        "hints": [
+          "movement"
+        ]
+      },
+      {
+        "word": "Samuel Eto'o",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Fernando Torres",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "David Villa",
+        "hints": [
+          "strike"
+        ]
+      },
+      {
+        "word": "David Silva",
+        "hints": [
+          "burst"
+        ]
+      },
+      {
+        "word": "Sergio Aguero",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Carlos Tevez",
+        "hints": [
+          "power"
+        ]
+      },
+      {
+        "word": "Robin van Persie",
+        "hints": [
+          "strike"
+        ]
+      },
+      {
+        "word": "Ruud van Nistelrooy",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Dennis Bergkamp",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "Michael Owen",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Alan Shearer",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Andy Cole",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Dwight Yorke",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Teddy Sheringham",
+        "hints": [
+          "direct"
+        ]
+      },
+      {
+        "word": "Jimmy Floyd Hasselbaink",
+        "hints": [
+          "movement"
+        ]
+      },
+      {
+        "word": "Nicolas Anelka",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Ian Wright",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Eric Cantona",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Ole Gunnar Solskjaer",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Dimitar Berbatov",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Jermain Defoe",
+        "hints": [
+          "dribble"
+        ]
+      },
+      {
+        "word": "Peter Crouch",
+        "hints": [
+          "movement"
+        ]
+      },
+      {
+        "word": "Emile Heskey",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Jamie Vardy",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Romelu Lukaku",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Diego Costa",
+        "hints": [
+          "power"
+        ]
+      },
+      {
+        "word": "Alexis Sanchez",
+        "hints": [
+          "flair"
+        ]
+      },
+      {
+        "word": "Mesut Ozil",
+        "hints": [
+          "power"
+        ]
+      },
+      {
+        "word": "Pedro",
+        "hints": [
+          "power"
+        ]
+      },
+      {
+        "word": "Willian",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Juan Mata",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Santi Cazorla",
+        "hints": [
+          "movement"
+        ]
+      },
+      {
+        "word": "Nani",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "Antonio Valencia",
+        "hints": [
+          "burst"
+        ]
+      },
+      {
+        "word": "Memphis Depay",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Ciro Immobile",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Dusan Vlahovic",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Federico Chiesa",
+        "hints": [
+          "strike"
+        ]
+      },
+      {
+        "word": "Paulo Dybala",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Rafael Leao",
+        "hints": [
+          "flair"
+        ]
+      },
+      {
+        "word": "Alvaro Morata",
+        "hints": [
+          "wing"
+        ]
+      },
+      {
+        "word": "Marcus Thuram",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "Leroy Sane",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Serge Gnabry",
+        "hints": [
+          "flair"
+        ]
+      },
+      {
+        "word": "Kingsley Coman",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Thomas Muller",
+        "hints": [
+          "dribble"
+        ]
+      },
+      {
+        "word": "Mario Gomez",
+        "hints": [
+          "movement"
+        ]
+      },
+      {
+        "word": "Miroslav Klose",
+        "hints": [
+          "burst"
+        ]
+      },
+      {
+        "word": "Lukas Podolski",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Timo Werner",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "Marco Reus",
+        "hints": [
+          "wing"
+        ]
+      },
+      {
+        "word": "Mario Gotze",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Andre Schurrle",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Hulk",
+        "hints": [
+          "power"
+        ]
+      },
+      {
+        "word": "Alexandre Pato",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Robinho",
+        "hints": [
+          "direct"
+        ]
+      },
+      {
+        "word": "Adriano",
+        "hints": [
+          "direct"
+        ]
+      },
+      {
+        "word": "Ronaldo Nazario",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Ronaldinho",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Rivaldo",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Romario",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Pele",
+        "hints": [
+          "direct"
+        ]
+      },
+      {
+        "word": "Kaka",
+        "hints": [
+          "power"
+        ]
+      },
+      {
+        "word": "Garrincha",
+        "hints": [
+          "dribble"
+        ]
+      },
+      {
+        "word": "Jairzinho",
+        "hints": [
+          "movement"
+        ]
+      },
+      {
+        "word": "Gabriel Jesus",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Richarlison",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Endrick",
+        "hints": [
+          "burst"
+        ]
+      },
+      {
+        "word": "Luis Figo",
+        "hints": [
+          "strike"
+        ]
+      },
+      {
+        "word": "Joao Felix",
+        "hints": [
+          "burst"
+        ]
+      },
+      {
+        "word": "Goncalo Ramos",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "Nuno Gomes",
+        "hints": [
+          "power"
+        ]
+      },
+      {
+        "word": "Pauleta",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Eusebio",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Zinedine Zidane",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Olivier Giroud",
+        "hints": [
+          "dribble"
+        ]
+      },
+      {
+        "word": "David Trezeguet",
+        "hints": [
+          "burst"
+        ]
+      },
+      {
+        "word": "Hugo Ekitike",
+        "hints": [
+          "burst"
+        ]
+      },
+      {
+        "word": "Patrick Kluivert",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Klaas-Jan Huntelaar",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Xavi Simons",
+        "hints": [
+          "flair"
+        ]
+      },
+      {
+        "word": "Donyell Malen",
+        "hints": [
+          "movement"
+        ]
+      },
+      {
+        "word": "Brian Brobbey",
+        "hints": [
+          "flair"
+        ]
+      },
+      {
+        "word": "Johan Cruyff",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Marco van Basten",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "George Best",
+        "hints": [
+          "wing"
+        ]
+      },
+      {
+        "word": "Kenny Dalglish",
+        "hints": [
+          "wing"
+        ]
+      },
+      {
+        "word": "Ian Rush",
+        "hints": [
+          "movement"
+        ]
+      },
+      {
+        "word": "John Barnes",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "Kevin Keegan",
+        "hints": [
+          "strike"
+        ]
+      },
+      {
+        "word": "Gary Lineker",
+        "hints": [
+          "dribble"
+        ]
+      },
+      {
+        "word": "Chris Waddle",
+        "hints": [
+          "burst"
+        ]
+      },
+      {
+        "word": "Paul Gascoigne",
+        "hints": [
+          "strike"
+        ]
+      },
+      {
+        "word": "Matt Le Tissier",
+        "hints": [
+          "dribble"
+        ]
+      },
+      {
+        "word": "Les Ferdinand",
+        "hints": [
+          "power"
+        ]
+      },
+      {
+        "word": "Robbie Fowler",
+        "hints": [
+          "touch"
+        ]
+      },
+      {
+        "word": "Theo Walcott",
+        "hints": [
+          "flair"
+        ]
+      },
+      {
+        "word": "Daniel Sturridge",
+        "hints": [
+          "wing"
+        ]
+      },
+      {
+        "word": "Danny Welbeck",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Tammy Abraham",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Ivan Toney",
+        "hints": [
+          "direct"
+        ]
+      },
+      {
+        "word": "Callum Wilson",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Michail Antonio",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Wilfried Zaha",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Yannick Bolasie",
+        "hints": [
+          "flair"
+        ]
+      },
+      {
+        "word": "Adama Traore",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Allan Saint-Maximin",
+        "hints": [
+          "flair"
+        ]
+      },
+      {
+        "word": "Hatem Ben Arfa",
+        "hints": [
+          "direct"
+        ]
+      },
+      {
+        "word": "Dimitri Payet",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Papiss Cisse",
+        "hints": [
+          "dribble"
+        ]
+      },
+      {
+        "word": "Demba Ba",
+        "hints": [
+          "strike"
+        ]
+      },
+      {
+        "word": "Yakubu",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Jay-Jay Okocha",
+        "hints": [
+          "dribble"
+        ]
+      },
+      {
+        "word": "Nwankwo Kanu",
+        "hints": [
+          "dribble"
+        ]
+      },
+      {
+        "word": "Obafemi Martins",
+        "hints": [
+          "strike"
+        ]
+      },
+      {
+        "word": "Asamoah Gyan",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "George Weah",
+        "hints": [
+          "wing"
+        ]
+      },
+      {
+        "word": "Ademola Lookman",
+        "hints": [
+          "movement"
+        ]
+      },
+      {
+        "word": "Victor Boniface",
+        "hints": [
+          "wing"
+        ]
+      },
+      {
+        "word": "Youssef En-Nesyri",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Hakim Ziyech",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Sofiane Boufal",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Amine Gouiri",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "Brahim Diaz",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Achraf Hakimi",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Abedi Pele",
+        "hints": [
+          "burst"
+        ]
+      },
+      {
+        "word": "Andre Ayew",
+        "hints": [
+          "wing"
+        ]
+      },
+      {
+        "word": "Jordan Ayew",
+        "hints": [
+          "direct"
+        ]
+      },
+      {
+        "word": "Mohammed Kudus",
+        "hints": [
+          "movement"
+        ]
+      },
+      {
+        "word": "Thomas Partey",
+        "hints": [
+          "direct"
+        ]
+      },
+      {
+        "word": "Wilfried Bony",
+        "hints": [
+          "spark"
+        ]
+      },
+      {
+        "word": "Didier Zokora",
+        "hints": [
+          "power"
+        ]
+      },
+      {
+        "word": "Salomon Kalou",
+        "hints": [
+          "finish"
+        ]
+      },
+      {
+        "word": "Emmanuel Adebayor",
+        "hints": [
+          "movement"
+        ]
+      },
+      {
+        "word": "Freddie Kanoute",
+        "hints": [
+          "dribble"
+        ]
+      },
+      {
+        "word": "Seydou Doumbia",
+        "hints": [
+          "flair"
+        ]
+      },
+      {
+        "word": "Islam Slimani",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Rabah Madjer",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Yacine Brahimi",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "Sofiane Feghouli",
+        "hints": [
+          "burst"
+        ]
+      },
+      {
+        "word": "Rachid Ghezzal",
+        "hints": [
+          "sharp"
+        ]
+      },
+      {
+        "word": "Kevin De Bruyne",
+        "hints": [
+          "control"
+        ]
+      },
+      {
+        "word": "Rodri",
+        "hints": [
+          "rhythm"
+        ]
+      },
+      {
+        "word": "Luka Modric",
+        "hints": [
+          "link"
+        ]
+      },
+      {
+        "word": "Toni Kroos",
+        "hints": [
+          "engine"
+        ]
+      },
+      {
+        "word": "Declan Rice",
+        "hints": [
+          "rhythm"
+        ]
+      },
+      {
+        "word": "Martin Odegaard",
+        "hints": [
+          "drive"
+        ]
+      },
+      {
+        "word": "Bernardo Silva",
+        "hints": [
+          "tempo"
+        ]
+      },
+      {
+        "word": "Frenkie de Jong",
+        "hints": [
+          "pivot"
+        ]
+      },
+      {
+        "word": "Pedri",
+        "hints": [
+          "balance"
+        ]
+      },
+      {
+        "word": "Gavi",
+        "hints": [
+          "control"
+        ]
+      },
+      {
+        "word": "Dani Olmo",
+        "hints": [
+          "pivot"
+        ]
+      },
+      {
+        "word": "Federico Valverde",
+        "hints": [
+          "balance"
+        ]
+      },
+      {
+        "word": "Eduardo Camavinga",
+        "hints": [
+          "rhythm"
+        ]
+      },
+      {
+        "word": "Aurelien Tchouameni",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Alexis Mac Allister",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Dominik Szoboszlai",
+        "hints": [
+          "engine"
+        ]
+      },
+      {
+        "word": "Ryan Gravenberch",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Curtis Jones",
+        "hints": [
+          "link"
+        ]
+      },
+      {
+        "word": "Harvey Elliott",
+        "hints": [
+          "engine"
+        ]
+      },
+      {
+        "word": "Enzo Fernandez",
+        "hints": [
+          "rhythm"
+        ]
+      },
+      {
+        "word": "Moises Caicedo",
+        "hints": [
+          "link"
+        ]
+      },
+      {
+        "word": "Romeo Lavia",
+        "hints": [
+          "drive"
+        ]
+      },
+      {
+        "word": "James Maddison",
+        "hints": [
+          "rhythm"
+        ]
+      },
+      {
+        "word": "Lucas Paqueta",
+        "hints": [
+          "drive"
+        ]
+      },
+      {
+        "word": "Bruno Guimaraes",
+        "hints": [
+          "vision"
+        ]
+      },
+      {
+        "word": "Sandro Tonali",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Joelinton",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Youri Tielemans",
+        "hints": [
+          "range"
+        ]
+      },
+      {
+        "word": "Morgan Gibbs-White",
+        "hints": [
+          "vision"
+        ]
+      },
+      {
+        "word": "Adam Wharton",
+        "hints": [
+          "tempo"
+        ]
+      },
+      {
+        "word": "Kobbie Mainoo",
+        "hints": [
+          "drive"
+        ]
+      },
+      {
+        "word": "Mason Mount",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Christian Eriksen",
+        "hints": [
+          "drive"
+        ]
+      },
+      {
+        "word": "Casemiro",
+        "hints": [
+          "pivot"
+        ]
+      },
+      {
+        "word": "Manuel Ugarte",
+        "hints": [
+          "link"
+        ]
+      },
+      {
+        "word": "Ilkay Gundogan",
+        "hints": [
+          "control"
+        ]
+      },
+      {
+        "word": "Mateo Kovacic",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Matheus Nunes",
+        "hints": [
+          "vision"
+        ]
+      },
+      {
+        "word": "Ruben Loftus-Cheek",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Ismael Bennacer",
+        "hints": [
+          "drive"
+        ]
+      },
+      {
+        "word": "Hakan Calhanoglu",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Nicolo Barella",
+        "hints": [
+          "tempo"
+        ]
+      },
+      {
+        "word": "Henrikh Mkhitaryan",
+        "hints": [
+          "tempo"
+        ]
+      },
+      {
+        "word": "Davide Frattesi",
+        "hints": [
+          "brain"
+        ]
+      },
+      {
+        "word": "Teun Koopmeiners",
+        "hints": [
+          "range"
+        ]
+      },
+      {
+        "word": "Manuel Locatelli",
+        "hints": [
+          "pivot"
+        ]
+      },
+      {
+        "word": "Adrien Rabiot",
+        "hints": [
+          "tempo"
+        ]
+      },
+      {
+        "word": "Paul Pogba",
+        "hints": [
+          "link"
+        ]
+      },
+      {
+        "word": "Marco Verratti",
+        "hints": [
+          "rhythm"
+        ]
+      },
+      {
+        "word": "Vitinha",
+        "hints": [
+          "link"
+        ]
+      },
+      {
+        "word": "Warren Zaire-Emery",
+        "hints": [
+          "engine"
+        ]
+      },
+      {
+        "word": "Joao Neves",
+        "hints": [
+          "engine"
+        ]
+      },
+      {
+        "word": "Fabian Ruiz",
+        "hints": [
+          "balance"
+        ]
+      },
+      {
+        "word": "Dani Parejo",
+        "hints": [
+          "range"
+        ]
+      },
+      {
+        "word": "Isco",
+        "hints": [
+          "rhythm"
+        ]
+      },
+      {
+        "word": "Mikel Merino",
+        "hints": [
+          "engine"
+        ]
+      },
+      {
+        "word": "Martin Zubimendi",
+        "hints": [
+          "control"
+        ]
+      },
+      {
+        "word": "Brais Mendez",
+        "hints": [
+          "rhythm"
+        ]
+      },
+      {
+        "word": "Sergio Busquets",
+        "hints": [
+          "pivot"
+        ]
+      },
+      {
+        "word": "Xavi",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Andres Iniesta",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Cesc Fabregas",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Xabi Alonso",
+        "hints": [
+          "drive"
+        ]
+      },
+      {
+        "word": "Thiago Alcantara",
+        "hints": [
+          "rhythm"
+        ]
+      },
+      {
+        "word": "Mikel Arteta",
+        "hints": [
+          "link"
+        ]
+      },
+      {
+        "word": "Yaya Toure",
+        "hints": [
+          "brain"
+        ]
+      },
+      {
+        "word": "David Beckham",
+        "hints": [
+          "brain"
+        ]
+      },
+      {
+        "word": "Paul Scholes",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Steven Gerrard",
+        "hints": [
+          "brain"
+        ]
+      },
+      {
+        "word": "Frank Lampard",
+        "hints": [
+          "control"
+        ]
+      },
+      {
+        "word": "Roy Keane",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Patrick Vieira",
+        "hints": [
+          "balance"
+        ]
+      },
+      {
+        "word": "Claude Makelele",
+        "hints": [
+          "balance"
+        ]
+      },
+      {
+        "word": "Michael Carrick",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Owen Hargreaves",
+        "hints": [
+          "range"
+        ]
+      },
+      {
+        "word": "Nicky Butt",
+        "hints": [
+          "drive"
+        ]
+      },
+      {
+        "word": "Darren Fletcher",
+        "hints": [
+          "rhythm"
+        ]
+      },
+      {
+        "word": "Ji-sung Park",
+        "hints": [
+          "range"
+        ]
+      },
+      {
+        "word": "Michael Essien",
+        "hints": [
+          "tempo"
+        ]
+      },
+      {
+        "word": "John Obi Mikel",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Ramires",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Deco",
+        "hints": [
+          "tempo"
+        ]
+      },
+      {
+        "word": "Michael Ballack",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Bastian Schweinsteiger",
+        "hints": [
+          "vision"
+        ]
+      },
+      {
+        "word": "Sami Khedira",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Ivan Rakitic",
+        "hints": [
+          "rhythm"
+        ]
+      },
+      {
+        "word": "Marcelo Brozovic",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Dejan Stankovic",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Clarence Seedorf",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Andrea Pirlo",
+        "hints": [
+          "vision"
+        ]
+      },
+      {
+        "word": "Gennaro Gattuso",
+        "hints": [
+          "tempo"
+        ]
+      },
+      {
+        "word": "Daniele De Rossi",
+        "hints": [
+          "brain"
+        ]
+      },
+      {
+        "word": "Francesco Totti",
+        "hints": [
+          "balance"
+        ]
+      },
+      {
+        "word": "Pavel Nedved",
+        "hints": [
+          "vision"
+        ]
+      },
+      {
+        "word": "Rui Costa",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Juan Roman Riquelme",
+        "hints": [
+          "tempo"
+        ]
+      },
+      {
+        "word": "Juan Sebastian Veron",
+        "hints": [
+          "drive"
+        ]
+      },
+      {
+        "word": "Esteban Cambiasso",
+        "hints": [
+          "vision"
+        ]
+      },
+      {
+        "word": "Javier Mascherano",
+        "hints": [
+          "pivot"
+        ]
+      },
+      {
+        "word": "Fernando Redondo",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Diego Simeone",
+        "hints": [
+          "tempo"
+        ]
+      },
+      {
+        "word": "Diego Maradona",
+        "hints": [
+          "rhythm"
+        ]
+      },
+      {
+        "word": "Juan Pablo Aimar",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Pablo Zabaleta",
+        "hints": [
+          "control"
+        ]
+      },
+      {
+        "word": "Ever Banega",
+        "hints": [
+          "balance"
+        ]
+      },
+      {
+        "word": "Rodrigo De Paul",
+        "hints": [
+          "range"
+        ]
+      },
+      {
+        "word": "Leandro Paredes",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Thiago Almada",
+        "hints": [
+          "rhythm"
+        ]
+      },
+      {
+        "word": "Giovani Lo Celso",
+        "hints": [
+          "engine"
+        ]
+      },
+      {
+        "word": "Arturo Vidal",
+        "hints": [
+          "brain"
+        ]
+      },
+      {
+        "word": "Charles Aranguiz",
+        "hints": [
+          "drive"
+        ]
+      },
+      {
+        "word": "Jorge Valdivia",
+        "hints": [
+          "drive"
+        ]
+      },
+      {
+        "word": "Matias Fernandez",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "James Rodriguez",
+        "hints": [
+          "craft"
+        ]
+      },
+      {
+        "word": "Juan Cuadrado",
+        "hints": [
+          "range"
+        ]
+      },
+      {
+        "word": "Freddy Guarin",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Carlos Valderrama",
+        "hints": [
+          "link"
+        ]
+      },
+      {
+        "word": "Jefferson Lerma",
+        "hints": [
+          "range"
+        ]
+      },
+      {
+        "word": "Rodrigo Bentancur",
+        "hints": [
+          "link"
+        ]
+      },
+      {
+        "word": "Lucas Torreira",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Diego Forlan",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Tomas Rosicky",
+        "hints": [
+          "tempo"
+        ]
+      },
+      {
+        "word": "Marek Hamsik",
+        "hints": [
+          "tempo"
+        ]
+      },
+      {
+        "word": "Miralem Pjanic",
+        "hints": [
+          "balance"
+        ]
+      },
+      {
+        "word": "Sergej Milinkovic-Savic",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Nemanja Matic",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Hakan Sukur",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Arda Turan",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Nuri Sahin",
+        "hints": [
+          "range"
+        ]
+      },
+      {
+        "word": "Emre Belozoglu",
+        "hints": [
+          "pivot"
+        ]
+      },
+      {
+        "word": "Shinji Kagawa",
+        "hints": [
+          "brain"
+        ]
+      },
+      {
+        "word": "Keisuke Honda",
+        "hints": [
+          "vision"
+        ]
+      },
+      {
+        "word": "Hidetoshi Nakata",
+        "hints": [
+          "balance"
+        ]
+      },
+      {
+        "word": "Park Ji-sung",
+        "hints": [
+          "balance"
+        ]
+      },
+      {
+        "word": "Lee Kang-in",
+        "hints": [
+          "balance"
+        ]
+      },
+      {
+        "word": "Takefusa Kubo",
+        "hints": [
+          "tempo"
+        ]
+      },
+      {
+        "word": "Daichi Kamada",
+        "hints": [
+          "vision"
+        ]
+      },
+      {
+        "word": "Kaoru Mitoma",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Wataru Endo",
+        "hints": [
+          "brain"
+        ]
+      },
+      {
+        "word": "Mehdi Taremi",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Ali Karimi",
+        "hints": [
+          "link"
+        ]
+      },
+      {
+        "word": "Ali Daei",
+        "hints": [
+          "pivot"
+        ]
+      },
+      {
+        "word": "Sunil Chhetri",
+        "hints": [
+          "tempo"
+        ]
+      },
+      {
+        "word": "Tim Cahill",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Harry Kewell",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Mark Viduka",
+        "hints": [
+          "pass"
+        ]
+      },
+      {
+        "word": "Aaron Mooy",
+        "hints": [
+          "rhythm"
+        ]
+      },
+      {
+        "word": "Mile Jedinak",
+        "hints": [
+          "range"
+        ]
+      },
+      {
+        "word": "Virgil van Dijk",
+        "hints": [
+          "marking"
+        ]
+      },
+      {
+        "word": "William Saliba",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Gabriel Magalhaes",
+        "hints": [
+          "marking"
+        ]
+      },
+      {
+        "word": "Ruben Dias",
+        "hints": [
+          "leader"
+        ]
+      },
+      {
+        "word": "John Stones",
+        "hints": [
+          "duel"
+        ]
+      },
+      {
+        "word": "Josko Gvardiol",
+        "hints": [
+          "strength"
+        ]
+      },
+      {
+        "word": "Manuel Akanji",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Nathan Ake",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Ibrahima Konate",
+        "hints": [
+          "aerial"
+        ]
+      },
+      {
+        "word": "Joe Gomez",
+        "hints": [
+          "duel"
+        ]
+      },
+      {
+        "word": "Trent Alexander-Arnold",
+        "hints": [
+          "shield"
+        ]
+      },
+      {
+        "word": "Andrew Robertson",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Kostas Tsimikas",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Ben White",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Jurrien Timber",
+        "hints": [
+          "aerial"
+        ]
+      },
+      {
+        "word": "Riccardo Calafiori",
+        "hints": [
+          "tackle"
+        ]
+      },
+      {
+        "word": "Myles Lewis-Skelly",
+        "hints": [
+          "cover"
+        ]
+      },
+      {
+        "word": "Lisandro Martinez",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Harry Maguire",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Matthijs de Ligt",
+        "hints": [
+          "tackle"
+        ]
+      },
+      {
+        "word": "Leny Yoro",
+        "hints": [
+          "aerial"
+        ]
+      },
+      {
+        "word": "Diogo Dalot",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Noussair Mazraoui",
+        "hints": [
+          "shield"
+        ]
+      },
+      {
+        "word": "Luke Shaw",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Reece James",
+        "hints": [
+          "strength"
+        ]
+      },
+      {
+        "word": "Wesley Fofana",
+        "hints": [
+          "marking"
+        ]
+      },
+      {
+        "word": "Levi Colwill",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Marc Cucurella",
+        "hints": [
+          "duel"
+        ]
+      },
+      {
+        "word": "Ben Chilwell",
+        "hints": [
+          "duel"
+        ]
+      },
+      {
+        "word": "Malo Gusto",
+        "hints": [
+          "strength"
+        ]
+      },
+      {
+        "word": "Micky van de Ven",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Cristian Romero",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Destiny Udogie",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Pedro Porro",
+        "hints": [
+          "tackle"
+        ]
+      },
+      {
+        "word": "Pau Torres",
+        "hints": [
+          "marking"
+        ]
+      },
+      {
+        "word": "Ezri Konsa",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Matty Cash",
+        "hints": [
+          "tackle"
+        ]
+      },
+      {
+        "word": "Lucas Digne",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Dan Burn",
+        "hints": [
+          "leader"
+        ]
+      },
+      {
+        "word": "Sven Botman",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Kieran Trippier",
+        "hints": [
+          "shield"
+        ]
+      },
+      {
+        "word": "Tino Livramento",
+        "hints": [
+          "shield"
+        ]
+      },
+      {
+        "word": "Fabian Schar",
+        "hints": [
+          "duel"
+        ]
+      },
+      {
+        "word": "Jarrad Branthwaite",
+        "hints": [
+          "leader"
+        ]
+      },
+      {
+        "word": "James Tarkowski",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Nathan Collins",
+        "hints": [
+          "timing"
+        ]
+      },
+      {
+        "word": "Ethan Pinnock",
+        "hints": [
+          "timing"
+        ]
+      },
+      {
+        "word": "Marc Guehi",
+        "hints": [
+          "shield"
+        ]
+      },
+      {
+        "word": "Maxence Lacroix",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Joachim Andersen",
+        "hints": [
+          "cover"
+        ]
+      },
+      {
+        "word": "Lewis Dunk",
+        "hints": [
+          "timing"
+        ]
+      },
+      {
+        "word": "Jan Paul van Hecke",
+        "hints": [
+          "duel"
+        ]
+      },
+      {
+        "word": "Pervis Estupinan",
+        "hints": [
+          "marking"
+        ]
+      },
+      {
+        "word": "Aaron Wan-Bissaka",
+        "hints": [
+          "strength"
+        ]
+      },
+      {
+        "word": "Kurt Zouma",
+        "hints": [
+          "leader"
+        ]
+      },
+      {
+        "word": "Nayef Aguerd",
+        "hints": [
+          "strength"
+        ]
+      },
+      {
+        "word": "Kyle Walker-Peters",
+        "hints": [
+          "tackle"
+        ]
+      },
+      {
+        "word": "Jan Bednarek",
+        "hints": [
+          "steel"
+        ]
+      },
+      {
+        "word": "Tyrone Mings",
+        "hints": [
+          "timing"
+        ]
+      },
+      {
+        "word": "Raphael Varane",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Sergio Ramos",
+        "hints": [
+          "tackle"
+        ]
+      },
+      {
+        "word": "Pepe",
+        "hints": [
+          "timing"
+        ]
+      },
+      {
+        "word": "Gerard Pique",
+        "hints": [
+          "block"
+        ]
+      },
+      {
+        "word": "Carles Puyol",
+        "hints": [
+          "tackle"
+        ]
+      },
+      {
+        "word": "Jordi Alba",
+        "hints": [
+          "tackle"
+        ]
+      },
+      {
+        "word": "Dani Alves",
+        "hints": [
+          "steel"
+        ]
+      },
+      {
+        "word": "Marcelo",
+        "hints": [
+          "duel"
+        ]
+      },
+      {
+        "word": "Roberto Carlos",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Cafu",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Thiago Silva",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Marquinhos",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Eder Militao",
+        "hints": [
+          "marking"
+        ]
+      },
+      {
+        "word": "Bremer",
+        "hints": [
+          "tackle"
+        ]
+      },
+      {
+        "word": "Danilo",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Alex Sandro",
+        "hints": [
+          "aerial"
+        ]
+      },
+      {
+        "word": "Lucio",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Juan",
+        "hints": [
+          "marking"
+        ]
+      },
+      {
+        "word": "David Luiz",
+        "hints": [
+          "aerial"
+        ]
+      },
+      {
+        "word": "Miranda",
+        "hints": [
+          "steel"
+        ]
+      },
+      {
+        "word": "Maicon",
+        "hints": [
+          "aerial"
+        ]
+      },
+      {
+        "word": "Felipe Luis",
+        "hints": [
+          "cover"
+        ]
+      },
+      {
+        "word": "Diego Godin",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Jose Maria Gimenez",
+        "hints": [
+          "strength"
+        ]
+      },
+      {
+        "word": "Ronald Araujo",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Nahuel Molina",
+        "hints": [
+          "aerial"
+        ]
+      },
+      {
+        "word": "Nicolas Otamendi",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Marcos Acuna",
+        "hints": [
+          "steel"
+        ]
+      },
+      {
+        "word": "Gonzalo Montiel",
+        "hints": [
+          "strength"
+        ]
+      },
+      {
+        "word": "Javier Zanetti",
+        "hints": [
+          "steel"
+        ]
+      },
+      {
+        "word": "Walter Samuel",
+        "hints": [
+          "steel"
+        ]
+      },
+      {
+        "word": "Roberto Ayala",
+        "hints": [
+          "tackle"
+        ]
+      },
+      {
+        "word": "Martin Demichelis",
+        "hints": [
+          "steel"
+        ]
+      },
+      {
+        "word": "Gabriel Heinze",
+        "hints": [
+          "aerial"
+        ]
+      },
+      {
+        "word": "Paolo Maldini",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "Alessandro Nesta",
+        "hints": [
+          "cover"
+        ]
+      },
+      {
+        "word": "Fabio Cannavaro",
+        "hints": [
+          "steel"
+        ]
+      },
+      {
+        "word": "Giorgio Chiellini",
+        "hints": [
+          "steel"
+        ]
+      },
+      {
+        "word": "Leonardo Bonucci",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Andrea Barzagli",
+        "hints": [
+          "block"
+        ]
+      },
+      {
+        "word": "Gianluca Zambrotta",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Marco Materazzi",
+        "hints": [
+          "leader"
+        ]
+      },
+      {
+        "word": "Christian Panucci",
+        "hints": [
+          "strength"
+        ]
+      },
+      {
+        "word": "Franco Baresi",
+        "hints": [
+          "cover"
+        ]
+      },
+      {
+        "word": "Alessandro Costacurta",
+        "hints": [
+          "timing"
+        ]
+      },
+      {
+        "word": "Giuseppe Bergomi",
+        "hints": [
+          "block"
+        ]
+      },
+      {
+        "word": "Lilian Thuram",
+        "hints": [
+          "strength"
+        ]
+      },
+      {
+        "word": "Marcel Desailly",
+        "hints": [
+          "leader"
+        ]
+      },
+      {
+        "word": "Laurent Blanc",
+        "hints": [
+          "pace"
+        ]
+      },
+      {
+        "word": "William Gallas",
+        "hints": [
+          "marking"
+        ]
+      },
+      {
+        "word": "Patrice Evra",
+        "hints": [
+          "cover"
+        ]
+      },
+      {
+        "word": "Bixente Lizarazu",
+        "hints": [
+          "cover"
+        ]
+      },
+      {
+        "word": "Samuel Umtiti",
+        "hints": [
+          "leader"
+        ]
+      },
+      {
+        "word": "Lucas Hernandez",
+        "hints": [
+          "duel"
+        ]
+      },
+      {
+        "word": "Theo Hernandez",
+        "hints": [
+          "block"
+        ]
+      },
+      {
+        "word": "Benjamin Pavard",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Dayot Upamecano",
+        "hints": [
+          "shield"
+        ]
+      },
+      {
+        "word": "Jules Kounde",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Bacary Sagna",
+        "hints": [
+          "aerial"
+        ]
+      },
+      {
+        "word": "Eric Abidal",
+        "hints": [
+          "tackle"
+        ]
+      },
+      {
+        "word": "Philipp Lahm",
+        "hints": [
+          "duel"
+        ]
+      },
+      {
+        "word": "Mats Hummels",
+        "hints": [
+          "steel"
+        ]
+      },
+      {
+        "word": "Jerome Boateng",
+        "hints": [
+          "steel"
+        ]
+      },
+      {
+        "word": "Antonio Rudiger",
+        "hints": [
+          "aerial"
+        ]
+      },
+      {
+        "word": "Niklas Sule",
+        "hints": [
+          "aerial"
+        ]
+      },
+      {
+        "word": "Per Mertesacker",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Benedikt Howedes",
+        "hints": [
+          "strength"
+        ]
+      },
+      {
+        "word": "Arne Friedrich",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "David Alaba",
+        "hints": [
+          "leader"
+        ]
+      },
+      {
+        "word": "Martin Hinteregger",
+        "hints": [
+          "marking"
+        ]
+      },
+      {
+        "word": "Stefan Lainer",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Jan Vertonghen",
+        "hints": [
+          "block"
+        ]
+      },
+      {
+        "word": "Toby Alderweireld",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Thomas Vermaelen",
+        "hints": [
+          "aerial"
+        ]
+      },
+      {
+        "word": "Vincent Kompany",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Thomas Meunier",
+        "hints": [
+          "strength"
+        ]
+      },
+      {
+        "word": "Nemanja Vidic",
+        "hints": [
+          "block"
+        ]
+      },
+      {
+        "word": "Branislav Ivanovic",
+        "hints": [
+          "leader"
+        ]
+      },
+      {
+        "word": "Aleksandar Kolarov",
+        "hints": [
+          "marking"
+        ]
+      },
+      {
+        "word": "Matija Nastasic",
+        "hints": [
+          "duel"
+        ]
+      },
+      {
+        "word": "Dejan Lovren",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Sime Vrsaljko",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Darijo Srna",
+        "hints": [
+          "timing"
+        ]
+      },
+      {
+        "word": "Vedran Corluka",
+        "hints": [
+          "leader"
+        ]
+      },
+      {
+        "word": "Mario Melchiot",
+        "hints": [
+          "steel"
+        ]
+      },
+      {
+        "word": "Jaap Stam",
+        "hints": [
+          "shield"
+        ]
+      },
+      {
+        "word": "Frank de Boer",
+        "hints": [
+          "cover"
+        ]
+      },
+      {
+        "word": "Ronald Koeman",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Denzel Dumfries",
+        "hints": [
+          "tackle"
+        ]
+      },
+      {
+        "word": "Joao Cancelo",
+        "hints": [
+          "cover"
+        ]
+      },
+      {
+        "word": "Nuno Mendes",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Ricardo Carvalho",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Jose Fonte",
+        "hints": [
+          "leader"
+        ]
+      },
+      {
+        "word": "Raphael Guerreiro",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Nelson Semedo",
+        "hints": [
+          "cover"
+        ]
+      },
+      {
+        "word": "Fabio Coentrao",
+        "hints": [
+          "aerial"
+        ]
+      },
+      {
+        "word": "Romain Saiss",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Kalidou Koulibaly",
+        "hints": [
+          "marking"
+        ]
+      },
+      {
+        "word": "Edouard Mendy",
+        "hints": [
+          "leader"
+        ]
+      },
+      {
+        "word": "Eric Bailly",
+        "hints": [
+          "aerial"
+        ]
+      },
+      {
+        "word": "Kolo Toure",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Sol Bamba",
+        "hints": [
+          "aerial"
+        ]
+      },
+      {
+        "word": "Lauren",
+        "hints": [
+          "timing"
+        ]
+      },
+      {
+        "word": "Rigobert Song",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Joel Matip",
+        "hints": [
+          "marking"
+        ]
+      },
+      {
+        "word": "Serge Aurier",
+        "hints": [
+          "leader"
+        ]
+      },
+      {
+        "word": "Kieran Gibbs",
+        "hints": [
+          "leader"
+        ]
+      },
+      {
+        "word": "Sol Campbell",
+        "hints": [
+          "steel"
+        ]
+      },
+      {
+        "word": "Rio Ferdinand",
+        "hints": [
+          "strength"
+        ]
+      },
+      {
+        "word": "John Terry",
+        "hints": [
+          "timing"
+        ]
+      },
+      {
+        "word": "Ashley Cole",
+        "hints": [
+          "block"
+        ]
+      },
+      {
+        "word": "Gary Neville",
+        "hints": [
+          "strength"
+        ]
+      },
+      {
+        "word": "Jamie Carragher",
+        "hints": [
+          "cover"
+        ]
+      },
+      {
+        "word": "Ledley King",
+        "hints": [
+          "cover"
+        ]
+      },
+      {
+        "word": "Wes Brown",
+        "hints": [
+          "press"
+        ]
+      },
+      {
+        "word": "Micah Richards",
+        "hints": [
+          "leader"
+        ]
+      },
+      {
+        "word": "Joleon Lescott",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Gary Cahill",
+        "hints": [
+          "duel"
+        ]
+      },
+      {
+        "word": "Leighton Baines",
+        "hints": [
+          "leader"
+        ]
+      },
+      {
+        "word": "Phil Jagielka",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Kyle Walker",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Alisson Becker",
+        "hints": [
+          "voice"
+        ]
+      },
+      {
+        "word": "Ederson",
+        "hints": [
+          "gloves"
+        ]
+      },
+      {
+        "word": "Thibaut Courtois",
+        "hints": [
+          "reflex"
+        ]
+      },
+      {
+        "word": "Marc-Andre ter Stegen",
+        "hints": [
+          "hands"
+        ]
+      },
+      {
+        "word": "Jan Oblak",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Gianluigi Donnarumma",
+        "hints": [
+          "voice"
+        ]
+      },
+      {
+        "word": "Mike Maignan",
+        "hints": [
+          "command"
+        ]
+      },
+      {
+        "word": "David Raya",
+        "hints": [
+          "gloves"
+        ]
+      },
+      {
+        "word": "Emiliano Martinez",
+        "hints": [
+          "gloves"
+        ]
+      },
+      {
+        "word": "Andre Onana",
+        "hints": [
+          "reach"
+        ]
+      },
+      {
+        "word": "Nick Pope",
+        "hints": [
+          "quick"
+        ]
+      },
+      {
+        "word": "Jordan Pickford",
+        "hints": [
+          "sweep"
+        ]
+      },
+      {
+        "word": "Aaron Ramsdale",
+        "hints": [
+          "hands"
+        ]
+      },
+      {
+        "word": "Bernd Leno",
+        "hints": [
+          "command"
+        ]
+      },
+      {
+        "word": "Dean Henderson",
+        "hints": [
+          "sweep"
+        ]
+      },
+      {
+        "word": "Robert Sanchez",
+        "hints": [
+          "box"
+        ]
+      },
+      {
+        "word": "Kepa Arrizabalaga",
+        "hints": [
+          "line"
+        ]
+      },
+      {
+        "word": "Matz Sels",
+        "hints": [
+          "catch"
+        ]
+      },
+      {
+        "word": "Jose Sa",
+        "hints": [
+          "box"
+        ]
+      },
+      {
+        "word": "Guglielmo Vicario",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Caoimhin Kelleher",
+        "hints": [
+          "catch"
+        ]
+      },
+      {
+        "word": "Giorgi Mamardashvili",
+        "hints": [
+          "gloves"
+        ]
+      },
+      {
+        "word": "Diogo Costa",
+        "hints": [
+          "reflex"
+        ]
+      },
+      {
+        "word": "Anatoliy Trubin",
+        "hints": [
+          "reflex"
+        ]
+      },
+      {
+        "word": "Gregor Kobel",
+        "hints": [
+          "spring"
+        ]
+      },
+      {
+        "word": "Yann Sommer",
+        "hints": [
+          "box"
+        ]
+      },
+      {
+        "word": "Wojciech Szczesny",
+        "hints": [
+          "spring"
+        ]
+      },
+      {
+        "word": "Manuel Neuer",
+        "hints": [
+          "sweep"
+        ]
+      },
+      {
+        "word": "Oliver Kahn",
+        "hints": [
+          "catch"
+        ]
+      },
+      {
+        "word": "Jens Lehmann",
+        "hints": [
+          "gloves"
+        ]
+      },
+      {
+        "word": "Gianluigi Buffon",
+        "hints": [
+          "voice"
+        ]
+      },
+      {
+        "word": "Iker Casillas",
+        "hints": [
+          "reach"
+        ]
+      },
+      {
+        "word": "Victor Valdes",
+        "hints": [
+          "launch"
+        ]
+      },
+      {
+        "word": "Petr Cech",
+        "hints": [
+          "catch"
+        ]
+      },
+      {
+        "word": "Edwin van der Sar",
+        "hints": [
+          "sweep"
+        ]
+      },
+      {
+        "word": "Peter Schmeichel",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "David Seaman",
+        "hints": [
+          "sweep"
+        ]
+      },
+      {
+        "word": "Joe Hart",
+        "hints": [
+          "gloves"
+        ]
+      },
+      {
+        "word": "Pepe Reina",
+        "hints": [
+          "command"
+        ]
+      },
+      {
+        "word": "Brad Friedel",
+        "hints": [
+          "reach"
+        ]
+      },
+      {
+        "word": "Tim Howard",
+        "hints": [
+          "spring"
+        ]
+      },
+      {
+        "word": "Shay Given",
+        "hints": [
+          "spring"
+        ]
+      },
+      {
+        "word": "Jussi Jaaskelainen",
+        "hints": [
+          "quick"
+        ]
+      },
+      {
+        "word": "Mark Schwarzer",
+        "hints": [
+          "voice"
+        ]
+      },
+      {
+        "word": "Fabien Barthez",
+        "hints": [
+          "gloves"
+        ]
+      },
+      {
+        "word": "Hugo Lloris",
+        "hints": [
+          "spring"
+        ]
+      },
+      {
+        "word": "Steve Mandanda",
+        "hints": [
+          "reach"
+        ]
+      },
+      {
+        "word": "Keylor Navas",
+        "hints": [
+          "save"
+        ]
+      },
+      {
+        "word": "Claudio Bravo",
+        "hints": [
+          "hands"
+        ]
+      },
+      {
+        "word": "Julio Cesar",
+        "hints": [
+          "save"
+        ]
+      },
+      {
+        "word": "Dida",
+        "hints": [
+          "hands"
+        ]
+      },
+      {
+        "word": "Rogerio Ceni",
+        "hints": [
+          "reflex"
+        ]
+      },
+      {
+        "word": "Rene Higuita",
+        "hints": [
+          "reach"
+        ]
+      },
+      {
+        "word": "Jorge Campos",
+        "hints": [
+          "quick"
+        ]
+      },
+      {
+        "word": "Guillermo Ochoa",
+        "hints": [
+          "catch"
+        ]
+      },
+      {
+        "word": "Sergio Romero",
+        "hints": [
+          "spring"
+        ]
+      },
+      {
+        "word": "Franco Armani",
+        "hints": [
+          "voice"
+        ]
+      },
+      {
+        "word": "Fernando Muslera",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Rui Patricio",
+        "hints": [
+          "launch"
+        ]
+      },
+      {
+        "word": "Vitor Baia",
+        "hints": [
+          "box"
+        ]
+      },
+      {
+        "word": "Andoni Zubizarreta",
+        "hints": [
+          "sweep"
+        ]
+      },
+      {
+        "word": "Santiago Canizares",
+        "hints": [
+          "spring"
+        ]
+      },
+      {
+        "word": "Diego Lopez",
+        "hints": [
+          "spring"
+        ]
+      },
+      {
+        "word": "Samir Handanovic",
+        "hints": [
+          "save"
+        ]
+      },
+      {
+        "word": "Sebastien Frey",
+        "hints": [
+          "voice"
+        ]
+      },
+      {
+        "word": "Angelo Peruzzi",
+        "hints": [
+          "sweep"
+        ]
+      },
+      {
+        "word": "Walter Zenga",
+        "hints": [
+          "quick"
+        ]
+      },
+      {
+        "word": "Dino Zoff",
+        "hints": [
+          "quick"
+        ]
+      },
+      {
+        "word": "Lev Yashin",
+        "hints": [
+          "sweep"
+        ]
+      },
+      {
+        "word": "Rinat Dasayev",
+        "hints": [
+          "spring"
+        ]
+      },
+      {
+        "word": "Igor Akinfeev",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Jerzy Dudek",
+        "hints": [
+          "gloves"
+        ]
+      },
+      {
+        "word": "Artur Boruc",
+        "hints": [
+          "sweep"
+        ]
+      },
+      {
+        "word": "Lukasz Fabianski",
+        "hints": [
+          "box"
+        ]
+      },
+      {
+        "word": "Kasper Schmeichel",
+        "hints": [
+          "spring"
+        ]
+      },
+      {
+        "word": "Thomas Sorensen",
+        "hints": [
+          "reach"
+        ]
+      },
+      {
+        "word": "Jasper Cillessen",
+        "hints": [
+          "quick"
+        ]
+      },
+      {
+        "word": "Maarten Stekelenburg",
+        "hints": [
+          "spring"
+        ]
+      },
+      {
+        "word": "Tim Krul",
+        "hints": [
+          "calm"
+        ]
+      },
+      {
+        "word": "Michel Vorm",
+        "hints": [
+          "quick"
+        ]
+      },
+      {
+        "word": "Simon Mignolet",
+        "hints": [
+          "hands"
+        ]
+      },
+      {
+        "word": "Koen Casteels",
+        "hints": [
+          "voice"
+        ]
+      },
+      {
+        "word": "Yassine Bounou",
+        "hints": [
+          "box"
+        ]
+      },
+      {
+        "word": "Vincent Enyeama",
+        "hints": [
+          "quick"
+        ]
+      },
+      {
+        "word": "Richard Kingson",
+        "hints": [
+          "save"
+        ]
+      },
+      {
+        "word": "Essam El-Hadary",
+        "hints": [
+          "command"
+        ]
+      },
+      {
+        "word": "Ali Al-Habsi",
+        "hints": [
+          "sweep"
+        ]
+      },
+      {
+        "word": "Mathew Ryan",
+        "hints": [
+          "quick"
+        ]
+      },
+      {
+        "word": "Mark Bosnich",
+        "hints": [
+          "box"
+        ]
+      },
+      {
+        "word": "Brad Jones",
+        "hints": [
+          "reflex"
+        ]
+      }
+    ]
+  },
+  "Clubs": {
+    "emoji": "🏟️",
+    "words": [
+      {
+        "word": "Arsenal",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Chelsea",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Liverpool",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Manchester City",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Manchester United",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Tottenham Hotspur",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Newcastle United",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Aston Villa",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "West Ham United",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Everton",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Brighton",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Brentford",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Crystal Palace",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Fulham",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Wolverhampton Wanderers",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Nottingham Forest",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Leeds United",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Sunderland",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Burnley",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Sheffield United",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Sheffield Wednesday",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Southampton",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Leicester City",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Ipswich Town",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Norwich City",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Watford",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Middlesbrough",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Blackburn Rovers",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Bolton Wanderers",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Portsmouth",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Derby County",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Coventry City",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Birmingham City",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "West Bromwich Albion",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Stoke City",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Swansea City",
+        "hints": [
+          "Wales"
+        ]
+      },
+      {
+        "word": "Cardiff City",
+        "hints": [
+          "Wales"
+        ]
+      },
+      {
+        "word": "Wrexham",
+        "hints": [
+          "Wales"
+        ]
+      },
+      {
+        "word": "Millwall",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Queens Park Rangers",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Charlton Athletic",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Reading",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Hull City",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Preston North End",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Blackpool",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Luton Town",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Bournemouth",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Bristol City",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Bristol Rovers",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Plymouth Argyle",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Oxford United",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Wycombe Wanderers",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Barnsley",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Huddersfield Town",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Wigan Athletic",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Rotherham United",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Peterborough United",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Port Vale",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Notts County",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Bradford City",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Stockport County",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Leyton Orient",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "AFC Wimbledon",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "MK Dons",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Salford City",
+        "hints": [
+          "England"
+        ]
+      },
+      {
+        "word": "Celtic",
+        "hints": [
+          "Scotland"
+        ]
+      },
+      {
+        "word": "Rangers",
+        "hints": [
+          "Scotland"
+        ]
+      },
+      {
+        "word": "Aberdeen",
+        "hints": [
+          "Scotland"
+        ]
+      },
+      {
+        "word": "Hearts",
+        "hints": [
+          "Scotland"
+        ]
+      },
+      {
+        "word": "Hibernian",
+        "hints": [
+          "Scotland"
+        ]
+      },
+      {
+        "word": "Dundee United",
+        "hints": [
+          "Scotland"
+        ]
+      },
+      {
+        "word": "Dundee",
+        "hints": [
+          "Scotland"
+        ]
+      },
+      {
+        "word": "Motherwell",
+        "hints": [
+          "Scotland"
+        ]
+      },
+      {
+        "word": "Kilmarnock",
+        "hints": [
+          "Scotland"
+        ]
+      },
+      {
+        "word": "St Mirren",
+        "hints": [
+          "Scotland"
+        ]
+      },
+      {
+        "word": "Real Madrid",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Barcelona",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Atletico Madrid",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Athletic Bilbao",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Real Sociedad",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Sevilla",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Real Betis",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Valencia",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Villarreal",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Girona",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Getafe",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Celta Vigo",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Osasuna",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Mallorca",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Espanyol",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Las Palmas",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Rayo Vallecano",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Deportivo La Coruna",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Real Zaragoza",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Malaga",
+        "hints": [
+          "Spain"
+        ]
+      },
+      {
+        "word": "Juventus",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Inter Milan",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "AC Milan",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Napoli",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Roma",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Lazio",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Atalanta",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Fiorentina",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Bologna",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Torino",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Genoa",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Sampdoria",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Parma",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Udinese",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Cagliari",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Palermo",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Verona",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Como",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Monza",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Sassuolo",
+        "hints": [
+          "Italy"
+        ]
+      },
+      {
+        "word": "Bayern Munich",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Borussia Dortmund",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Bayer Leverkusen",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "RB Leipzig",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Eintracht Frankfurt",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Stuttgart",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Wolfsburg",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Borussia Monchengladbach",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Werder Bremen",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Hamburg",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Schalke",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Hoffenheim",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Freiburg",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Mainz",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Augsburg",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Union Berlin",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Hertha Berlin",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Koln",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Kaiserslautern",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "St Pauli",
+        "hints": [
+          "Germany"
+        ]
+      },
+      {
+        "word": "Paris Saint-Germain",
+        "hints": [
+          "France"
+        ]
+      },
+      {
+        "word": "Marseille",
+        "hints": [
+          "France"
+        ]
+      },
+      {
+        "word": "Lyon",
+        "hints": [
+          "France"
+        ]
+      },
+      {
+        "word": "Monaco",
+        "hints": [
+          "France"
+        ]
+      },
+      {
+        "word": "Lille",
+        "hints": [
+          "France"
+        ]
+      },
+      {
+        "word": "Nice",
+        "hints": [
+          "France"
+        ]
+      },
+      {
+        "word": "Lens",
+        "hints": [
+          "France"
+        ]
+      },
+      {
+        "word": "Rennes",
+        "hints": [
+          "France"
+        ]
+      },
+      {
+        "word": "Nantes",
+        "hints": [
+          "France"
+        ]
+      },
+      {
+        "word": "Bordeaux",
+        "hints": [
+          "France"
+        ]
+      },
+      {
+        "word": "Saint-Etienne",
+        "hints": [
+          "France"
+        ]
+      },
+      {
+        "word": "Montpellier",
+        "hints": [
+          "France"
+        ]
+      },
+      {
+        "word": "Toulouse",
+        "hints": [
+          "France"
+        ]
+      },
+      {
+        "word": "Strasbourg",
+        "hints": [
+          "France"
+        ]
+      },
+      {
+        "word": "Auxerre",
+        "hints": [
+          "France"
+        ]
+      },
+      {
+        "word": "Reims",
+        "hints": [
+          "France"
+        ]
+      },
+      {
+        "word": "Ajax",
+        "hints": [
+          "Netherlands"
+        ]
+      },
+      {
+        "word": "PSV Eindhoven",
+        "hints": [
+          "Netherlands"
+        ]
+      },
+      {
+        "word": "Feyenoord",
+        "hints": [
+          "Netherlands"
+        ]
+      },
+      {
+        "word": "AZ Alkmaar",
+        "hints": [
+          "Netherlands"
+        ]
+      },
+      {
+        "word": "Twente",
+        "hints": [
+          "Netherlands"
+        ]
+      },
+      {
+        "word": "Utrecht",
+        "hints": [
+          "Netherlands"
+        ]
+      },
+      {
+        "word": "Heerenveen",
+        "hints": [
+          "Netherlands"
+        ]
+      },
+      {
+        "word": "Vitesse",
+        "hints": [
+          "Netherlands"
+        ]
+      },
+      {
+        "word": "Benfica",
+        "hints": [
+          "Portugal"
+        ]
+      },
+      {
+        "word": "Porto",
+        "hints": [
+          "Portugal"
+        ]
+      },
+      {
+        "word": "Sporting CP",
+        "hints": [
+          "Portugal"
+        ]
+      },
+      {
+        "word": "Braga",
+        "hints": [
+          "Portugal"
+        ]
+      },
+      {
+        "word": "Vitoria Guimaraes",
+        "hints": [
+          "Portugal"
+        ]
+      },
+      {
+        "word": "Boavista",
+        "hints": [
+          "Portugal"
+        ]
+      },
+      {
+        "word": "Club Brugge",
+        "hints": [
+          "Belgium"
+        ]
+      },
+      {
+        "word": "Anderlecht",
+        "hints": [
+          "Belgium"
+        ]
+      },
+      {
+        "word": "Genk",
+        "hints": [
+          "Belgium"
+        ]
+      },
+      {
+        "word": "Gent",
+        "hints": [
+          "Belgium"
+        ]
+      },
+      {
+        "word": "Standard Liege",
+        "hints": [
+          "Belgium"
+        ]
+      },
+      {
+        "word": "Union Saint-Gilloise",
+        "hints": [
+          "Belgium"
+        ]
+      },
+      {
+        "word": "Galatasaray",
+        "hints": [
+          "Turkey"
+        ]
+      },
+      {
+        "word": "Fenerbahce",
+        "hints": [
+          "Turkey"
+        ]
+      },
+      {
+        "word": "Besiktas",
+        "hints": [
+          "Turkey"
+        ]
+      },
+      {
+        "word": "Trabzonspor",
+        "hints": [
+          "Turkey"
+        ]
+      },
+      {
+        "word": "Basaksehir",
+        "hints": [
+          "Turkey"
+        ]
+      },
+      {
+        "word": "Olympiacos",
+        "hints": [
+          "Greece"
+        ]
+      },
+      {
+        "word": "Panathinaikos",
+        "hints": [
+          "Greece"
+        ]
+      },
+      {
+        "word": "AEK Athens",
+        "hints": [
+          "Greece"
+        ]
+      },
+      {
+        "word": "PAOK",
+        "hints": [
+          "Greece"
+        ]
+      },
+      {
+        "word": "Red Star Belgrade",
+        "hints": [
+          "Serbia"
+        ]
+      },
+      {
+        "word": "Partizan Belgrade",
+        "hints": [
+          "Serbia"
+        ]
+      },
+      {
+        "word": "Dinamo Zagreb",
+        "hints": [
+          "Croatia"
+        ]
+      },
+      {
+        "word": "Hajduk Split",
+        "hints": [
+          "Croatia"
+        ]
+      },
+      {
+        "word": "Sparta Prague",
+        "hints": [
+          "Czech"
+        ]
+      },
+      {
+        "word": "Slavia Prague",
+        "hints": [
+          "Czech"
+        ]
+      },
+      {
+        "word": "Viktoria Plzen",
+        "hints": [
+          "Czech"
+        ]
+      },
+      {
+        "word": "Legia Warsaw",
+        "hints": [
+          "Poland"
+        ]
+      },
+      {
+        "word": "Lech Poznan",
+        "hints": [
+          "Poland"
+        ]
+      },
+      {
+        "word": "Shakhtar Donetsk",
+        "hints": [
+          "Ukraine"
+        ]
+      },
+      {
+        "word": "Dynamo Kyiv",
+        "hints": [
+          "Ukraine"
+        ]
+      },
+      {
+        "word": "Ferencvaros",
+        "hints": [
+          "Hungary"
+        ]
+      },
+      {
+        "word": "Rapid Vienna",
+        "hints": [
+          "Austria"
+        ]
+      },
+      {
+        "word": "Red Bull Salzburg",
+        "hints": [
+          "Austria"
+        ]
+      },
+      {
+        "word": "Sturm Graz",
+        "hints": [
+          "Austria"
+        ]
+      },
+      {
+        "word": "Basel",
+        "hints": [
+          "Switzerland"
+        ]
+      },
+      {
+        "word": "Young Boys",
+        "hints": [
+          "Switzerland"
+        ]
+      },
+      {
+        "word": "Copenhagen",
+        "hints": [
+          "Denmark"
+        ]
+      },
+      {
+        "word": "Brondby",
+        "hints": [
+          "Denmark"
+        ]
+      },
+      {
+        "word": "Malmo",
+        "hints": [
+          "Sweden"
+        ]
+      },
+      {
+        "word": "Rosenborg",
+        "hints": [
+          "Norway"
+        ]
+      },
+      {
+        "word": "Bodo/Glimt",
+        "hints": [
+          "Norway"
+        ]
+      },
+      {
+        "word": "Boca Juniors",
+        "hints": [
+          "Argentina"
+        ]
+      },
+      {
+        "word": "River Plate",
+        "hints": [
+          "Argentina"
+        ]
+      },
+      {
+        "word": "Racing Club",
+        "hints": [
+          "Argentina"
+        ]
+      },
+      {
+        "word": "Independiente",
+        "hints": [
+          "Argentina"
+        ]
+      },
+      {
+        "word": "San Lorenzo",
+        "hints": [
+          "Argentina"
+        ]
+      },
+      {
+        "word": "Velez Sarsfield",
+        "hints": [
+          "Argentina"
+        ]
+      },
+      {
+        "word": "Estudiantes",
+        "hints": [
+          "Argentina"
+        ]
+      },
+      {
+        "word": "Rosario Central",
+        "hints": [
+          "Argentina"
+        ]
+      },
+      {
+        "word": "Newell's Old Boys",
+        "hints": [
+          "Argentina"
+        ]
+      },
+      {
+        "word": "Flamengo",
+        "hints": [
+          "Brazil"
+        ]
+      },
+      {
+        "word": "Fluminense",
+        "hints": [
+          "Brazil"
+        ]
+      },
+      {
+        "word": "Palmeiras",
+        "hints": [
+          "Brazil"
+        ]
+      },
+      {
+        "word": "Corinthians",
+        "hints": [
+          "Brazil"
+        ]
+      },
+      {
+        "word": "Santos",
+        "hints": [
+          "Brazil"
+        ]
+      },
+      {
+        "word": "Sao Paulo",
+        "hints": [
+          "Brazil"
+        ]
+      },
+      {
+        "word": "Gremio",
+        "hints": [
+          "Brazil"
+        ]
+      },
+      {
+        "word": "Internacional",
+        "hints": [
+          "Brazil"
+        ]
+      },
+      {
+        "word": "Botafogo",
+        "hints": [
+          "Brazil"
+        ]
+      },
+      {
+        "word": "Vasco da Gama",
+        "hints": [
+          "Brazil"
+        ]
+      },
+      {
+        "word": "Atletico Mineiro",
+        "hints": [
+          "Brazil"
+        ]
+      },
+      {
+        "word": "Cruzeiro",
+        "hints": [
+          "Brazil"
+        ]
+      },
+      {
+        "word": "Athletico Paranaense",
+        "hints": [
+          "Brazil"
+        ]
+      },
+      {
+        "word": "Penarol",
+        "hints": [
+          "Uruguay"
+        ]
+      },
+      {
+        "word": "Nacional",
+        "hints": [
+          "Uruguay"
+        ]
+      },
+      {
+        "word": "Colo-Colo",
+        "hints": [
+          "Chile"
+        ]
+      },
+      {
+        "word": "Universidad de Chile",
+        "hints": [
+          "Chile"
+        ]
+      },
+      {
+        "word": "Universidad Catolica",
+        "hints": [
+          "Chile"
+        ]
+      },
+      {
+        "word": "Atletico Nacional",
+        "hints": [
+          "Colombia"
+        ]
+      },
+      {
+        "word": "Millonarios",
+        "hints": [
+          "Colombia"
+        ]
+      },
+      {
+        "word": "America de Cali",
+        "hints": [
+          "Colombia"
+        ]
+      },
+      {
+        "word": "Junior",
+        "hints": [
+          "Colombia"
+        ]
+      },
+      {
+        "word": "LDU Quito",
+        "hints": [
+          "Ecuador"
+        ]
+      },
+      {
+        "word": "Barcelona SC",
+        "hints": [
+          "Ecuador"
+        ]
+      },
+      {
+        "word": "Emelec",
+        "hints": [
+          "Ecuador"
+        ]
+      },
+      {
+        "word": "Olimpia",
+        "hints": [
+          "Paraguay"
+        ]
+      },
+      {
+        "word": "Cerro Porteno",
+        "hints": [
+          "Paraguay"
+        ]
+      },
+      {
+        "word": "Alianza Lima",
+        "hints": [
+          "Peru"
+        ]
+      },
+      {
+        "word": "Universitario",
+        "hints": [
+          "Peru"
+        ]
+      },
+      {
+        "word": "Sporting Cristal",
+        "hints": [
+          "Peru"
+        ]
+      },
+      {
+        "word": "Inter Miami",
+        "hints": [
+          "USA"
+        ]
+      },
+      {
+        "word": "LA Galaxy",
+        "hints": [
+          "USA"
+        ]
+      },
+      {
+        "word": "Los Angeles FC",
+        "hints": [
+          "USA"
+        ]
+      },
+      {
+        "word": "New York City FC",
+        "hints": [
+          "USA"
+        ]
+      },
+      {
+        "word": "New York Red Bulls",
+        "hints": [
+          "USA"
+        ]
+      },
+      {
+        "word": "Seattle Sounders",
+        "hints": [
+          "USA"
+        ]
+      },
+      {
+        "word": "Atlanta United",
+        "hints": [
+          "USA"
+        ]
+      },
+      {
+        "word": "Austin FC",
+        "hints": [
+          "USA"
+        ]
+      },
+      {
+        "word": "Portland Timbers",
+        "hints": [
+          "USA"
+        ]
+      },
+      {
+        "word": "Orlando City",
+        "hints": [
+          "USA"
+        ]
+      },
+      {
+        "word": "Toronto FC",
+        "hints": [
+          "Canada"
+        ]
+      },
+      {
+        "word": "Vancouver Whitecaps",
+        "hints": [
+          "Canada"
+        ]
+      },
+      {
+        "word": "CF Montreal",
+        "hints": [
+          "Canada"
+        ]
+      },
+      {
+        "word": "Club America",
+        "hints": [
+          "Mexico"
+        ]
+      },
+      {
+        "word": "Chivas Guadalajara",
+        "hints": [
+          "Mexico"
+        ]
+      },
+      {
+        "word": "Cruz Azul",
+        "hints": [
+          "Mexico"
+        ]
+      },
+      {
+        "word": "Pumas UNAM",
+        "hints": [
+          "Mexico"
+        ]
+      },
+      {
+        "word": "Monterrey",
+        "hints": [
+          "Mexico"
+        ]
+      },
+      {
+        "word": "Tigres UANL",
+        "hints": [
+          "Mexico"
+        ]
+      },
+      {
+        "word": "Pachuca",
+        "hints": [
+          "Mexico"
+        ]
+      },
+      {
+        "word": "Santos Laguna",
+        "hints": [
+          "Mexico"
+        ]
+      },
+      {
+        "word": "Toluca",
+        "hints": [
+          "Mexico"
+        ]
+      },
+      {
+        "word": "Al Hilal",
+        "hints": [
+          "Saudi"
+        ]
+      },
+      {
+        "word": "Al Nassr",
+        "hints": [
+          "Saudi"
+        ]
+      },
+      {
+        "word": "Al Ittihad",
+        "hints": [
+          "Saudi"
+        ]
+      },
+      {
+        "word": "Al Ahli",
+        "hints": [
+          "Saudi"
+        ]
+      },
+      {
+        "word": "Al Sadd",
+        "hints": [
+          "Qatar"
+        ]
+      },
+      {
+        "word": "Al Duhail",
+        "hints": [
+          "Qatar"
+        ]
+      },
+      {
+        "word": "Al Ain",
+        "hints": [
+          "UAE"
+        ]
+      },
+      {
+        "word": "Shabab Al Ahli",
+        "hints": [
+          "UAE"
+        ]
+      },
+      {
+        "word": "Persepolis",
+        "hints": [
+          "Iran"
+        ]
+      },
+      {
+        "word": "Esteghlal",
+        "hints": [
+          "Iran"
+        ]
+      },
+      {
+        "word": "Urawa Red Diamonds",
+        "hints": [
+          "Japan"
+        ]
+      },
+      {
+        "word": "Kashima Antlers",
+        "hints": [
+          "Japan"
+        ]
+      },
+      {
+        "word": "Yokohama F Marinos",
+        "hints": [
+          "Japan"
+        ]
+      },
+      {
+        "word": "Kawasaki Frontale",
+        "hints": [
+          "Japan"
+        ]
+      },
+      {
+        "word": "Vissel Kobe",
+        "hints": [
+          "Japan"
+        ]
+      },
+      {
+        "word": "Jeonbuk Hyundai Motors",
+        "hints": [
+          "Korea"
+        ]
+      },
+      {
+        "word": "Ulsan HD",
+        "hints": [
+          "Korea"
+        ]
+      },
+      {
+        "word": "Pohang Steelers",
+        "hints": [
+          "Korea"
+        ]
+      },
+      {
+        "word": "Seoul FC",
+        "hints": [
+          "Korea"
+        ]
+      },
+      {
+        "word": "Shanghai Port",
+        "hints": [
+          "China"
+        ]
+      },
+      {
+        "word": "Shandong Taishan",
+        "hints": [
+          "China"
+        ]
+      },
+      {
+        "word": "Beijing Guoan",
+        "hints": [
+          "China"
+        ]
+      },
+      {
+        "word": "Buriram United",
+        "hints": [
+          "Thailand"
+        ]
+      },
+      {
+        "word": "Johor Darul Ta'zim",
+        "hints": [
+          "Malaysia"
+        ]
+      },
+      {
+        "word": "Mumbai City",
+        "hints": [
+          "India"
+        ]
+      },
+      {
+        "word": "Mohun Bagan",
+        "hints": [
+          "India"
+        ]
+      },
+      {
+        "word": "East Bengal",
+        "hints": [
+          "India"
+        ]
+      },
+      {
+        "word": "Al Ahly",
+        "hints": [
+          "Egypt"
+        ]
+      },
+      {
+        "word": "Zamalek",
+        "hints": [
+          "Egypt"
+        ]
+      },
+      {
+        "word": "Pyramids FC",
+        "hints": [
+          "Egypt"
+        ]
+      },
+      {
+        "word": "Wydad Casablanca",
+        "hints": [
+          "Morocco"
+        ]
+      },
+      {
+        "word": "Raja Casablanca",
+        "hints": [
+          "Morocco"
+        ]
+      },
+      {
+        "word": "Esperance Tunis",
+        "hints": [
+          "Tunisia"
+        ]
+      },
+      {
+        "word": "Etoile du Sahel",
+        "hints": [
+          "Tunisia"
+        ]
+      },
+      {
+        "word": "Mamelodi Sundowns",
+        "hints": [
+          "SouthAfrica"
+        ]
+      },
+      {
+        "word": "Kaizer Chiefs",
+        "hints": [
+          "SouthAfrica"
+        ]
+      },
+      {
+        "word": "Orlando Pirates",
+        "hints": [
+          "SouthAfrica"
+        ]
+      },
+      {
+        "word": "TP Mazembe",
+        "hints": [
+          "Congo"
+        ]
+      },
+      {
+        "word": "Enyimba",
+        "hints": [
+          "Nigeria"
+        ]
+      },
+      {
+        "word": "Hearts of Oak",
+        "hints": [
+          "Ghana"
+        ]
+      },
+      {
+        "word": "Asante Kotoko",
+        "hints": [
+          "Ghana"
+        ]
+      },
+      {
+        "word": "Sydney FC",
+        "hints": [
+          "Australia"
+        ]
+      },
+      {
+        "word": "Melbourne Victory",
+        "hints": [
+          "Australia"
+        ]
+      },
+      {
+        "word": "Melbourne City",
+        "hints": [
+          "Australia"
+        ]
+      },
+      {
+        "word": "Western Sydney Wanderers",
+        "hints": [
+          "Australia"
+        ]
+      },
+      {
+        "word": "Auckland City",
+        "hints": [
+          "NewZealand"
+        ]
+      }
+    ]
+  }
+}

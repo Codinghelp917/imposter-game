@@ -137,6 +137,37 @@
   details.how .body b{color:var(--ink)}
   details.how ol{margin:6px 0 0;padding-left:18px}details.how li{margin:7px 0}
 
+  /* ---------- game mode picker ---------- */
+  .modes{display:grid;gap:10px;margin:2px 0 12px}
+  .modecard{position:relative;overflow:hidden;text-align:left;border-radius:18px;border:1px solid var(--line);
+    padding:13px 15px;cursor:pointer;color:var(--ink);font:inherit;display:grid;gap:3px;transition:.16s;
+    background:linear-gradient(180deg,rgba(21,30,46,.92),rgba(14,21,33,.95))}
+  .modecard:hover{border-color:var(--line-2);transform:translateY(-1px)}
+  .modecard .mc-top{display:flex;align-items:center;gap:9px}
+  .modecard .mc-emoji{font-size:20px;line-height:1}
+  .modecard .mc-name{font-family:"Luckiest Guy",cursive;font-size:18px;letter-spacing:.02em}
+  .modecard .mc-sub{font-size:12px;color:var(--muted);position:relative;z-index:1}
+  .modecard.on{border-color:var(--gold);box-shadow:0 0 0 2px rgba(255,201,77,.22)}
+  /* the football card wears its own kit */
+  .modecard.football{background:linear-gradient(180deg,#0F4429,#06210F);border-color:rgba(67,214,124,.3)}
+  .modecard.football .mc-name{color:#E8FBEE}
+  .modecard.football .mc-sub{color:#9FD9B4}
+  .modecard.football.on{border-color:#43D67C;box-shadow:0 0 0 2px rgba(67,214,124,.32)}
+  .modecard.football::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.14;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='58' height='58'%3E%3Ccircle cx='29' cy='29' r='12' fill='none' stroke='%23ffffff' stroke-width='2'/%3E%3Cpath d='M29 22l5.7 4.2-2.2 6.7h-7l-2.2-6.7z' fill='%23ffffff'/%3E%3C/svg%3E");
+    background-size:58px 58px}
+
+  /* ---------- football mode ---------- */
+  /* Placed before the per-phase tints so voting/guess still go red — that red is
+     semantic (danger), not decorative, and should survive a mode change. */
+  body[data-mode="football"]::after{
+    background:radial-gradient(ellipse at 50% -12%,rgba(255,255,255,.16),transparent 42%),
+               radial-gradient(ellipse at 50% 112%,rgba(14,120,60,.34),transparent 58%)}
+  body[data-mode="football"] .wordmark{font-size:clamp(19px,5.6vw,28px)}
+  body[data-mode="football"] .byline{color:#57E08C;text-shadow:0 0 18px rgba(67,214,124,.4)}
+  body[data-mode="football"] .card.rivets::before,
+  body[data-mode="football"] .card.rivets::after{background:rgba(120,230,160,.18)}
+
   /* ---------- avatars ---------- */
   .avatars{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:15px;max-height:270px;overflow-y:auto;padding:3px 4px 5px;scrollbar-width:thin}
   .av{aspect-ratio:1;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:20px;
@@ -431,14 +462,14 @@
       <div class="brandside"></div>
       <div class="brandstack">
         <div class="byline">Thilaksan&rsquo;s</div>
-        <div class="wordmark">IMPOSTER<span class="mate" id="brandMate"></span></div>
+        <div class="wordmark"><span id="brandWord">IMPOSTER</span><span class="mate" id="brandMate"></span></div>
       </div>
       <div class="brandside right">
         <button class="iconbtn" id="hostBtn" title="Host controls" aria-label="Host controls" style="display:none">⚙</button>
         <button class="iconbtn" id="soundBtn" title="Sound" aria-label="Toggle sound">🔊</button>
       </div>
     </div>
-    <div class="tagline">one of us is lying</div>
+    <div class="tagline" id="tagline">one of us is lying</div>
   </header>
 
   <main>
@@ -447,7 +478,21 @@
       <div class="card rivets">
         <h2 class="eyebrow">Party word game · 3+ players</h2>
         <h1 class="title">One of you is the imposter.</h1>
-        <p class="lead">Everyone gets the same secret word — except the imposter, who's flying on a vague hint. Drop your clues, then vote out the faker. Catch them and they still get one last shot at naming the word.</p>
+        <p class="lead" id="homeLead">Everyone gets the same secret word — except the imposter, who's flying on a vague hint. Drop your clues, then vote out the faker. Catch them and they still get one last shot at naming the word.</p>
+
+        <span class="lab">Pick your game</span>
+        <div class="modes" id="modePick">
+          <button type="button" class="modecard on" data-mode="classic">
+            <span class="mc-top"><span class="mc-emoji">🕵️</span><span class="mc-name">Classic Imposter</span></span>
+            <span class="mc-sub" id="mcClassicSub">Movies · Food · People · Countries…</span>
+          </button>
+          <button type="button" class="modecard football" data-mode="football">
+            <span class="mc-top"><span class="mc-emoji">⚽</span><span class="mc-name">Football Imposter</span></span>
+            <span class="mc-sub" id="mcFootballSub">Players &amp; Clubs · think you know ball?</span>
+          </button>
+        </div>
+        <p class="note" style="margin:-6px 0 14px">Only the host picks — joining by code puts you in whichever game the room is.</p>
+
         <div class="err" id="homeErr"></div>
         <label class="field"><span class="lab">Your name</span>
           <input class="txt" id="nameInput" maxlength="16" autocomplete="off" placeholder="e.g. Alex" /></label>
@@ -494,6 +539,13 @@
               <button data-h="on" class="on">Hints on · vague clue</button>
               <button data-h="off">Hints off · blind</button>
             </div></div>
+          <div class="setrow" id="tierRow" style="display:none"><span class="lab">Knowledge level</span>
+            <div class="seg" id="tierSeg">
+              <button data-t="casual">🟢 Casual</button>
+              <button data-t="fan">🟡 Football fan</button>
+              <button data-t="ball" class="on">🔴 Ball knowledge</button>
+            </div>
+            <p class="note" id="tierNote"></p></div>
           <div class="setrow"><span class="lab">Imposter can guess the word</span>
             <div class="seg" id="guessSeg">
               <button data-g="on" class="on">Guessing on</button>
@@ -816,8 +868,9 @@
     const state={
       me:{pid:null,name:"",icon:"crew:red",isHost:false},
       roomCode:null, room:null, role:null, myVote:null, results:null, lastGuess:null,
+      mode:"classic",
       categories:[], icons:[], secretIcons:[],
-      selCats:["Famous People"], selImp:1, selHints:true, selGuess:true
+      selCats:[], selImp:1, selHints:true, selGuess:true, selTier:"ball"
     };
     try{const s=JSON.parse(localStorage.getItem("imposter.me")||"{}");if(s.name)state.me.name=s.name;if(s.icon)state.me.icon=s.icon;}catch(e){}
     const persistMe=()=>{try{localStorage.setItem("imposter.me",JSON.stringify({name:state.me.name,icon:state.me.icon}));}catch(e){}};
@@ -829,8 +882,28 @@
     /* ============ STARFIELD ============ */
     // Three parallax layers so the field has depth, plus the occasional
     // shooting star. Distant stars are small, dim and slow; near ones drift.
-    (function starfield(){
+    const sky=(function starfield(){
       const cv=$("#stars"),cx=cv.getContext("2d");
+      let skyMode="classic",balls=[];
+      // A football: white disc, dark rim, centre pentagon and five seams. Reads
+      // as a ball from about 10px up.
+      function drawBall(x,y,r,rot){
+        cx.save();cx.translate(x,y);cx.rotate(rot);
+        cx.beginPath();cx.arc(0,0,r,0,6.283);
+        cx.fillStyle="#F2F7F1";cx.fill();
+        cx.lineWidth=Math.max(.7,r*.10);cx.strokeStyle="#16241B";cx.stroke();
+        cx.beginPath();
+        for(let i=0;i<5;i++){const a=-Math.PI/2+i*1.2566;
+          const px=Math.cos(a)*r*.40,py=Math.sin(a)*r*.40;
+          i?cx.lineTo(px,py):cx.moveTo(px,py);}
+        cx.closePath();cx.fillStyle="#16241B";cx.fill();
+        cx.strokeStyle="#16241B";cx.lineWidth=Math.max(.6,r*.09);
+        for(let i=0;i<5;i++){const a=-Math.PI/2+i*1.2566;
+          cx.beginPath();
+          cx.moveTo(Math.cos(a)*r*.40,Math.sin(a)*r*.40);
+          cx.lineTo(Math.cos(a)*r*.96,Math.sin(a)*r*.96);cx.stroke();}
+        cx.restore();
+      }
       const LAYERS=[{n:.5, r:[.5,1.1],a:[.30,.60],v:[.004,.014],tint:"#B8C9F0"},
                     {n:.32,r:[.9,1.7],a:[.45,.80],v:[.018,.04], tint:"#FFFFFF"},
                     {n:.18,r:[1.3,2.4],a:[.62,1],  v:[.05,.1],  tint:"#FFF3D6"}];
@@ -862,7 +935,31 @@
         const fromLeft=Math.random()<.5;
         shots.push({x:fromLeft?-40:w+40,y:rnd(0,h*.55),vx:(fromLeft?1:-1)*rnd(7,12),vy:rnd(2.5,4.5),life:0,len:rnd(70,130)});
       }
+      function buildBalls(){
+        // Far fewer than stars — footballs are big, and a sky full of them is
+        // busy rather than atmospheric.
+        const n=Math.max(9,Math.min(20,Math.round(w*h/58000)));
+        balls=[];
+        // globalAlpha dims the dark panels as much as the white leather, so too
+        // low an alpha turns a football into a featureless grey disc. Keep them
+        // faint enough to sit behind the card but solid enough to read as balls.
+        for(let i=0;i<n;i++)balls.push({
+          x:Math.random()*w,y:Math.random()*h,r:rnd(10,22),a:rnd(.20,.42),
+          v:rnd(.10,.30),rot:Math.random()*6.283,vr:rnd(-.006,.006)});
+      }
+      function frameFootball(){
+        cx.clearRect(0,0,w,h);
+        for(const b of balls){
+          b.y+=b.v; b.rot+=b.vr;
+          if(b.y-b.r>h){b.y=-b.r;b.x=Math.random()*w;}
+          cx.globalAlpha=b.a;
+          drawBall(b.x,b.y,b.r,b.rot);
+        }
+        cx.globalAlpha=1;
+        if(skyMode==="football")requestAnimationFrame(frameFootball);
+      }
       function frame(){
+        if(skyMode!=="classic")return;
         cx.clearRect(0,0,w,h);
         for(const s of stars){
           s.d+=s.tw; s.y+=s.v; if(s.y>h+2){s.y=-2;s.x=Math.random()*w;}
@@ -889,16 +986,36 @@
         for(const s of stars){cx.globalAlpha=s.a;cx.fillStyle=s.tint;cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.283);cx.fill();}
         cx.globalAlpha=1;
       }
-      build();
+      function drawStaticBalls(){
+        cx.clearRect(0,0,w,h);
+        for(const b of balls){cx.globalAlpha=b.a;drawBall(b.x,b.y,b.r,b.rot);}
+        cx.globalAlpha=1;
+      }
+      function paintStatic(){ skyMode==="football"?drawStaticBalls():drawStatic(); }
+
+      build();buildBalls();
       // Mobile browsers fire resize every time the URL bar slides away. Only
       // regenerate the field when the width really changed — otherwise just fix
       // the backing store so the sky does not visibly reshuffle while scrolling.
       addEventListener("resize",()=>{
-        if(Math.abs(innerWidth-lastW)>1){build();}
+        if(Math.abs(innerWidth-lastW)>1){build();buildBalls();}
         else{resize();}
-        if(reduce)drawStatic();
+        if(reduce)paintStatic();
       });
-      if(reduce)drawStatic(); else frame();
+      if(reduce)paintStatic(); else frame();
+
+      return {
+        setMode(m){
+          const next=(m==="football")?"football":"classic";
+          if(next===skyMode)return;
+          skyMode=next;
+          if(next==="football")buildBalls();
+          if(reduce){paintStatic();return;}
+          // Only one loop runs at a time; each bails when the mode moves on.
+          if(next==="football")requestAnimationFrame(frameFootball);
+          else requestAnimationFrame(frame);
+        }
+      };
     })();
 
     /* ============ SOUND ============ */
@@ -920,6 +1037,32 @@
     const updSound=()=>{$("#soundBtn").textContent=soundOn?"🔊":"🔈";};
     $("#soundBtn").addEventListener("click",()=>{soundOn=!soundOn;localStorage.setItem("imposter.sound",soundOn?"on":"off");updSound();if(soundOn)sfx.tap();});
     updSound();
+
+    /* ============ GAME MODES ============ */
+    // One engine, two word libraries. The room carries the mode, so joining by
+    // code drops you into the right game without choosing anything.
+    const MODES={
+      classic:{word:"IMPOSTER",tag:"one of us is lying",
+        lead:"Everyone gets the same secret word — except the imposter, who's flying on a vague hint. Drop your clues, then vote out the faker. Catch them and they still get one last shot at naming the word."},
+      football:{word:"FOOTBALL IMPOSTER",tag:"one of us doesn't know ball",
+        lead:"Everyone gets the same player or club — except the imposter, who only gets a vague hint and doesn't even know which it is. Drop your clues, then vote out the faker."}
+    };
+    const isMode=(m)=>Object.prototype.hasOwnProperty.call(MODES,m);
+    function applyMode(mode){
+      state.mode=isMode(mode)?mode:"classic";
+      const m=MODES[state.mode],football=state.mode==="football";
+      document.body.dataset.mode=state.mode;
+      $("#brandWord").textContent=m.word;
+      $("#tagline").textContent=m.tag;
+      $("#homeLead").textContent=m.lead;
+      $$("#modePick .modecard").forEach(b=>b.classList.toggle("on",b.dataset.mode===state.mode));
+      const tierRow=$("#tierRow"); if(tierRow)tierRow.style.display=football?"block":"none";
+      sky.setMode(state.mode);
+    }
+    $$("#modePick .modecard").forEach(b=>b.addEventListener("click",()=>{
+      applyMode(b.dataset.mode);sfx.tap();
+      try{localStorage.setItem("imposter.mode",state.mode);}catch(e){}
+    }));
 
     /* ============ TOAST / SCREENS ============ */
     let toastT=null;
@@ -1049,8 +1192,10 @@
     function applyState(s){
       if(!s)return; state.room=s;
       const mine=meInRoom(); if(mine){state.me.isHost=mine.isHost;if(mine.icon)state.me.icon=mine.icon;}
+      if(s.mode&&s.mode!==state.mode)applyMode(s.mode);   // the room decides, not the client
       if(s.settings){state.selCats=s.settings.categories;state.selImp=s.settings.imposters;
-        state.selHints=s.settings.hintsEnabled!==false;state.selGuess=s.settings.guessEnabled!==false;}
+        state.selHints=s.settings.hintsEnabled!==false;state.selGuess=s.settings.guessEnabled!==false;
+        state.selTier=s.settings.tier||"ball";}
       updateHostBtn();
       const active=$(".screen.active"); if(!active)return;
       const id=active.id;
@@ -1073,7 +1218,7 @@
     function pushSettings(extra){
       socket.emit("updateSettings",Object.assign({
         roomCode:state.roomCode,categories:state.selCats,imposters:state.selImp,
-        hintsEnabled:state.selHints,guessEnabled:state.selGuess
+        hintsEnabled:state.selHints,guessEnabled:state.selGuess,tier:state.selTier
       },extra||{}));
     }
 
@@ -1103,6 +1248,9 @@
     $$("#hintSeg button").forEach(b=>b.addEventListener("click",()=>{
       state.selHints=(b.dataset.h==="on");
       $$("#hintSeg button").forEach(x=>x.classList.toggle("on",x===b));sfx.tap();pushSettings();}));
+    $$("#tierSeg button").forEach(b=>b.addEventListener("click",()=>{
+      state.selTier=b.dataset.t;
+      $$("#tierSeg button").forEach(x=>x.classList.toggle("on",x===b));sfx.tap();pushSettings();}));
     $$("#guessSeg button").forEach(b=>b.addEventListener("click",()=>{
       state.selGuess=(b.dataset.g==="on");
       $$("#guessSeg button").forEach(x=>x.classList.toggle("on",x===b));sfx.tap();pushSettings();}));
@@ -1144,6 +1292,11 @@
         b.classList.toggle("on",bn===state.selImp);b.disabled=(bn===2&&n<5);});
       $$("#hintSeg button").forEach(b=>b.classList.toggle("on",(b.dataset.h==="on")===state.selHints));
       $$("#guessSeg button").forEach(b=>b.classList.toggle("on",(b.dataset.g==="on")===state.selGuess));
+      $$("#tierSeg button").forEach(b=>b.classList.toggle("on",b.dataset.t===state.selTier));
+      const tn=$("#tierNote");
+      if(tn)tn.textContent={casual:"Household names only.",
+        fan:"Adds less obvious names from more leagues.",
+        ball:"Everything, including cult heroes and obscure clubs."}[state.selTier]||"";
       $("#guessNote").textContent=state.selGuess
         ? "A caught imposter gets one last shot at naming the word — and can gamble a guess mid-round."
         : "Once the imposter is caught, that's it. No last words.";
@@ -1679,8 +1832,9 @@
       clearHomeErr();ac();const name=readName();
       if(name.length<2){homeErr("Enter a name (2–16 characters) first.");return;}
       $("#createBtn").disabled=true;
-      socket.emit("createRoom",(res)=>{
+      socket.emit("createRoom",{mode:state.mode},(res)=>{
         if(!res||!res.ok){$("#createBtn").disabled=false;homeErr((res&&res.error)||"Couldn't create a room. Try again.");return;}
+        if(res.mode)applyMode(res.mode);
         if(res.categories)state.categories=res.categories;
         socket.emit("joinRoom",{roomCode:res.roomCode,name,icon:state.me.icon},(jr)=>{
           $("#createBtn").disabled=false;
@@ -1747,6 +1901,16 @@
         cx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);cx.restore();});
       if(parts.length)raf=requestAnimationFrame(tick);else{raf=null;cx.clearRect(0,0,cvs.width,cvs.height);}
     }
+
+    // /football deep-links straight into the football lobby; otherwise fall back
+    // to whichever mode was picked last.
+    (function initialMode(){
+      let saved=null;try{saved=localStorage.getItem("imposter.mode");}catch(e){}
+      const path=(location.pathname||"").toLowerCase();
+      applyMode(path.indexOf("football")>=0 ? "football"
+              : path.indexOf("classic")>=0 ? "classic"
+              : (saved||"classic"));
+    })();
 
     show("home");
   })();

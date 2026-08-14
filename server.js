@@ -78,10 +78,46 @@ function safePlayerIcon(icon, allowSecret) {
 
 app.use(express.static(PUBLIC_DIR));
 
-const CATEGORIES = require("./categories.json");
-const CATEGORY_LIST = Object.keys(CATEGORIES).map((name) => ({
-  name, emoji: CATEGORIES[name].emoji, count: CATEGORIES[name].words.length
-}));
+/* ---------------- game modes ----------------
+   One engine, one room system, separate word libraries. Adding a mode here is
+   all it takes on the server — the room remembers which one it is, so only the
+   host picks and everyone joining by code inherits it.                       */
+function loadLibrary(file) {
+  const raw = require(file);
+  // Word files may carry a leading `_readme` block; it is documentation, not a
+  // category, so drop anything that has no words array.
+  const out = {};
+  Object.keys(raw).forEach((k) => { if (raw[k] && Array.isArray(raw[k].words)) out[k] = raw[k]; });
+  return out;
+}
+const LIBRARIES = {
+  classic: loadLibrary("./categories.json"),
+  football: loadLibrary("./football_list.json")
+};
+const DEFAULT_MODE = "classic";
+const isMode = (m) => Object.prototype.hasOwnProperty.call(LIBRARIES, m);
+const libraryFor = (room) => LIBRARIES[(room && room.mode) || DEFAULT_MODE] || LIBRARIES[DEFAULT_MODE];
+
+const CATEGORY_LISTS = {};
+Object.keys(LIBRARIES).forEach((mode) => {
+  const lib = LIBRARIES[mode];
+  CATEGORY_LISTS[mode] = Object.keys(lib).map((name) => ({
+    name, emoji: lib[name].emoji, count: lib[name].words.length
+  }));
+});
+const categoryListFor = (mode) => CATEGORY_LISTS[isMode(mode) ? mode : DEFAULT_MODE];
+// A new room starts with every category in its library ticked, so a mode is
+// playable the moment it is created.
+const defaultCategoriesFor = (mode) => categoryListFor(mode).map((c) => c.name);
+
+Object.keys(LIBRARIES).forEach((mode) => {
+  const words = Object.values(LIBRARIES[mode]).reduce((n, c) => n + c.words.length, 0);
+  console.log(`mode "${mode}": ${Object.keys(LIBRARIES[mode]).length} categories, ${words} words`);
+});
+
+// Deep links: /football and /classic serve the same page, which reads the path
+// to preselect a mode. Everything else still falls through to static files.
+app.get(["/classic", "/football"], (req, res) => res.sendFile(path.join(PUBLIC_DIR, "index.html")));
 
 function envMs(name, fallback, { min = 0 } = {}) {
   const parsed = Number(process.env[name] || fallback);
@@ -349,7 +385,7 @@ function doResolve(code, force) {
 }
 
 io.on("connection", (socket) => {
-  socket.emit("categories", CATEGORY_LIST);
+  socket.emit("categories", categoryListFor(DEFAULT_MODE));
   socket.emit("icons", getIconList());
 
   const hostGate = (roomCode) => {
@@ -364,13 +400,17 @@ io.on("connection", (socket) => {
 
   socket.on("createRoom", (...args) => {
     const cb = args[args.length - 1];
-    const { roomCode } = R.createRoom(socket.id);
+    // Only the room's creator picks the mode; everyone joining by code inherits
+    // it from the room, so nobody else has to know which game they're joining.
+    const payload = (args[0] && typeof args[0] === "object") ? args[0] : {};
+    const mode = isMode(payload.mode) ? payload.mode : DEFAULT_MODE;
+    const { roomCode } = R.createRoom(socket.id, mode, defaultCategoriesFor(mode));
     if (!roomCode) {
       if (typeof cb === "function") cb({ ok: false, error: "The server is full of rooms right now. Try again in a minute." });
       return;
     }
     socket.join(roomCode);
-    if (typeof cb === "function") cb({ ok: true, roomCode, categories: CATEGORY_LIST });
+    if (typeof cb === "function") cb({ ok: true, roomCode, mode, categories: categoryListFor(mode) });
   });
 
   // Unlock the dev icons for this connection. Rate limited so the code can't be
@@ -403,7 +443,7 @@ io.on("connection", (socket) => {
     if (typeof cb === "function") cb({
       ok: true, pid: player.pid, icon: player.icon,
       isHost: R.isActingHost(room, socket.id),
-      state: R.publicRoomState(room), categories: CATEGORY_LIST
+      state: R.publicRoomState(room), categories: categoryListFor(room.mode)
     });
     broadcast(roomCode);
   });
@@ -422,19 +462,19 @@ io.on("connection", (socket) => {
       ok: true, pid: player.pid, icon: player.icon,
       isHost: R.isActingHost(room, socket.id),
       state: R.publicRoomState(room), chat: room.chat.slice(-60),
-      gameResult: room.gameResult, finished: R.finishedSummary(room), categories: CATEGORY_LIST
+      gameResult: room.gameResult, finished: R.finishedSummary(room), categories: categoryListFor(room.mode)
     });
     broadcast(roomCode); scheduleTurnTimer(roomCode); scheduleGuessTimer(roomCode); syncAuto(roomCode);
   });
 
-  socket.on("updateSettings", ({ roomCode, categories, imposters, hintsEnabled, guessEnabled }) => {
+  socket.on("updateSettings", ({ roomCode, categories, imposters, hintsEnabled, guessEnabled, tier }) => {
     const room = hostGate(roomCode); if (!room) return;
-    R.setSettings(room, { categories, imposters, hintsEnabled, guessEnabled }, CATEGORIES); broadcast(roomCode);
+    R.setSettings(room, { categories, imposters, hintsEnabled, guessEnabled, tier }, libraryFor(room)); broadcast(roomCode);
   });
 
   socket.on("startGame", ({ roomCode }) => {
     const room = hostGate(roomCode); if (!room) return;
-    const result = R.startGame(room, CATEGORIES);
+    const result = R.startGame(room, libraryFor(room));
     if (!result.ok) return socket.emit("toast", { type: "error", message: result.error });
     dealRoles(room); io.to(roomCode).emit("gameStarted", { state: R.publicRoomState(room) }); broadcast(roomCode);
     syncAuto(roomCode);
@@ -540,7 +580,7 @@ io.on("connection", (socket) => {
     R.backToLobby(room);
 
     if (mode === "redeal") {
-      const result = R.startGame(room, CATEGORIES);
+      const result = R.startGame(room, libraryFor(room));
       if (result.ok) {
         R.addSystem(room, `${hostName} redealt — fresh word, fresh imposter.`);
         dealRoles(room);

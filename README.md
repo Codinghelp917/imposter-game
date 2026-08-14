@@ -79,6 +79,46 @@ that folder automatically and offers whatever it finds under a "custom" divider
 in the picker — there's no filename list to edit. The listing is cached for five
 seconds, so a new file shows up on the next page load.
 
+## Game modes
+
+One engine, one room system, separate word libraries:
+
+| mode | library | categories |
+| --- | --- | --- |
+| `classic` | `categories.json` | 20 categories, 1400 words |
+| `football` | `football_list.json` | Players, Clubs |
+
+The host picks the mode when creating a room. **Everyone joining by code inherits
+it** — the room remembers which game it is, so nobody else has to choose. Deep
+links work too: `/football` and `/classic` open the same page with that mode
+preselected.
+
+Adding a mode is a two-line change in `server.js` — drop a new file into
+`LIBRARIES` and it gets its own category list, defaults and lobby picker
+automatically. Nothing in the game engine needs to know it exists.
+
+### Writing a word list
+
+Top-level keys are the categories the host can tick. Each word may carry a
+`tier` of `casual`, `fan` or `ball`. **Tiers are cumulative** — "Casual" plays
+only casual words, "Football Fan" plays casual + fan, "Ball Knowledge" plays
+everything. A word with no tier counts as casual, so a partially-tiered file
+still works.
+
+```json
+{ "word": "Lionel Messi", "tier": "casual", "hints": ["left", "dribbler", "ten"] }
+```
+
+The imposter gets **one** of those hints, drawn at random and held for the whole
+game, so each hint has to stand alone. Two traps worth avoiding: nationality
+gives a player away instantly (`"argentina"` is not a hint, it's an answer), and
+current clubs go stale the moment someone transfers. Durable traits — position,
+foot, physique, playing style, an era, a shirt number — age much better.
+Nationality is fine for *clubs*, since a country has dozens of them.
+
+Guesses are matched loosely (case, accents, punctuation, spacing and a leading
+"the" are all ignored), so there's no need to add spelling variants.
+
 ## Bailing out mid-game
 
 The host gets a gear button in the header while a game is running (it's hidden in
